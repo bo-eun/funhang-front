@@ -6,15 +6,11 @@ import Main from "../pages/main/Main";
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: Layout,
+    element: <Layout />,
         children: [
             {
                 index: true,
-                element: (
-                    <ProtectedRoute>
-                        <Main/>
-                    </ProtectedRoute>
-                )
+                element: <Main />,
             },
         ]
   }
