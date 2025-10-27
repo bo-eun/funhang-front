@@ -1,7 +1,10 @@
 import { createBrowserRouter } from "react-router";
 import Layout from "../pages/Layout";
 import Main from "../pages/main/Main";
-import Login from "../pages/login/login";
+import Login from "../pages/login/Login";
+import FindId from "../pages/login/FindId";
+import FindPw from "../pages/login/FindPw";
+import SignUp from "../pages/login/SignUp";
 
 
 export const router = createBrowserRouter([
@@ -14,15 +17,6 @@ export const router = createBrowserRouter([
                 element: <Main />,
             },
             {
-                path: "login",
-                children: [
-                  {
-                    index: true,
-                    element: <Login/>
-                  }
-                ]
-            },
-            {
                 path: "main",
                 children: [
                   {
@@ -31,6 +25,28 @@ export const router = createBrowserRouter([
                   }
                 ]
             },
+            {
+                path: "login",
+                children: [
+                  {
+                    index: true,
+                    element: <Login/>
+                  },
+                  {
+                    path:"findId",
+                    element: <FindId/>
+                  },
+                  {
+                    path:"findPw",
+                    element: <FindPw/>
+                  },
+                  {
+                    path:"signUp",
+                    element: <SignUp/>
+                  }
+                ]
+            },
+            
 
         ]
   }

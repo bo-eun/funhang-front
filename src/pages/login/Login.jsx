@@ -1,45 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 import '../../assets/css/Login.css';
 
 function Login(props) {
+    const [role, setRole] = useState("user");
+
+    const handleChange = (e) => {
+        setRole(e.target.value);
+    };
     return (
-        <>
+        
             <div className='login-bg'>
-                
+                <div className='login-wrap'>
+
                 <span className='login-title'>로그인</span>
-                <section className='user-role-wrap'>
-                    <div>
-                        <input type="radio" />
-                        <span>사용자</span>
-                    </div>
-                    <div>
-                        <input type="radio" />
-                        <span>관리자</span>
-                    </div>
+                <section>
+                    <form className='user-role-wrap'>
+                        <label>
+                            <input type="radio" name="role" value="user" 
+                                    checked={role === "user"}
+                                    onChange={handleChange}/>
+                            사용자
+                        </label>
+
+                        <label>
+                            <input type="radio" name="role" value="admin"
+                                    checked={role === "admin"}
+                                    onChange={handleChange}/>
+                            관리자
+                        </label>
+                    </form>
                 </section>
                 <section className='user-loginp-wrap'>
                     <div className='id-inp user-loginp'>
-                        <span>아이디</span>
-                        <input type="text" />
+                        <label>아이디</label>
+                        <input type="text" placeholder='아이디를 입력해주세요' required/>
                     </div>
                     <div className='pw-inp user-loginp'>
-                        <span>비밀번호</span>
-                        <input type="password" />
+                        <label>비밀번호</label>
+                        <input type="password" placeholder='비밀번호를 입력해주세요' required/>
                     </div>
                 </section>
-                <div>
-                    <Link to="/">아이디 찾기</Link>
+                <div className='find-wrap'>
+                    <Link to="/login/findId">아이디 찾기</Link>
                     <span> | </span>
-                    <Link to="/">비밀번호 찾기</Link>
+                    <Link to="/login/findPw">비밀번호 찾기</Link>
                 </div>
-                <div>
-                    <button>로그인</button>
-                    <Link to="/">회원가입</Link>
+                <div className='btn-wrap'>
+                    <button type='submit' className='btn-50' >로그인</button>
+                    <Link to="/login/signUp" className='link-btn'>회원가입</Link>
                 </div>
 
+                </div>
             </div>
-        </>
+        
     );
 }
 
