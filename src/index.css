@@ -1,3 +1,8 @@
+:root {
+  --main-color: #2c3e50;
+  --secondary-color: #ffd600;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -32,12 +37,12 @@ p {
 a,
 a:hover,
 a:active {
-  color: #333;
+  color: #222;
   text-decoration: none;
 }
 .nav-link,
 .nav-link:hover {
-  color: #333;
+  color: #222;
 }
 
 /* input type number의 기존 화살표 제거 */
