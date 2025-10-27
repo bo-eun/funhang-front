@@ -1,9 +1,21 @@
 import { createBrowserRouter } from "react-router";
+import Layout from "../pages/Layout";
+import Main from "../pages/main/Main";
 
 
-export const routers = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    Component: Layout,
+        children: [
+            {
+                index: true,
+                element: (
+                    <ProtectedRoute>
+                        <Main/>
+                    </ProtectedRoute>
+                )
+            },
+        ]
   }
 ])
