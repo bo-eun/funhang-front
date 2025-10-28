@@ -6,8 +6,8 @@ import FindId from "../pages/login/FindId";
 import FindPw from "../pages/login/FindPw";
 import SignUp from "../pages/login/SignUp";
 import ProductLayout from "../components/product/Layout"
-import List from "../components/product/List";
-import Detail from "../components/product/Detail";
+import List from "../pages/product/List";
+import Detail from "../pages/product/Detail";
 
 
 export const router = createBrowserRouter([

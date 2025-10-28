@@ -1,6 +1,6 @@
 import React from 'react';
-import Item from '../list/Item';
-import SearchInput from '../SearchInput';
+import Item from '../../components/list/Item';
+import SearchInput from '../../components/SearchInput';
 import { Link } from 'react-router';
 
 function List(props) {
