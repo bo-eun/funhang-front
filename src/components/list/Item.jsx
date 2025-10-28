@@ -2,7 +2,7 @@ import React from 'react';
 import itemImg from "../../assets/img/item.png";
 import wishiIcon from "../../assets/img/wish.svg";
 import wishiActiveIcon from "../../assets/img/wish_active.svg";
-import "./item.css"
+import "../../assets/css/item.css";
 
 function Item(props) {
     return (

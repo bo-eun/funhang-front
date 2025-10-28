@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Link, Outlet } from 'react-router';
-import "../product/product.css"
+import "../../assets/css/product.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
 
 function Layout(props) {

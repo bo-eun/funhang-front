@@ -7,7 +7,7 @@ function Header(props) {
 
     
     return (
-        <>
+        <div className='fixed-bg'>
             <header className='header-bg'>
                 <nav className='header-nav'>
                     <div className='l-menu-bg'>
@@ -17,7 +17,7 @@ function Header(props) {
                             </Link>
                         </div>
                         <ul className='l-menu-list'>
-                            <li><NavLink to="/" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
+                            <li><NavLink to="/cu" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
                             <li><NavLink to="/gs25">GS25</NavLink></li>
                             <li><NavLink to="/7eleven">7ELEVEN</NavLink></li>
                             <li><NavLink to="/board">게시판</NavLink></li>
@@ -28,7 +28,7 @@ function Header(props) {
                     </ul>
                 </nav>
             </header>
-        </>
+        </div>
     );
 }
 

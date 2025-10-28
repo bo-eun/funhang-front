@@ -13,7 +13,7 @@ function FindId(props) {
     return (
         <div className="login-bg">
         <div className="login-wrap">
-            <span className="login-title">아이디 찾기</span>
+            <span className="page-title">아이디 찾기</span>
             {/* 아이디 찾기 index */}
             {!checkId && (
                 <form className="user-loginp-wrap" onSubmit={handleSubmit}>
