@@ -90,3 +90,19 @@ button {
   position: absolute;
   right: 10px; top: 12px;
 }
+
+ul, li{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.layout-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 화면 전체 높이 확보 */
+}
+
+.layout-content {
+    flex: 1; /* 남은 공간을 채우도록 main 영역 확장 */
+}
