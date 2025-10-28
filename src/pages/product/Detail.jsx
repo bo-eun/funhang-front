@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import itemImg from "../../assets/img/item.png";
 import shareIcon from "../../assets/img/share_icon.svg";
+import Map from "../../components/map/Map";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 
 function Detail(props) {
+
+    const [copiedText, copy] = useCopyToClipboard(); // 클립보드
+    const copyUrl = () => {
+        copy(window.location);
+        alert('주소가 클립보드에 복사되었습니다');
+    }
+
     return (
         <section className='detail_section'>
             <div className="prd_info">
@@ -10,7 +19,7 @@ function Detail(props) {
                     <img src={itemImg} alt="" />
                 </div>
                 <div className="info_box">
-                    <button type="button" className='share_btn'>
+                    <button type="button" className='share_btn' onClick={copyUrl}>
                         <img src={shareIcon} alt="" />
                     </button>
                     <p className="event_text">9월 행사상품</p>
@@ -25,7 +34,7 @@ function Detail(props) {
             <section className='store'>
                 <h3>가까운 편의점 보기</h3>
                 <div id="map">
-                    지도!
+                    <Map chainName={"CU"} height="300px" />
                 </div>
             </section>
 

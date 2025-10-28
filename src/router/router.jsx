@@ -8,6 +8,7 @@ import SignUp from "../pages/login/SignUp";
 import ProductLayout from "../components/product/Layout"
 import List from "../pages/product/List";
 import Detail from "../pages/product/Detail";
+import Store from "../pages/store/Store";
 
 
 export const router = createBrowserRouter([
@@ -49,8 +50,6 @@ export const router = createBrowserRouter([
                   }
                 ]
             },
-            
-
             {
                 element: <ProductLayout />,
                 path: "product",
@@ -64,6 +63,10 @@ export const router = createBrowserRouter([
                         element: <Detail />
                     }
                 ]
+            },
+            {
+              element: <Store />,
+              path: "store",
             },
         ]
   }

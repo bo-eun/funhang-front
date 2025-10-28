@@ -1,0 +1,12 @@
+.info_marker {
+    display: block;
+    padding:5px 15px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    background:#fff;
+}
+.info_marker p {
+    font-weight: bold;
+}
+.info_marker span {
+    font-size: 12px;
+}
