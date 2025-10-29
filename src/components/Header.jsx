@@ -20,6 +20,7 @@ function Header(props) {
                             <li><NavLink to="/cu" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
                             <li><NavLink to="/gs25">GS25</NavLink></li>
                             <li><NavLink to="/7eleven">7ELEVEN</NavLink></li>
+                            <li><NavLink to="/map">편의점 찾기</NavLink></li>
                             <li><NavLink to="/board">게시판</NavLink></li>
                         </ul>
                     </div>

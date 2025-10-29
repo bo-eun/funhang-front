@@ -12,7 +12,7 @@ function BoardDetail() {
     // ===== 임시 데이터 (나중에 API로 교체) =====
     const board = {
         title: '맛있다',
-        author: '김땡떙',
+        writer: '김땡떙',
         createdAt: '2025-10-25',
         likeCount: 0,
         content: '<p>이것은 <strong>Quill</strong>로 작성된 내용입니다.</p><p>다양한 <em>서식</em>이 <u>적용</u>됩니다.</p><ul><li>리스트도 표시됩니다</li><li>이미지도 보입니다</li></ul>'
@@ -27,7 +27,7 @@ function BoardDetail() {
             <div className='board-title-bg'>
                 {/* 제목 표시 */}
                 <p className='board-title-txt'>{board.title}</p>
-                <p>{board.author} · {board.createdAt} · 추천수 {board.likeCount}</p>
+                <p>{board.writer} · {board.createdAt} · 추천수 {board.likeCount}</p>
             </div>
             <section className='content-bg'>
                 {/* Quill로 작성된 HTML 내용 표시 */}
@@ -44,7 +44,7 @@ function BoardDetail() {
                         추천
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
-                    <Link to="/board/update/1" className='min-link-btn-b'>수정</Link>
+                    <Link to="/board/update" className='min-link-btn-b'>수정</Link>
                     <Link to="/board" className='min-link-btn-w'>목록</Link>
                 </div>
             </section>

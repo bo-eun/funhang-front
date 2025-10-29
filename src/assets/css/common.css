@@ -70,6 +70,11 @@ input, button, textarea, select {
 input:focus-visible{
     outline: none;
 }
+.error-msg {
+  color: red;
+  margin-top: 5px;
+  margin-left: 30px;
+}
 
 button {
   border: 0;

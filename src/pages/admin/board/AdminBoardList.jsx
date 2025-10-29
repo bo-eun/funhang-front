@@ -1,10 +1,6 @@
 import React from 'react';
-import SearchInput from '../../components/SearchInput';
-import { Link } from 'react-router';
-import Pagination from '../../components/Pagination';
-import '../../assets/css/boardList.css';
 
-function BoardList(props) {
+function AdminBoardList(props) {
     
     
     return (
@@ -90,4 +86,4 @@ function BoardList(props) {
     );
 }
 
-export default BoardList;
+export default AdminBoardList;

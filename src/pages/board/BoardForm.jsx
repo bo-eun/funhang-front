@@ -201,8 +201,7 @@ function BoardForm({ type }) {
   };
 
   return (
-    <div className='board-list-wrap'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='board-list-wrap'>
         <div className='board-title-bg'>
           <input
             type='text'
@@ -214,6 +213,7 @@ function BoardForm({ type }) {
         </div>
         <section className='content-bg'>
           <ReactQuill
+            
             ref={quillRef}
             theme="snow"
             value={content}
@@ -229,11 +229,10 @@ function BoardForm({ type }) {
             <button type='submit' className='min-link-btn-b'>
               {type === "update" ? "수정" : "등록"}
             </button>
-            <a href="/board" className='min-link-btn-w'>취소</a>
+            <a href={type==="update"?"/board/detail":"/board"} className='min-link-btn-w'>취소</a>
           </div>
         </section>
       </form>
-    </div>
   );
 }
 
