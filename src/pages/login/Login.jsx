@@ -48,7 +48,7 @@ function Login(props) {
                 </div>
                 <div className='btn-wrap'>
                     <button type='submit' className='btn-50' >로그인</button>
-                    <Link to="/login/signUp" className='link-btn'>회원가입</Link>
+                    <Link to="/login/signUp" className='link-btn-50'>회원가입</Link>
                 </div>
 
                 </div>

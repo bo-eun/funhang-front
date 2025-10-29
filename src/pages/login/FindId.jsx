@@ -41,7 +41,7 @@ function FindId(props) {
                     </p>
                     <div className='btn-wrap'>
                         <Link to="/login" className='btn-50' >로그인</Link>
-                        <Link to="/login/findPw" className='link-btn'>비밀번호 찾기</Link>
+                        <Link to="/login/findPw" className='link-btn-50'>비밀번호 찾기</Link>
                     </div>
                 </div>
             )}
