@@ -99,7 +99,7 @@ export const router = createBrowserRouter([
                 }
                 
               ]
-            }
+            },
             {
               element: <Store />,
               path: "store",

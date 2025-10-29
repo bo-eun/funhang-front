@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Map from '../../components/map/Map';
 import "../../assets/css/store.css"
 import searchbtn from "../../assets/img/search_btn.svg"
@@ -8,6 +8,7 @@ function Store(props) {
     const [chainName, setChainName] = useState("all");
     const [inputText, setInputText] = useState("");
     const [searchText, setSearchText] = useState('');
+    const [list, setList] = useState([]);
     const [toggle, setToggle] = useState(false);
 
     const filter = (e) => {
@@ -58,13 +59,34 @@ function Store(props) {
                             </label>
                         </li>                            
                     </ul>
+
+                    <div className="search_list_cont">
+                        <ul className='search_list'>
+                            {list?.length > 0 && list.map((item) => {
+                                return <li>
+                                    <p className="title">
+                                        {item.place_name}
+                                    </p>
+                                    <p className="addr">
+                                        {item.road_address_name}
+                                    </p>
+                                    {item.phone && 
+                                        <p className="call">
+                                            {item.phone}
+                                        </p>
+                                    }
+                                    
+                                </li>
+                            })}
+                        </ul>
+                    </div>
                 </div>
                 <button type="button" className='box_toggle_btn' onClick={() => setToggle(prev => !prev)}>
                     <i className="bi bi-caret-right-fill"></i>
                 </button>                
             </div>
 
-            <Map chainName={chainName} searchText={searchText} height={"calc(100vh - 100px)"} />
+            <Map chainName={chainName} searchText={searchText} setList={setList} height={"calc(100vh - 100px)"} />
         </div>
     );
 }

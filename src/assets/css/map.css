@@ -10,3 +10,20 @@
 .info_marker span {
     font-size: 12px;
 }
+
+.search_list_cont {
+    overflow-y: scroll;
+    height: calc(100% - 92px);
+    margin: 10px 0 0 0;
+}
+.search_list li {
+    padding: 15px 0 16px;
+    border-bottom: 1px solid #BCBCBC;
+    font-size: 16px;
+}
+.search_list li .title {
+    font-size: 20px;
+}
+.search_list li .addr {
+    padding: 12px 0 14px;
+}
