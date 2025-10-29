@@ -23,7 +23,7 @@ function Main(props) {
             <SearchInput />
             
             <div className="swiper_cont">
-                <div class="pagination"></div>
+                <div className="pagination"></div>
                 <Swiper
                     slidesPerView={1}
                     onSlideChange={() => console.log('slide change')}
@@ -33,7 +33,7 @@ function Main(props) {
                         el: ".pagination",
                         clickable: true,
                         renderBullet: (index, className) => {
-                        return `<p class="${className}">${slideTexts[index]}</p>`;
+                        return `<p className="${className}">${slideTexts[index]}</p>`;
                         },
                     }}
                     >

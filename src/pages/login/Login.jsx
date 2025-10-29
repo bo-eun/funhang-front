@@ -13,7 +13,7 @@ function Login(props) {
             <div className='login-bg'>
                 <div className='login-wrap'>
 
-                <span className='login-title'>로그인</span>
+                <span className='page-title'>로그인</span>
                 <section>
                     <form className='user-role-wrap'>
                         <label>

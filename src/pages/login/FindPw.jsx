@@ -14,7 +14,7 @@ function FindPw(props) {
     return (
         <div className="login-bg">
         <div className="login-wrap">
-            <span className="login-title">{checkPw===false?"비밀번호 찾기":"비밀번호 변경"}</span>
+            <span className="page-title">{checkPw===false?"비밀번호 찾기":"비밀번호 변경"}</span>
             {/* 비밀번호 찾기 index */}
             {!checkPw && (
                 <form className="user-loginp-wrap" onSubmit={handleSubmit}>

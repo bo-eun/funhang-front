@@ -6,7 +6,7 @@ function SignUp(props) {
         <div className='login-bg login-bg-long'>
                 <div className='login-wrap'>
 
-                <span className='login-title'>회원가입</span>
+                <span className='page-title'>회원가입</span>
                 <section className='user-loginp-wrap'>
                     <div className='id-inp user-loginp'>
                         <label>아이디</label>
