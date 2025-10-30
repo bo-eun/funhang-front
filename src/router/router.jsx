@@ -8,8 +8,10 @@ import SignUp from "../pages/login/SignUp";
 import ProductLayout from "../components/product/Layout"
 import List from "../pages/product/List";
 import Detail from "../pages/product/Detail";
-import BoardLayout from "../components/board/BoardLayout";
 import Store from "../pages/store/Store";
+import BoardList from "../pages/board/BoardList";
+import BoardDetail from "../pages/board/BoardDetail";
+import BoardForm from "../pages/board/BoardForm";
 
 
 export const router = createBrowserRouter([
@@ -71,31 +73,19 @@ export const router = createBrowserRouter([
               children: [
                 {
                   index: true,
-                  element:<BoardLayout 
-                  type='list'
-                  pageTitle='게시판'
-                  />
+                  element:<BoardList/>
                 },
                 {
                   path: "detail",
-                  element:<BoardLayout
-                  type='detail'
-                  pageTitle='게시판 상세'
-                  />
+                  element:<BoardDetail/>
                 },
                 {
                   path: "update",
-                  element:<BoardLayout
-                  type='update'
-                  pageTitle='게시판 수정'
-                  />
+                  element:<BoardForm type="update"/>
                 },
                 {
                   path: "write",
-                  element:<BoardLayout
-                  type='write'
-                  pageTitle='게시판 등록'
-                  />
+                  element:<BoardForm type="write"/>
                 }
                 
               ]

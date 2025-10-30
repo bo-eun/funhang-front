@@ -86,7 +86,7 @@
 .product_cont .detail_section .prd_info {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 100px;
     padding: 0 70px;
 }
 .product_cont .detail_section .prd_info .img_box {
@@ -136,58 +136,4 @@
     padding: 100px 0 40px;
     font-size: 26px;
     font-weight: bold;
-}
-.detail_section section.comment ul {
-    padding-bottom: 20px;
-}
-.detail_section section.comment ul li {
-    padding: 0 0 30px;
-    margin: 0 0 20px;
-    border-bottom: 1px solid #D9D9D9;
-
-}
-.detail_section section.comment ul li .comment_head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.detail_section section.comment ul li .info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 16px;
-    color: #7E7E7E;
-}
-.detail_section section.comment ul li .info button {
-    color: #7E7E7E;
-}
-.detail_section section.comment ul li .name {
-    font-size: 21px;
-    font-weight: 500;
-    padding-bottom: 15px;
-}
-.detail_section section.comment ul li .text {
-    font-size: 16px;
-}
-.detail_section section.comment .comment_box {
-    display: flex;
-    border: 1px solid #C9C9C9;
-    border-radius: 10px;
-    overflow: hidden;
-}
-.detail_section section.comment .comment_box textarea {
-    width: calc(100% - 100px);
-    border: 0;
-    min-height: 140px;
-    padding: 15px;
-    font-size: 16px;
-}
-.detail_section section.comment .comment_box textarea:focus {
-    outline: none;
-}
-.detail_section section.comment .comment_box button {
-    font-size: 16px;
-    color: #666;
-    width: 100px;
-    border-left: 1px solid #C9C9C9;
 }
