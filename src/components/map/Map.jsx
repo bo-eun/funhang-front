@@ -99,6 +99,8 @@ function Map({ chainName, searchText = "", setList, height }) {
 
     // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
     const options = searchText.trim() ? undefined : { location, radius: 1000 };
+    
+    setDataList([]);
 
     const search = (keyword, isLast = false) => {
       ps.keywordSearch(keyword, (data, status) => {
@@ -115,8 +117,6 @@ function Map({ chainName, searchText = "", setList, height }) {
           const newCenter = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
           mapInstance.current.setCenter(newCenter);
         }
-
-        setDataList([]);
           
         data.forEach((place) => {
           const markerImage = new window.kakao.maps.MarkerImage(
