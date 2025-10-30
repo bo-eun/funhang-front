@@ -17,10 +17,11 @@ function Header(props) {
                             </Link>
                         </div>
                         <ul className='l-menu-list'>
-                            <li><NavLink to="/cu" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
-                            <li><NavLink to="/gs25">GS25</NavLink></li>
-                            <li><NavLink to="/7eleven">7ELEVEN</NavLink></li>
-                            <li><NavLink to="/board">게시판</NavLink></li>
+                            <li><NavLink to="/product" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
+                            <li><NavLink to="/gs25" className={({isActive}) => isActive? "active":""}>GS25</NavLink></li>
+                            <li><NavLink to="/7eleven" className={({isActive}) => isActive? "active":""}>7ELEVEN</NavLink></li>
+                            <li><NavLink to="/board" className={({isActive}) => isActive? "active":""}>게시판</NavLink></li>
+                            <li><NavLink to="/store" className={({isActive}) => isActive? "active":""}>매장찾기</NavLink></li>
                         </ul>
                     </div>
                     <ul className='r-menu'>

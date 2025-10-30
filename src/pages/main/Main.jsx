@@ -33,7 +33,7 @@ function Main(props) {
                         el: ".pagination",
                         clickable: true,
                         renderBullet: (index, className) => {
-                        return `<p className="${className}">${slideTexts[index]}</p>`;
+                        return `<p class="${className}">${slideTexts[index]}</p>`;
                         },
                     }}
                     >
