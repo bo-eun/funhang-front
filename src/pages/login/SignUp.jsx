@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
+import BtnForm from "../../components/BtnForm";
 
 function SignUp(props) {
     
@@ -35,6 +36,7 @@ function SignUp(props) {
     const onSubmit = (data) => {
         console.log("폼 데이터:", data);
         reset();
+        location.href = '/login';
     };
 
     return (
@@ -108,9 +110,12 @@ function SignUp(props) {
                     />
                 </section>
                 <div className="btn-wrap">
-                    <button type="submit" className="btn-50">
-                        회원가입
-                    </button>
+                    <BtnForm
+                        type='submit'
+                        // onClick={goLogin}
+                        className='btn-50'
+                        btnName='회원가입'
+                    />
                 </div>
             </form>
         </div>

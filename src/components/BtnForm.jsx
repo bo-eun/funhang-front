@@ -1,12 +1,17 @@
 import React from 'react';
 
-function LongBtn({btnName,type,className}) {
+function LongBtn({btnName,type = "button",className, disabled = false, onClick }) {
     return (
-        <div className="btn-wrap">
-            <button type={type} className={className}>
+        
+            <button 
+                type={type} 
+                className={className}
+                disabled={disabled}
+                onClick={onClick}
+            >
                 {btnName}
             </button>
-        </div>
+        
     );
 }
 
