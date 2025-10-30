@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import Layout from "../pages/Layout";
 import Main from "../pages/main/Main";
 import Login from "../pages/login/Login";
@@ -12,6 +12,7 @@ import Store from "../pages/store/Store";
 import BoardList from "../pages/board/BoardList";
 import BoardDetail from "../pages/board/BoardDetail";
 import BoardForm from "../pages/board/BoardForm";
+import AdminBoardList from "../pages/admin/board/AdminBoardList";
 
 
 export const router = createBrowserRouter([
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Main />,
+                element: <Navigate to="main" replace />,
             },
             {
                 path: "main",
@@ -87,12 +88,20 @@ export const router = createBrowserRouter([
                   path: "write",
                   element:<BoardForm type="write"/>
                 }
-                
               ]
             },
             {
               element: <Store />,
               path: "store",
+            },
+            {
+                path: "admin",
+                children: [
+                  {
+                    index: true,
+                    element: <AdminBoardList/>
+                  }
+                ]
             },
         ]
   }

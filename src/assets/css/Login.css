@@ -139,7 +139,7 @@
 }
 
 .modal-content p {
-    font-size: 16px;
+    font-size: var(--text-size);
     line-height: 34px;
     margin-bottom: 40px;
 }

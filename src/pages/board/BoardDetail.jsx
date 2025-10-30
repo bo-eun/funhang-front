@@ -17,25 +17,43 @@ function BoardDetail() {
         likeCount: 0,
         content: '<p>이것은 <strong>Quill</strong>로 작성된 내용입니다.</p><p>다양한 <em>서식</em>이 <u>적용</u>됩니다.</p><ul><li>리스트도 표시됩니다</li><li>이미지도 보입니다</li></ul>'
     };
+    
+    const [comments, setComments]=useState([
+        { id: 1, name: '김땡땡', date: '2025-10-25', text: '첫 댓글입니다!' },
+    ]);
+    const [text, setText]=useState('');
+
+    const addComment=(newCommentText)=>{
+        const newComment = {
+            id: Date.now(),
+            name: '닉네임123', // 로그인 사용자 이름
+            date: new Date().toISOString().slice(0, 10),
+            text: newCommentText,
+        };
+        setComments([...comments, newComment]);
+    }
+    const deleteComment = (id) => {
+        setComments(comments.filter((c) => c.id !== id));
+    };
 
     const handleToggle = () => {
         setIsActive(!isActive);
     };
 
     return (
-        <div className='board-list-wrap'>
-            <div className='board-title-bg'>
+        <div className='board_list_wrap'>
+            <div className='board_title_bg'>
                 {/* 제목 표시 */}
                 <p className='board-title-txt'>{board.title}</p>
                 <p>{board.writer} · {board.createdAt} · 추천수 {board.likeCount}</p>
             </div>
-            <section className='content-bg'>
+            <section className='content_bg'>
                 {/* Quill로 작성된 HTML 내용 표시 */}
                 <div 
-                    className='content-txt ql-editor'
+                    className='content_txt ql-editor'
                     dangerouslySetInnerHTML={{ __html: board.content }}
                 />
-                <div className='brd-btn-bg'>
+                <div className='brd_btn_bg'>
                     <button 
                         type='button'
                         onClick={handleToggle}
@@ -48,7 +66,11 @@ function BoardDetail() {
                     <Link to="/board" className='min-link-btn-w'>목록</Link>
                 </div>
             </section>
-            <CommentLayout />
+            <CommentLayout
+                comments={comments}
+                onAddComment={addComment}
+                onDeleteComment={deleteComment}
+            />
         </div>
     );
 }
@@ -85,8 +107,8 @@ function BoardDetail() {
         fetchBoard();
     }, [id]);
 
-    if (loading) return <div className='board-list-wrap'>로딩중...</div>;
-    if (!board) return <div className='board-list-wrap'>게시글을 찾을 수 없습니다.</div>;
+    if (loading) return <div className='board_list_wrap'>로딩중...</div>;
+    if (!board) return <div className='board_list_wrap'>게시글을 찾을 수 없습니다.</div>;
 
     return (
         // ... 동일한 JSX

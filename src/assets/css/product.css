@@ -108,7 +108,7 @@
 }
 
 .product_cont .detail_section .prd_info .info_box .event_text {
-    font-size: 16px;
+    font-size: var(--text-size);
     color: #999;
     padding-bottom: 15px;
 }
