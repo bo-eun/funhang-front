@@ -12,6 +12,9 @@ import Store from "../pages/store/Store";
 import BoardList from "../pages/board/BoardList";
 import BoardDetail from "../pages/board/BoardDetail";
 import BoardForm from "../pages/board/BoardForm";
+import MypageLayout from "../components/mypage/Layout";
+import WishList from "../pages/mypage/WishList";
+import Point from "../pages/mypage/Point";
 
 
 export const router = createBrowserRouter([
@@ -93,6 +96,33 @@ export const router = createBrowserRouter([
             {
               element: <Store />,
               path: "store",
+            },
+            {
+              path: "mypage",
+              element: <MypageLayout />,
+              children: [
+                {
+                  index: true,
+                  element: <WishList />,
+                },
+                {
+                  path: 'point',
+                  element: <Point />,
+                },
+                {
+                  path: 'coupon',
+                  element: <WishList />,
+                },
+                {
+                  path: 'check',
+                  element: <WishList />,
+                },
+                {
+                  path: 'info',
+                  element: <WishList />,
+                }
+
+              ]
             },
         ]
   }

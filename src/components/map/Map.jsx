@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import mapMarkerIcon from "../../assets/img/map_marker_icon.svg";
 import cuIcon from "../../assets/img/cu_icon.svg";
 import gs25Icon from "../../assets/img/gs25_icon.svg";
 import sevenIcon from "../../assets/img/seven_icon.svg";
@@ -7,7 +6,7 @@ import "../../assets/css/map.css";
 
 const KAKAO_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
-function Map({ chainName, searchText = "", setList, height }) {
+function Map({ chainName, searchText = "", setList, selectedItem, height }) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [myLocation, setMyLocation] = useState({});
   const mapInstance = useRef(null);
@@ -17,6 +16,80 @@ function Map({ chainName, searchText = "", setList, height }) {
 
   const chainList = ["CU", "GS25", "세븐일레븐"];
   const chainIcon = [cuIcon, gs25Icon, sevenIcon];
+
+
+  const markers = [];
+  
+  const createMarker = (place) => {
+    // 마커 아이콘 설정
+    let markerIcon = '';
+    chainList.forEach((chain, index) => {
+      if(place.category_name.includes(chain)) {
+        markerIcon = chainIcon[index]
+      }
+
+    })
+
+    const markerImage = new window.kakao.maps.MarkerImage(
+      markerIcon,
+      new window.kakao.maps.Size(34, 34),
+      {
+        offset: new window.kakao.maps.Point(17, 17),
+      }
+    );
+
+    // 마커 등록
+    const marker = new window.kakao.maps.Marker({
+      position: new window.kakao.maps.LatLng(place.y, place.x),
+      image: markerImage,
+    });
+
+    const infowindow = new window.kakao.maps.InfoWindow({
+      content: `
+        <div class="info_marker">
+          <p>${place.place_name}</p>
+          <span>${place.phone || ""}</span>
+        </div>
+      `,
+    });
+
+    // 인포윈도우 열기, css 설정
+    window.kakao.maps.event.addListener(marker, "click", () => {
+      if (currentInfowindow.current) {
+        currentInfowindow.current.close();
+      }      
+
+      infowindow.open(mapInstance.current, marker);
+      currentInfowindow.current = infowindow;
+
+      const infoTitle = document.querySelectorAll('.info_marker');
+      console.log('123')
+
+      infoTitle.forEach(el => {
+        var w = el.offsetWidth + 4;
+
+        // infowindow 부모 css 수정
+        // 처음 width값 저장하여 적용함
+        const originWidth = el.parentElement.dataset.width ? 
+                            el.parentElement.dataset.width :  
+                            w+'px';
+        el.parentElement.dataset.width = originWidth;
+        el.parentElement.style.width = originWidth;
+        el.parentElement.style.left = "50%"
+        el.parentElement.style.transform = "translate(-50%, 0)"
+        el.parentElement.previousSibling.style.display = "none";
+        el.parentElement.parentElement.style.border = "0px";
+        el.parentElement.parentElement.style.background = "unset";               
+      })
+
+          
+    });
+
+    markers.push(marker);        
+
+    return marker;
+
+  }
 
   // 현재 위치 가져오기
   useEffect(() => {
@@ -33,7 +106,10 @@ function Map({ chainName, searchText = "", setList, height }) {
       },
       (err) => {
         console.log(err.message);
-        setMyLocation({});
+        setMyLocation({
+          latitude: 33.450701, 
+          longitude: 126.570667 
+        });
       }
     );
   }, []);
@@ -101,8 +177,6 @@ function Map({ chainName, searchText = "", setList, height }) {
       clusterer.clear();
     }
 
-    const markers = [];
-
     // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
     const options = searchText.trim() ? undefined : { location, radius: 1000 };
 
@@ -125,75 +199,11 @@ function Map({ chainName, searchText = "", setList, height }) {
         }
           
         data.forEach((place) => {
-
-          let markerIcon = '';
-          chainList.forEach((chain, index) => {
-            if(place.category_name.includes(chain)) {
-              markerIcon = chainIcon[index]
-            }
-
-          })
-
-
-
-          const markerImage = new window.kakao.maps.MarkerImage(
-            markerIcon,
-            new window.kakao.maps.Size(25, 25),
-            {
-              offset: new window.kakao.maps.Point(10, 20),
-            }
-          );
-
-          const marker = new window.kakao.maps.Marker({
-            position: new window.kakao.maps.LatLng(place.y, place.x),
-            image: markerImage,
-          });
-
-          const infowindow = new window.kakao.maps.InfoWindow({
-            content: `
-              <div class="info_marker">
-                <p>${place.place_name}</p>
-                <span>${place.phone || ""}</span>
-              </div>
-            `,
-          });
-
-          // 인포윈도우 열기
-          window.kakao.maps.event.addListener(marker, "mouseover", () => {
-            infowindow.open(mapInstance.current, marker);
-            currentInfowindow.current = infowindow;
-  
-            const infoTitle = document.querySelector('.info_marker');
-
-            var w = infoTitle.offsetWidth + 4;
-
-            // infowindow 부모 css 수정
-            // 처음 width값 저장하여 적용함
-            const originWidth = infoTitle.parentElement.dataset.width ? 
-                                infoTitle.parentElement.dataset.width :  
-                                w+'px';
-            infoTitle.parentElement.dataset.width = originWidth;
-            infoTitle.parentElement.style.width = originWidth;
-            infoTitle.parentElement.previousSibling.style.display = "none";
-            infoTitle.parentElement.parentElement.style.border = "0px";
-            infoTitle.parentElement.parentElement.style.background = "unset";                
-          });
-
-          markers.push(marker);
-        
-
-          // 마우스 떠났을 때 닫기
-          window.kakao.maps.event.addListener(marker, "mouseout", () => {
-            if (currentInfowindow.current) {
-              currentInfowindow.current.close();
-            }
-          });          
-
+          createMarker(place);
           setDataList(prev => [...prev, place]);
         });
 
         clusterer.addMarkers(markers);
-        setList();
       }, options);
     };
 
@@ -205,6 +215,11 @@ function Map({ chainName, searchText = "", setList, height }) {
     } else {
       search(`${searchText} ${chainName}`, true);
     }
+
+    // infowindow열려있으면 닫기
+    if (currentInfowindow.current) {
+      currentInfowindow.current.close();
+    }          
 
   }, [mapLoaded, chainName, searchText]);
 
@@ -225,10 +240,31 @@ function Map({ chainName, searchText = "", setList, height }) {
 
     }).sort((a, b) => (a.distance * 1) - (b.distance * 1));
 
-    setList(sortedList);
-    console.log(sortedList);
+    setList && setList(sortedList);
     }
   }, [dataList, setList])
+
+
+  // 매장찾기 페이지에서 검색한 리스트를 눌렀을 경우 지도 위치 이동
+  useEffect(() => {
+
+    if(mapInstance.current && selectedItem) {
+      // 클릭한 편의점 위치로 지도 이동
+      const newCenter = new window.kakao.maps.LatLng(selectedItem.y, selectedItem.x);
+      mapInstance.current.setCenter(newCenter);
+
+      let markerIcon = '';
+      chainList.forEach((chain, index) => {
+        if(selectedItem.category_name.includes(chain)) {
+          markerIcon = chainIcon[index]
+        }
+      }) 
+
+
+      const marker = createMarker(selectedItem);
+      window.kakao.maps.event.trigger(marker, 'click');
+    }
+  }, [selectedItem])
 
 
   return <div id="map" style={{ width: "100%", height: height }}></div>;

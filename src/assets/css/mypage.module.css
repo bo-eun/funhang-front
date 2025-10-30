@@ -1,0 +1,108 @@
+.my_cont {
+    padding-bottom: 80px;
+}
+.my_cont .page-title {
+    padding: 100px 0 70px;
+}
+.my_cont .top_box {
+    display: flex;
+}
+
+.my_cont .top_box .text_box {
+    font-size: 24px;
+    width: 100%;
+    max-width: 300px;
+    padding-top: 10px;
+}
+
+.my_cont .card_box {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 40px;
+    border-bottom: 1px dashed #CECECE;
+}
+.my_cont .card_box li {
+    width: 100%;
+}
+.my_cont .card_box li a {
+    display: block;
+    text-align: center;
+    background: #F7F7F7;
+    border-radius: 10px;
+    padding: 14px 0 11px;
+    font-size: 16px;
+    width: 100%;
+}
+.my_cont .card_box li p {
+    font-size: 24px;
+}
+
+.my_cont .sub_category_list li a {
+    display: block;
+    padding: 12px 0px 12px 40px;
+    font-size: 20px;
+    border-radius: 0 30px 30px 0;
+}
+.my_cont .sub_category_list li a.active {
+    background: var(--secondary-color);
+    font-weight: bold;
+}
+
+
+/* 마이페이지 공통 내용 */
+.right_contents h3 {
+    font-size: 26px;
+    padding: 38px 0;
+}
+.right_contents {
+    padding-left: 120px;
+}
+.right_contents .notice {
+    color: #C80000;
+    font-size: 16px;
+    padding-bottom: 20px;
+}
+
+
+/* 위시 리스트 */
+.wish_cont .item_list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* 포인트 내역 */
+.point_cont h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.point_cont .coupon_btn {
+    font-size: 18px;
+    color: #fff;
+    background: var(--main-color);
+    padding: 12px 34px;
+    border-radius: 45px;
+    font-weight: 300;
+}
+.point_cont table {
+    font-size: 16px;
+    width: 100%;
+}
+.point_cont table th {
+    color: var(--main-color);
+    border-bottom: 1px solid var(--main-color);
+    padding: 10px 12px;
+}
+.point_cont td {
+    border-bottom: 1px solid #EEEEEE;
+    padding: 10px 12px;
+}
+.point_cont td.plus {
+    color: #0051FF;
+}
+.point_cont td.minus {
+    color: #EA0000;
+}

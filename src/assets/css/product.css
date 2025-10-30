@@ -27,10 +27,8 @@
     font-size: 20px;
 }
 
-.category_list li.active {
+.category_list li a.active {
     margin-left: -2px;
-}
-.category_list li.active a {
     color: #222;
     background: var(--secondary-color);
 }
