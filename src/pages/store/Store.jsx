@@ -41,19 +41,19 @@ function Store(props) {
                             </label>
                         </li>
                         <li>
-                            <input type="radio" name="chain" id="cu" value="cu" checked={chainName == "cu" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="cu" value="CU" checked={chainName == "cu" && true} onChange={filter} />
                             <label htmlFor="cu">
                                 CU
                             </label>
                         </li>
                         <li>
-                            <input type="radio" name="chain" id="gs25" value="gs25" checked={chainName == "gs25" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="gs25" value="GS25" checked={chainName == "gs25" && true} onChange={filter} />
                             <label htmlFor="gs25">
                                 GS25
                             </label>
                         </li> 
                         <li>
-                            <input type="radio" name="chain" id="7eleven" value="7eleven" checked={chainName == "7eleven" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="7eleven" value="세븐일레븐" checked={chainName == "7eleven" && true} onChange={filter} />
                             <label htmlFor="7eleven">
                                 7ELEVEN
                             </label>
@@ -63,7 +63,10 @@ function Store(props) {
                     <div className="search_list_cont">
                         <ul className='search_list'>
                             {list?.length > 0 && list.map((item) => {
-                                return <li>
+                                return <li key={`${chainName}${item.id}`}>
+                                    <span className={`chain_title chain_${item.category_name}`}>
+                                        {item.category_name}
+                                    </span>
                                     <p className="title">
                                         {item.place_name}
                                     </p>
@@ -82,7 +85,7 @@ function Store(props) {
                     </div>
                 </div>
                 <button type="button" className='box_toggle_btn' onClick={() => setToggle(prev => !prev)}>
-                    <i className="bi bi-caret-right-fill"></i>
+                    <i className={`bi bi-caret-${toggle ? 'right' : 'left'}-fill`}></i>
                 </button>                
             </div>
 

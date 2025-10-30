@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapMarkerIcon from "../../assets/img/map_marker_icon.svg";
+import cuIcon from "../../assets/img/cu_icon.svg";
+import gs25Icon from "../../assets/img/gs25_icon.svg";
+import sevenIcon from "../../assets/img/seven_icon.svg";
 import "../../assets/css/map.css";
 
 const KAKAO_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
@@ -11,6 +14,9 @@ function Map({ chainName, searchText = "", setList, height }) {
   const clustererRef = useRef(null);
   const [dataList, setDataList] = useState([]);
   const currentInfowindow = useRef(null);
+
+  const chainList = ["CU", "GS25", "세븐일레븐"];
+  const chainIcon = [cuIcon, gs25Icon, sevenIcon];
 
   // 현재 위치 가져오기
   useEffect(() => {
@@ -99,7 +105,7 @@ function Map({ chainName, searchText = "", setList, height }) {
 
     // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
     const options = searchText.trim() ? undefined : { location, radius: 1000 };
-    
+
     setDataList([]);
 
     const search = (keyword, isLast = false) => {
@@ -119,9 +125,20 @@ function Map({ chainName, searchText = "", setList, height }) {
         }
           
         data.forEach((place) => {
+
+          let markerIcon = '';
+          chainList.forEach((chain, index) => {
+            if(place.category_name.includes(chain)) {
+              markerIcon = chainIcon[index]
+            }
+
+          })
+
+
+
           const markerImage = new window.kakao.maps.MarkerImage(
-            mapMarkerIcon,
-            new window.kakao.maps.Size(20, 20),
+            markerIcon,
+            new window.kakao.maps.Size(25, 25),
             {
               offset: new window.kakao.maps.Point(10, 20),
             }
@@ -182,7 +199,7 @@ function Map({ chainName, searchText = "", setList, height }) {
 
     // 검색 실행
     if (chainName === "all") {
-      ["cu", "gs25", "세븐일레븐"].forEach((chain) => {
+      chainList.forEach((chain) => {
         search(`${searchText} ${chain}`);
       });
     } else {
@@ -197,9 +214,15 @@ function Map({ chainName, searchText = "", setList, height }) {
 
     // 거리순 + category_name 에 편의점 종류를 저장
     const sortedList = dataList.map((data) => {
+
       const arr = data.category_name.split(' > ');
       data.category_name = arr[arr.length - 1];
+      if(data.category_name === '세븐일레븐') {
+        data.category_name = "7ELEVEN"
+      }
+
       return {...data, category_name: data.category_name}
+
     }).sort((a, b) => (a.distance * 1) - (b.distance * 1));
 
     setList(sortedList);
