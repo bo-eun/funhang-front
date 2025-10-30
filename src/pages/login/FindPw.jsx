@@ -6,14 +6,20 @@ import * as yup from "yup";
 import InputForm from "../../components/InputForm";
 import BtnLinkForm from "../../components/BtnLinkForm";
 import BtnForm from "../../components/BtnForm";
+import ShowModal from "../../components/ShowModal";
 
 function FindPw(props) {
     const [checkPw, setCheckPw] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const updatePw = (e) => {
-        setIsModalOpen(true);
-    };
+    // const updatePw = (e) => {
+    //     setIsModalOpen(true);
+    // };
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const findSchema = yup.object().shape({
         userName: yup.string().required("이름을 입력하십시오"),
         userId: yup.string().required("아이디를 입력하십시오"),
@@ -44,6 +50,7 @@ function FindPw(props) {
         reset();
     };
     return (
+        <>
         <div className="login-bg">
         <div className="login-wrap">
             <span className="page-title">
@@ -51,7 +58,7 @@ function FindPw(props) {
             </span>
             {/* 비밀번호 찾기 index */}
             {!checkPw && (
-            <form className="user-loginp-wrap" onSubmit={handleSubmit(onSubmit)}>
+                <form className="user-loginp-wrap" onSubmit={handleSubmit(onSubmit)}>
                 <InputForm
                 label="이름"
                 type="text"
@@ -75,12 +82,12 @@ function FindPw(props) {
                     type="submit"
                     className="btn-50"
                     btnName="비밀번호찾기"
-                />
+                    />
                 </div>
             </form>
             )}
             {checkPw && (
-            <div className="user-loginp-wrap">
+                <div className="user-loginp-wrap">
                 <InputForm
                 label="새 비밀번호"
                 type="password"
@@ -101,30 +108,37 @@ function FindPw(props) {
                 <div className="btn-wrap">
                 <BtnForm
                     type="button"
-                    onClick={updatePw}
+                    onClick={handleShow}
                     className="btn-50"
                     btnName="비밀번호 변경"
-                />
+                    />
                 </div>
             </div>
             )}
         </div>
-        {/* 모달 */}
-        {isModalOpen && (
+    
+        
+        {/* {isModalOpen && (
             <div className="modal">
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-content-list">
-                <p>비밀번호가 변경되었습니다.</p>
-                <BtnLinkForm
-                    linkPath="/login"
-                    className="modal-log-btn"
-                    btnName="닫기"
-                />
-                </div>
+            <div className="modal-content-list">
+            <p>비밀번호가 변경되었습니다.</p>
+            <BtnLinkForm
+            linkPath="/login"
+            className="modal-log-btn"
+            btnName="닫기"
+            />
             </div>
             </div>
-        )}
+            </div>
+            )} */}
         </div>
+                {/* 모달 */}
+                <ShowModal
+                    show={show}
+                    handleClose={handleClose}
+                    />
+            </>
     );
 }
 

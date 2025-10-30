@@ -1,6 +1,8 @@
 :root {
   --main-color: #2c3e50;
   --secondary-color: #ffd600;
+  --title-size:36px;
+  --text-size:16px;
 }
 
 body {
@@ -90,7 +92,7 @@ button {
   height: 45px;
   line-height: 45px;
   color: white;
-  font-size: 16px;
+  font-size: var(--text-size);
   background-color: #2c3e50;
   border-radius: 25px;
   text-align: center;
@@ -100,7 +102,7 @@ button {
   height: 45px;
   line-height: 45px;
   color: rgb(0, 0, 0);
-  font-size: 16px;
+  font-size: var(--text-size);
   background-color: #ffffff;
   border-radius: 25px;
   border: 1px solid #eeeeee;
@@ -149,7 +151,7 @@ ul, li{
 
 /* 각 페이지 메인 타이틀 */
 .page-title{
-    font-size: 36px;
+    font-size: --title-size;
     font-weight: 600;
     text-align: center;
 }
@@ -175,3 +177,60 @@ ul, li{
   background: #24946B;
   color: #fff;
 }
+
+/* 게시판 */
+.board_list_bg{
+    width: 100%;
+}
+.board_list_wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1128px;
+    min-width: 800px;
+    margin: 100px auto;
+}
+
+/* quill */
+.ql-editor {
+  font-size: var(--text-size);
+  line-height: 1.6;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="14px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
+  content: '14px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="var(--text-size)"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="var(--text-size)"]::before {
+  content: 'var(--text-size)';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="18px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: '18px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="20px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
+  content: '20px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="24px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before {
+  content: '24px';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="32px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="32px"]::before {
+  content: '32px';
+}
+
+/* 테이블 */
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* text-align: center; */
+}
+.table-title tr th{
+  border-bottom: 1px solid #a8a8a8;
+}
+
+.modal {z-index: 1056 !important;}

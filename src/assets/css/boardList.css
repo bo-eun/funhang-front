@@ -1,103 +1,93 @@
-/* 게시판 레이아웃 */
-.board-list-bg{
-    width: 100%;
-}
-.board-list-wrap{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 1128px;
-    min-width: 800px;
-    margin: 100px auto;
-}
 
-/* ------------------------------------------------ */
 /* 게시판 검색창 */
-.board-search-wrap{
+.board_search_wrap{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin-top:70px ;
 }
-.board-search-wrap .form-select{
+.board_search_wrap .form-select{
     width: 120px;
     margin-right: 20px;
     height: 45px;
 }
-.board-search-wrap .search_box{
+.board_search_wrap .search_box{
     margin: 0;
     width: 100%;
 }
-.board-search-wrap .search_box input {
+.board_search_wrap .search_box input {
     width: 100%;
 }
 
 /* 게시판 정보 및 정렬 */
-.brd-list-info{
+.brd_list_info{
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-top: 50px;
     line-height: 45px;
 }
-.brd-list-info .form-select{
+.brd_list_info .form-select{
     width: 170px;
 }
 
 /* 게시판 리스트 */
-.board-list{
+.board_list{
     width: 100%;
     margin-top: 30px;
-    font-size: 16px;
+    font-size: var(--text-size);
 }
 
 /* ------------------------------------------ */
 /* 게시판 상세 */
-.board-title-bg{
+.board_title_bg{
     width: 100%;
 }
-.board-title-txt{
-    font-size: 36px;
-    font-weight: bold;
-}
-.board-title-bg p:nth-child(2){
+.board_title_bg p:nth-child(2){
     font-size: 18px;
 }
+.board_title_txt{
+    font-size: --title-size;
+    font-weight: bold;
+}
+/* 게시판 수정및 등록 */
+.board_title_bg input{
+    height: 60px;
+    width: 100%;
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    padding-left: 20px;
+}
+
 
 /* 게시판 상세 내용 */
-.content-bg{
+.content_bg{
     margin: 20px auto;
     width: 100%;
     padding: 40px 40px;
     border-top: 1px solid #C9C9C9;
     border-bottom: 1px solid #C9C9C9;
 }
-.content-txt{
+.content_txt{
     min-height: 300px;
     width: 100%;
     margin-bottom: 40px;
 }
 
-.brd-btn-bg{
+.brd_btn_bg{
     display: flex;
     justify-content: center;
     font-size: 18px;
     gap: 15px;
 
 }
-.brd-btn-bg button{
+.brd_btn_bg button{
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
 }
 
-/* 게시판 수정및 등록 */
-.board-title-bg input{
-    height: 45px;
-    width: 100%;
-}
 
 

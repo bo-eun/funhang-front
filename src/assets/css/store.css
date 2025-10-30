@@ -47,7 +47,7 @@
 .chain_list li label {
     display: block;
     padding: 8px 20px;
-    font-size: 16px;
+    font-size: var(--text-size);
     border: 1px solid #eee;
     border-radius: 5px;
     text-align: center;
