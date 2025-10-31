@@ -15,13 +15,13 @@ function CommentLayout({ comments, onAddComment, onDeleteComment }) {
     return (
         
             <section className="comment">
-                <p className='comment-count'>댓글 {comments.length}</p>
+                <p className='comment-count'>댓글 {comments?.length}</p>
                 <ul>
-                    {comments.map((comment) => (
+                    {comments?.map((comment) => (
                         <CommentItem
                             key={comment.id}
                             comment={comment}
-                            onDelete={() => onDeleteComment(comment.id)}
+                            onDelete={() => onDeleteComment(comment?.id)}
                         />
                     ))}
                 </ul>

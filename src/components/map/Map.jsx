@@ -63,7 +63,6 @@ function Map({ chainName, searchText = "", setList, selectedItem, height }) {
       currentInfowindow.current = infowindow;
 
       const infoTitle = document.querySelectorAll('.info_marker');
-      console.log('123')
 
       infoTitle.forEach(el => {
         var w = el.offsetWidth + 4;

@@ -8,7 +8,7 @@
 .swiper_cont {
     display: flex;
     max-width: 1056px;
-    margin: 0 auto;
+    margin: 35px auto 0;
 }
 .swiper_cont .swiper {
     flex: 3.6;
@@ -20,8 +20,9 @@
 
     width: 100%;
 }
+
 .swiper_cont .pagination {
-    display: block;;
+    display: block;
     flex: 1;
     background: var(--main-color);
     text-align: right;
@@ -35,7 +36,12 @@
     color: #fff;
     cursor: pointer;
 }
-.swiper_cont .pagination p.swiper-pagination-bullet-active {
+
+:global(.swiper-pagination-bullet-active) {
+    background: var(--secondary-color);
+    color: #222 !important;
+}
+.swiper_cont .pagination .swiper-pagination-bullet-active {
     background: var(--secondary-color);
     color: #222;
 }

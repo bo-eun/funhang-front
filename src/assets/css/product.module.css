@@ -39,6 +39,9 @@
     gap: 40px;
     padding-top: 86px;
 }
+.sub_category_list.detail {
+    padding-top: 0;
+}
 .sub_category_list li a {
     display: flex;
     align-items: center;
@@ -55,7 +58,9 @@
     padding: 45px 0 100px;
 }
 
-
+.detail_section .sub_category_list {
+    padding-top: 0;
+}
 
 
 /* list */
@@ -76,6 +81,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     min-height: 200px;
+    gap: 12px;
 }
 
 

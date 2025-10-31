@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import styles from "../../assets/css/product.module.css";
 import itemImg from "../../assets/img/item.png";
 import shareIcon from "../../assets/img/share_icon.svg";
 import Map from "../../components/map/Map";
@@ -14,32 +15,32 @@ function Detail(props) {
     }
 
     return (
-        <section className='detail_section'>
-            <div className="prd_info">
-                <div className="img_box">
+        <section className={styles.detail_section}>
+            <div className={styles.prd_info}>
+                <div className={styles.img_box}>
                     <img src={itemImg} alt="" />
                 </div>
-                <div className="info_box">
-                    <button type="button" className='share_btn' onClick={copyUrl}>
+                <div className={styles.info_box}>
+                    <button type="button" className={styles.share_btn} onClick={copyUrl}>
                         <img src={shareIcon} alt="" />
                     </button>
-                    <p className="event_text">9월 행사상품</p>
-                    <p className="title">
+                    <p className={styles.event_text}>9월 행사상품</p>
+                    <p className={styles.title}>
                         상품명
-                        <span className="event one">1 + 1</span>
+                        <span className={`${styles.event} ${styles.one}`}>1 + 1</span>
                     </p>
-                    <p className="price"><strong>23,000</strong> 원</p>
+                    <p className={styles.price}><strong>23,000</strong> 원</p>
                 </div>
             </div>
 
-            <section className='store'>
+            <section className={styles.store}>
                 <h3>가까운 편의점 보기</h3>
                 <div id="map">
                     <Map chainName={"CU"} height="300px" />
                 </div>
             </section>
             
-            <CommentLayout/>
+            <CommentLayout />
             
         </section>
     );

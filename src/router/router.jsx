@@ -16,6 +16,9 @@ import AdminBoardList from "../pages/admin/board/AdminBoardList";
 import MypageLayout from "../components/mypage/Layout";
 import WishList from "../pages/mypage/WishList";
 import Point from "../pages/mypage/Point";
+import Coupon from "../pages/mypage/Coupon";
+import DailyCheck from "../pages/mypage/DailyCheck";
+import EditProfile from "../pages/mypage/EditProfile";
 
 export const router = createBrowserRouter([
   {
@@ -110,7 +113,7 @@ export const router = createBrowserRouter([
         element: <MypageLayout />,
         children: [
           {
-            index: true,
+            path: "wish",
             element: <WishList />,
           },
           {
@@ -119,15 +122,15 @@ export const router = createBrowserRouter([
           },
           {
             path: "coupon",
-            element: <WishList />,
+            element: <Coupon />,
           },
           {
             path: "check",
-            element: <WishList />,
+            element: <DailyCheck />,
           },
           {
-            path: "info",
-            element: <WishList />,
+            path: "profile",
+            element: <EditProfile />,
           },
         ],
       },

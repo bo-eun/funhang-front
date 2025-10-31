@@ -15,7 +15,7 @@ function Layout(props) {
                 </div>
                 <ul className={styles.card_box}>
                     <li>
-                        <Link to="/mypage">
+                        <Link to="/mypage/wish">
                             <span>찜한상품</span>
                             <p><b>20</b> 개</p>
                         </Link>
@@ -39,7 +39,7 @@ function Layout(props) {
                 <Col xs={2}>
                     <ul className={styles.sub_category_list}>
                         <li>
-                            <NavLink to="/mypage" className={({isActive}) => isActive? styles.active:""}>찜목록</NavLink>
+                            <NavLink to="/mypage/wish" className={({isActive}) => isActive? styles.active:""}>찜목록</NavLink>
                         </li>
                         <li>
                             <NavLink to="/mypage/point" className={({isActive}) => isActive? styles.active:""}>포인트 내역</NavLink>                    
@@ -51,7 +51,7 @@ function Layout(props) {
                             <NavLink to="/mypage/check" className={({isActive}) => isActive? styles.active:""}>출석 체크 현황</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/mypage/info" className={({isActive}) => isActive? styles.active:""}>내 정보 수정</NavLink>
+                            <NavLink to="/mypage/profile" className={({isActive}) => isActive? styles.active:""}>내 정보 수정</NavLink>
                         </li>
                         <li>
                             <NavLink to="">회원탈퇴</NavLink>

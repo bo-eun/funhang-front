@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Link, Outlet } from 'react-router';
-import "../../assets/css/product.css";
+import { Link, Outlet, useLocation, useParams } from 'react-router';
+import styles from "../../assets/css/product.module.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
 
 function Layout(props) {
+    const locataion = useLocation();
+    const [isDetail, setIsDetail] = useState(false);
+
+    useEffect(() => {
+        setIsDetail(locataion.pathname.includes('/detail'))
+    }, [locataion.pathname])
+
     return (
-        <Container className='product_cont'>
+        <Container className={styles.product_cont}>
             <h2>CU</h2>
-            <ul className='category_list'>
-                <li className='active'>
+            <ul className={styles.category_list}>
+                <li className={styles.active}>
                     <Link to="">전체상품</Link>
                 </li>
                 <li>
@@ -20,10 +27,10 @@ function Layout(props) {
                 </li>
                 
             </ul>
-            <Row className='contents'>
+            <Row className={styles.contents}>
                 <Col xs={2}>
-                    <ul className="sub_category_list">
-                        <li className='active'>
+                    <ul className={`${styles.sub_category_list} ${isDetail && styles.detail}`}>
+                        <li className={styles.active}>
                             <Link to="">전체 <img src={activeIcon} /></Link>
                         </li>
                         <li>

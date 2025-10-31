@@ -32,19 +32,19 @@
     box-shadow: 7px 0px 7px 0px rgba(0,0,0,0.2);
 }
 
-.chain_list {
+.store_cont .chain_list {
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
-.chain_list li {
+.store_cont .chain_list li {
     width: 100%;
 }
-.chain_list li input {
+.store_cont .chain_list li input {
     display: none;
 }
-.chain_list li label {
+.store_cont .chain_list li label {
     display: block;
     padding: 8px 20px;
     font-size: var(--text-size);
@@ -53,6 +53,6 @@
     text-align: center;
     cursor: pointer;
 }
-.chain_list li input:checked + label {
+.store_cont .chain_list li input:checked + label {
     border-color:#222;
 }
