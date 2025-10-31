@@ -15,9 +15,9 @@ function CommentLayout({ comments, onAddComment, onDeleteComment }) {
     return (
         
             <section className={styles.comment}>
-                <p>댓글 {comments.length}</p>
+                <p>댓글 {comments?.length}</p>
                 <ul className={styles.comment_list}>
-                    {comments.map((comment) => (
+                    {comments?.map((comment) => (
                         <CommentItem
                             key={comment.id}
                             comment={comment}

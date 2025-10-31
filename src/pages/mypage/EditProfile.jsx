@@ -108,11 +108,11 @@ function EditProfile(props) {
                             readOnly={true}
                         />
                     </section>
-                    <div className="btn-wrap">
+                    <div className={styles["btn_wrap"]}>
                         <BtnForm
                             type='submit'
                             // onClick={goLogin}
-                            className='btn-50'
+                            className='btn_50_b w-100 mt-3'
                             btnName='수정'
                         />
                     </div>
