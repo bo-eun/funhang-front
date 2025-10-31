@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import styles from '../../assets/css/boardList.module.css';
 
 function BoardListItem({boardItem}) {
     return (

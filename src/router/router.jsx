@@ -16,6 +16,8 @@ import AdminBoardList from "../pages/admin/board/AdminBoardList";
 import MypageLayout from "../components/mypage/Layout";
 import WishList from "../pages/mypage/WishList";
 import Point from "../pages/mypage/Point";
+import LoginLayout from "../components/login/LoginLayout";
+import AdminLayout from "../components/admin/AdminLayout";
 import Coupon from "../pages/mypage/Coupon";
 import DailyCheck from "../pages/mypage/DailyCheck";
 import EditProfile from "../pages/mypage/EditProfile";
@@ -39,23 +41,28 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        element: <LoginLayout/>,
         path: "login",
         children: [
           {
             index: true,
-            element: <Login />,
+            element: <Login/>,
+            handle: { title: "로그인" } 
           },
           {
             path: "findId",
             element: <FindId />,
+            handle: { title: "아이디 찾기" } 
           },
           {
             path: "findPw",
             element: <FindPw />,
+            handle: { title: "비밀번호 찾기" } 
           },
           {
             path: "signUp",
             element: <SignUp />,
+            handle: { title: "회원가입" } 
           },
         ],
       },
@@ -100,15 +107,6 @@ export const router = createBrowserRouter([
         path: "store",
       },
       {
-        path: "admin",
-        children: [
-          {
-            index: true,
-            element: <AdminBoardList />,
-          },
-        ],
-      },
-      {
         path: "mypage",
         element: <MypageLayout />,
         children: [
@@ -134,6 +132,18 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      //관리자페이지
+      { element:<AdminLayout/>,
+        path: "admin",
+        children: [
+          {
+            index: true,
+            element: <AdminBoardList />,
+            handle: { title: "게시판 관리" } 
+          },
+        ],
+      },
+      
     ],
   },
 ]);

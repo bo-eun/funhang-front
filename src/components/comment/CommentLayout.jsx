@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CommentItem from './CommentItem';
-import '../../assets/css/comment.css';
+import styles from '../../assets/css/comment.module.css';
 import BtnForm from '../BtnForm';
 
 function CommentLayout({ comments, onAddComment, onDeleteComment }) {
@@ -14,10 +14,10 @@ function CommentLayout({ comments, onAddComment, onDeleteComment }) {
     };
     return (
         
-            <section className="comment">
-                <p className='comment-count'>댓글 {comments?.length}</p>
-                <ul>
-                    {comments?.map((comment) => (
+            <section className={styles.comment}>
+                <p>댓글 {comments.length}</p>
+                <ul className={styles.comment_list}>
+                    {comments.map((comment) => (
                         <CommentItem
                             key={comment.id}
                             comment={comment}
@@ -26,9 +26,9 @@ function CommentLayout({ comments, onAddComment, onDeleteComment }) {
                     ))}
                 </ul>
                 <form onSubmit={handleSubmit} autoComplete='off'>
-                    <div className='comment_box'>
+                    <div className={styles.comment_box}>
                         <textarea
-                            className="form-text"
+                            className={styles.form_text}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder="댓글을 입력하세요"

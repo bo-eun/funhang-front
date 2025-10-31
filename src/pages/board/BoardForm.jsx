@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import '../../assets/css/boardList.css';
+import styles from '../../assets/css/boardList.module.css';
 import axios from 'axios';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
-Size.whitelist = ['var(--text-size)', '18px', '20px', '24px', '32px'];
+Size.whitelist = ['16px', '18px', '20px', '24px', '32px'];
 Quill.register(Size, true);
 
 function BoardForm({ type }) {
@@ -531,7 +531,7 @@ function BoardForm({ type }) {
       toolbar: {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
-          [{ size: ['var(--text-size)', '18px', '20px', '24px', '32px'] }],
+          [{ size: ['16px', '18px', '20px', '24px', '32px'] }],
           [{ list: 'ordered' }, { list: 'bullet' }],
           [{ color: [] }, { background: [] }],
           [{ align: [] }],
@@ -577,7 +577,7 @@ function BoardForm({ type }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='board_list_wrap'>
+    <form onSubmit={handleSubmit} className={styles.board_list_wrap}>
       {USE_MOCK && (
         <div style={{ 
           background: '#fff3cd', 
@@ -590,16 +590,16 @@ function BoardForm({ type }) {
         </div>
       )}
       
-      <div className='board_title_bg'>
+      <div className={styles.board_title_bg}>
         <input
           type='text'
-          className='board-title-txt'
+          className={styles['board_title_txt']}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder='제목을 입력하세요'
         />
       </div>
-      <section className='content_bg'>
+      <section className={styles.content_bg}>
         <ReactQuill
           ref={quillRef}
           theme="snow"
@@ -612,11 +612,11 @@ function BoardForm({ type }) {
           onChangeSelection={ensureEditor}
           style={{ height: '500px', marginBottom: '50px' }}
         />
-        <div className='brd_btn_bg'>
-          <button type='submit' className='min-link-btn-b' onClick={goSubmit}>
+        <div className={styles.brd_btn_bg}>
+          <button type='submit' className='min_link_btn_b' onClick={goSubmit}>
             {type === "update" ? "수정" : "등록"}
           </button>
-          <a href={type==="update"?"/board/detail":"/board"} className='min-link-btn-w'>취소</a>
+          <a href={type==="update"?"/board/detail":"/board"} className='min_link_btn_w'>취소</a>
         </div>
       </section>
     </form>

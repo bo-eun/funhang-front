@@ -1,8 +1,8 @@
-.fixed-bg{
+.fixed_bg{
     height: 100px;
 }
 
-.header-bg{
+.header_bg{
     position: fixed;
     top: 0;    
     left: 0;
@@ -12,33 +12,33 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
-.header-nav{
+.header_nav{
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     width: 1128px;
     height: 100%;
 }
-.l-menu-list a.active,
-.l-menu-list a:hover{
+.l_menu_list a.active,
+.l_menu_list a:hover{
     border-bottom-color: #FFD600;
 }
-.l-menu-bg, .l-menu-list, .r-menu{
+.l_menu_bg, .l_menu_list, .r_menu{
     display: flex;
     align-items: center;
     font-size: 18px;
     font-weight: 600;
 }
-.l-menu-bg{
+.l_menu_bg{
     gap: 62px;
 }
-.l-menu-list{
+.l_menu_list{
     height: 100%;
 }
-.l-menu-list li{
+.l_menu_list li{
     height: 100%;
 }
-.l-menu-list a{
+.l_menu_list a{
     display: flex;
     align-items: center;
     justify-content: center;

@@ -7,7 +7,7 @@ import { Link, NavLink, Outlet } from 'react-router';
 function Layout(props) {
     return (
         <Container className={styles.my_cont}>
-            <h2 className={styles['page-title']}>마이페이지</h2>
+            <h2 className={styles['page_title']}>마이페이지</h2>
             <div className={styles.top_box}>
                 <div className={styles.text_box}>
                     <strong>이름</strong> 님<br />

@@ -1,9 +1,9 @@
-.footer-bg{
-    height: 150px;
+.footer_bg{
+    height: 100px;
     width: 100%;
-    background-color: #2C3E50;
+    background: var(--main-color);
 }
-.footer-body{
+.footer_body{
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -11,12 +11,13 @@
     width: 900px;
     height: 100%;
 }
-.foot-text-body{
+.foot_text_body{
     color: white;
+    font-size: 14px;
 }
-.foot-logo{
+.foot_logo{
     height: 30px;
 }
-.foot-logo img{
+.foot_logo img{
     height: 100%;
 }

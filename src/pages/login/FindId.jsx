@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import '../../assets/css/Login.css';
+import styles from '../../assets/css/login.module.css';
 import BtnForm from "../../components/BtnForm";
 import BtnLinkForm from "../../components/BtnLinkForm";
 import InputForm from "../../components/InputForm";
@@ -8,15 +8,26 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+const findIdFields = [
+    { label: "이름", name: "username", type: "text", placeholder: "이름을 입력하세요" },
+    { label: "이메일", name: "email", type: "text", placeholder: "이메일을 입력하세요" },
+];
+const btnList =[
+    { linkPath:"/login", className:'btn_50_b', btnName:"로그인"},
+    { linkPath:"/login/findPw", className:'btn_50_w', btnName:"비밀번호 찾기"},
+]
+
 function FindId(props) {
     const [checkId, setCheckId] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [closeModal, setCloseModal] = useState(false);
     
     
+    
+    
 
     const schema = yup.object().shape({
-        userName: yup.string().required("이름을 입력하십시오"),
+        username: yup.string().required("이름을 입력하십시오"),
         email: yup.string().required("이메일을 입력하십시오"),
     });
     const {
@@ -36,58 +47,45 @@ function FindId(props) {
     };
 
     return (
-        <div className="login-bg">
-        <div className="login-wrap">
-            <span className="page-title">아이디 찾기</span>
-            {/* 아이디 찾기 index */}
+        <>
+        
             {!checkId && (
-                <form className="user-loginp-wrap" onSubmit={handleSubmit(onSubmit)}>
-                    <InputForm
-                        label='이름'
-                        type="text"
-                        placeholder="이름을 입력해주세요"
-                        name="userName"
+                <form className={styles.user_loginp_wrap} onSubmit={handleSubmit(onSubmit)}>
+                    {findIdFields.map((field) => (
+                        <InputForm
+                        key={field.name}
+                        {...field}
                         register={register}
-                        error={errors.userName}
-                    />
-                    <InputForm
-                        label='이메일'
-                        type="text"
-                        placeholder="이메일을 입력해주세요"
-                        name="email"
-                        register={register}
-                        error={errors.email}
-                    />
+                        error={errors[field.name]}
+                        />
+                    ))}
 
-                    <div className="btn-wrap">
+                    <div className={styles.btn_wrap}>
                         <BtnForm
                             type='submit'
-                            className='btn-50'
+                            className='btn_50_b'
                             btnName='아이디찾기'
                         />
                     </div>
                 </form>
             )}
             {checkId &&(
-                <div className="user-loginp-wrap">
-                    <p className="result-id-txt">
+                <div className={styles.user_loginp_wrap}>
+                    <p className={styles.result_id_txt}>
                         회원님의 아이디는 user_99 입니다.
                     </p>
-                    <div className='btn-wrap'>
-                        <BtnLinkForm
-                            linkPath="/login"
-                            className='btn-50'
-                            btnName='로그인'
-                        />
-                        <BtnLinkForm
-                            linkPath="/login/findPw"
-                            className='link-btn-50'
-                            btnName='비밀번호 찾기'
-                        />
+                    <div className={styles.btn_wrap}>
+                        {btnList.map((btn)=>(
+                            <BtnLinkForm
+                                linkPath={btn.linkPath}
+                                className={btn.className}
+                                btnName={btn.btnName}
+                            />
+                        ))}
                     </div>
                 </div>
             )}
-        </div>
+        
         {/* 모달 */}
         {isModalOpen && (
             <div className="modal" onClick={closeModal}>
@@ -108,7 +106,7 @@ function FindId(props) {
                 </div>
             </div>
         )}
-        </div>
+        </>
     );
 }
 

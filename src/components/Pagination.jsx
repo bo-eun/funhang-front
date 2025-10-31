@@ -1,5 +1,5 @@
 import React, {useMemo } from 'react';
-import '../assets/css/pagination.css';
+import styles from '../assets/css/pagination.module.css';
 
 function Pagination({
   page,
@@ -7,10 +7,10 @@ function Pagination({
   movePage,
   pagePerRows = 8,
   blockPerCount = 10,
-  wrapperClass = 'pagination-wrapper',
-  listClass = 'pagination-list',
-  itemClass = 'pagination-item',
-  linkClass = 'pagination-link',
+  wrapperClass = styles['pagination-wrapper'],
+  listClass = styles['pagination-list'],
+  itemClass = styles['pagination-item'],
+  linkClass = styles['pagination-link'],
 }) {
 
   const calculatePageData = useMemo(() => {

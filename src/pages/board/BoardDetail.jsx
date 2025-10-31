@@ -4,7 +4,7 @@ import likeOn from '../../assets/img/likeOn.png';
 import likeOff from '../../assets/img/likeOff.png';
 import CommentLayout from '../../components/comment/CommentLayout';
 import 'react-quill-new/dist/quill.snow.css';
-import '../../assets/css/boardList.css';
+import styles from '../../assets/css/boardList.module.css';
 
 function BoardDetail() {
     const [isActive, setIsActive] = useState(false);
@@ -41,29 +41,29 @@ function BoardDetail() {
     };
 
     return (
-        <div className='board_list_wrap'>
-            <div className='board_title_bg'>
+        <div className={styles.board_list_wrap}>
+            <div className={styles.board_title_bg}>
                 {/* 제목 표시 */}
-                <p className='board-title-txt'>{board.title}</p>
+                <p className={styles.board_title_txt}>{board.title}</p>
                 <p>{board.writer} · {board.createdAt} · 추천수 {board.likeCount}</p>
             </div>
-            <section className='content_bg'>
+            <section className={styles.content_bg}>
                 {/* Quill로 작성된 HTML 내용 표시 */}
                 <div 
-                    className='content_txt ql-editor'
+                    className={`${styles.content_txt} ql-editor`}
                     dangerouslySetInnerHTML={{ __html: board.content }}
                 />
-                <div className='brd_btn_bg'>
+                <div className={styles.brd_btn_bg}>
                     <button 
                         type='button'
                         onClick={handleToggle}
-                        className='min-link-btn-b'
+                        className='min_link_btn_b'
                     >
                         추천
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
-                    <Link to="/board/update" className='min-link-btn-b'>수정</Link>
-                    <Link to="/board" className='min-link-btn-w'>목록</Link>
+                    <Link to="/board/update" className='min_link_btn_b'>수정</Link>
+                    <Link to="/board" className='min_link_btn_w'>목록</Link>
                 </div>
             </section>
             <CommentLayout
@@ -107,8 +107,8 @@ function BoardDetail() {
         fetchBoard();
     }, [id]);
 
-    if (loading) return <div className='board_list_wrap'>로딩중...</div>;
-    if (!board) return <div className='board_list_wrap'>게시글을 찾을 수 없습니다.</div>;
+    if (loading) return <div className={styles.board_list_wrap}>로딩중...</div>;
+    if (!board) return <div className={styles.board_list_wrap}>게시글을 찾을 수 없습니다.</div>;
 
     return (
         // ... 동일한 JSX
