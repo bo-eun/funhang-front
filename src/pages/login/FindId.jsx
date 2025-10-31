@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import styles from '../../assets/css/login.module.css';
-import BtnForm from "../../components/BtnForm";
-import BtnLinkForm from "../../components/BtnLinkForm";
 import InputForm from "../../components/InputForm";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -12,10 +10,7 @@ const findIdFields = [
     { label: "이름", name: "username", type: "text", placeholder: "이름을 입력하세요" },
     { label: "이메일", name: "email", type: "text", placeholder: "이메일을 입력하세요" },
 ];
-const btnList =[
-    { linkPath:"/login", className:'btn_50_b', btnName:"로그인"},
-    { linkPath:"/login/findPw", className:'btn_50_w', btnName:"비밀번호 찾기"},
-]
+
 
 function FindId(props) {
     const [checkId, setCheckId] = useState(false);
@@ -61,11 +56,7 @@ function FindId(props) {
                     ))}
 
                     <div className='long_btn_bg'>
-                        <BtnForm
-                            type='submit'
-                            className='btn_50_b'
-                            btnName='아이디찾기'
-                        />
+                        <button type="submit" className="btn_50_b">아이디찾기</button>
                     </div>
                 </form>
             )}
@@ -75,13 +66,8 @@ function FindId(props) {
                         회원님의 아이디는 user_99 입니다.
                     </p>
                     <div className='long_btn_bg'>
-                        {btnList.map((btn)=>(
-                            <BtnLinkForm
-                                linkPath={btn.linkPath}
-                                className={btn.className}
-                                btnName={btn.btnName}
-                            />
-                        ))}
+                        <Link to={"/login"} className='btn_50_b'>로그인</Link>
+                        <Link to={"/login/findPw"} className='btn_50_w'>비밀번호 찾기</Link>
                     </div>
                 </div>
             )}
@@ -96,12 +82,13 @@ function FindId(props) {
                         <br />
                         다시 입력해 주세요.
                     </p>
-                    <BtnForm
+                    
+                    <button
                         type='submit'
                         onClick={closeModal}
-                        className='modal-log-btn'
-                        btnName='닫기'
-                    />
+                        className='modal-log-btn'>
+                    닫기
+                    </button>
                     </div>
                 </div>
             </div>

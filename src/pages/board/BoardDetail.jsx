@@ -57,9 +57,9 @@ function BoardDetail() {
                     <button 
                         type='button'
                         onClick={handleToggle}
-                        className='min_btn_b'
+                        className={`min_btn_b ${styles.like_btn}`}
                     >
-                        추천
+                        <span>추천</span>
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
                     <Link to="/board/update" className='min_btn_b'>수정</Link>

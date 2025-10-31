@@ -73,11 +73,11 @@ function FindPw(props) {
                 ))}
 
                 <div className='long_btn_bg'>
-                    <BtnForm
+                    <button
                         type="submit"
-                        className='btn_50_b'
-                        btnName="비밀번호찾기"
-                        />
+                        className='btn_50_b'>
+                            비밀번호찾기
+                    </button>
                 </div>
             </form>
             )}
@@ -92,12 +92,7 @@ function FindPw(props) {
                     />
                 ))}
                 <div className='long_btn_bg'>
-                <BtnForm
-                    type="button"
-                    onClick={handleShow}
-                    className='btn_50_b'
-                    btnName="비밀번호 변경"
-                    />
+                    <button type="button" onClick={handleShow} className='btn_50_b'>비밀번호 변경</button>
                 </div>
             </div>
             )}

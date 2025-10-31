@@ -46,16 +46,6 @@ export const authStore = create(
                     state.userRole = null
             }),
 
-            // ✅ [개발용] 일반유저 로그인 (테스트용)
-            devLoginAsUser: () =>
-                set((state) => {
-                state.token = 'dummy-user-token';
-                state.userId = 'user001';
-                state.userName = '일반유저';
-                state.userRole = 'ADMIN';
-            }),
-
-
     })),
        // 원하는 내용을 localstorge 에 저장 
     {

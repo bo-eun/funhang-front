@@ -65,12 +65,8 @@ function SignUp(props) {
                         />
                     ))}
                 </section>
-                <div className='long_btn_bg'>
-                    <BtnForm
-                        type='submit'
-                        className='btn_50_w'
-                        btnName='회원가입'
-                    />
+                <div className={`${styles.top_btn} long_btn_bg`}>
+                    <button type="submit" className="btn_50_b">회원가입</button>
                 </div>
             </form>
        

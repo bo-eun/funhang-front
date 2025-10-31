@@ -60,54 +60,54 @@ function Login() {
     return (
         <>
             <form  onSubmit={handleSubmit(onSubmit)}>
-            <section>
-                <div className={styles.user_role_wrap}>
-                <label>
-                    <input
-                    type="radio"
-                    name="role"
-                    value="user"
-                    checked={role === "user"}
-                    onChange={handleChange}
-                    />
-                    사용자
-                </label>
+                <section>
+                    <div className={styles.user_role_wrap}>
+                        <label>
+                            <input
+                            type="radio"
+                            name="role"
+                            value="user"
+                            checked={role === "user"}
+                            onChange={handleChange}
+                            />
+                            사용자
+                        </label>
 
-                <label>
-                    <input
-                    type="radio"
-                    name="role"
-                    value="admin"
-                    checked={role === "admin"}
-                    onChange={handleChange}
-                    />
-                    관리자
-                </label>
+                        <label>
+                            <input
+                            type="radio"
+                            name="role"
+                            value="admin"
+                            checked={role === "admin"}
+                            onChange={handleChange}
+                            />
+                            관리자
+                        </label>
+                    </div>
+                </section>
+
+                <section className={styles.user_loginp_wrap}>
+                    {loginFields.map((field) => (
+                        <InputForm
+                        key={field.name}
+                        {...field}
+                        register={register}
+                        error={errors[field.name]}
+                        />
+                    ))}
+                </section>
+
+                <div className={styles.find_wrap}>
+                    <Link to="/login/findId">아이디 찾기</Link>
+                    <span> | </span>
+                    <Link to="/login/findPw">비밀번호 찾기</Link>
                 </div>
-            </section>
-            <section className={styles.user_loginp_wrap}>
-                {loginFields.map((field) => (
-                    <InputForm
-                    key={field.name}
-                    {...field}
-                    register={register}
-                    error={errors[field.name]}
-                    />
-                ))}
-            </section>
-            <div className={styles.find_wrap}>
-                <Link to="/login/findId">아이디 찾기</Link>
-                <span> | </span>
-                <Link to="/login/findPw">비밀번호 찾기</Link>
-            </div>
-            <div className='long_btn_bg'>
-                <BtnForm type="submit" className='btn_50_b' btnName="로그인" />
-                <BtnLinkForm
-                linkPath="/login/signUp"
-                className='btn_50_w'
-                btnName="회원가입"
-                />
-            </div>
+
+                <div className='long_btn_bg'>
+                    <button type="submint" className="btn_50_b">로그인</button>
+                    <Link to={"/login/signUp"} className="btn_50_w">회원가입</Link>
+                </div>
+
             </form>
         
         </>

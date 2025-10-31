@@ -22,21 +22,21 @@ function Header(props) {
 
                         {!isAdmin && (
                             <ul className={styles.l_menu_list}>
-                                <li><NavLink to="/product" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
-                                <li><NavLink to="/gs25" className={({isActive}) => isActive? "active":""}>GS25</NavLink></li>
-                                <li><NavLink to="/7eleven" className={({isActive}) => isActive? "active":""}>7ELEVEN</NavLink></li>
-                                <li><NavLink to="/board" className={({isActive}) => isActive? "active":""}>게시판</NavLink></li>
-                                <li><NavLink to="/store" className={({isActive}) => isActive? "active":""}>매장찾기</NavLink></li>
+                                <li><NavLink to="/product" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
+                                <li><NavLink to="/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
+                                <li><NavLink to="/7eleven" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
+                                <li><NavLink to="/board" className={({isActive}) => isActive? styles.active:""}>게시판</NavLink></li>
+                                <li><NavLink to="/store" className={({isActive}) => isActive? styles.active:""}>매장찾기</NavLink></li>
                             </ul>
                         )}
                         {isAdmin && (
                             <ul className={styles.l_menu_list}>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>상품관리</NavLink></li>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>회원관리</NavLink></li>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>게시물관리</NavLink></li>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>카테고리관리</NavLink></li>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>메인 배너 관리</NavLink></li>
-                                <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>쿠폰 관리</NavLink></li>
+                                <li><NavLink to="/admin/product" className={({isActive}) => isActive? styles.active:""}>상품 관리</NavLink></li>
+                                <li><NavLink to="/admin/user" className={({isActive}) => isActive? styles.active:""}>회원 관리</NavLink></li>
+                                <li><NavLink to="/admin/board" className={({isActive}) => isActive? styles.active:""}>게시판 관리</NavLink></li>
+                                <li><NavLink to="/admin/category" className={({isActive}) => isActive? styles.active:""}>카테고리관리</NavLink></li>
+                                <li><NavLink to="/admin/banner" className={({isActive}) => isActive? styles.active:""}>메인 배너 관리</NavLink></li>
+                                <li><NavLink to="/admin/cupon" className={({isActive}) => isActive? styles.active:""}>쿠폰 관리</NavLink></li>
                             </ul>
                         )}
                     </div>

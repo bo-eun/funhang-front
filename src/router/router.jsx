@@ -12,7 +12,6 @@ import Store from "../pages/store/Store";
 import BoardList from "../pages/board/BoardList";
 import BoardDetail from "../pages/board/BoardDetail";
 import BoardForm from "../pages/board/BoardForm";
-import AdminBoardList from "../pages/admin/board/AdminBoardList";
 import MypageLayout from "../components/mypage/Layout";
 import WishList from "../pages/mypage/WishList";
 import Point from "../pages/mypage/Point";
@@ -23,6 +22,7 @@ import DailyCheck from "../pages/mypage/DailyCheck";
 import EditProfile from "../pages/mypage/EditProfile";
 import AdminProtectedRoute from "../components/admin/AdminProtectedRoute";
 import NotAuthorized from "../components/NotAuthorized";
+import AdminProductList from "../pages/admin/product/AdminProductList";
 
 export const router = createBrowserRouter([
   {
@@ -145,10 +145,23 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <AdminBoardList />,
-            handle: { title: "게시판 관리" },
+            element: <Navigate to="product" replace />
+          },
+          {
+            path: "product",
+            element: <AdminProductList />,
+            handle: { title: "상품관리" },
           },
         ],
+      },
+      {
+        path: "admin/board",
+        element: (
+          <AdminProtectedRoute>
+            <BoardList/>
+          </AdminProtectedRoute>
+        ),
+        handle: { title: "게시판 관리" },
       },
       // ✅ 접근 차단 페이지 등록
       {

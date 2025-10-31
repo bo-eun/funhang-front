@@ -60,8 +60,10 @@
 .user_loginp input:focus{
   background-color: #fafafa;
 }
-
-
+/* 버튼 */
+.top_btn{
+    margin-top: 70px;
+}
 /* 찾기로 이동  */
 .find_wrap{
     position: relative;

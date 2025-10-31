@@ -76,6 +76,7 @@ input:focus-visible{
   color: red;
   margin-top: 5px;
   margin-left: 30px;
+  font-size: 14px;
 }
 
 /* -----------------------------------------버튼-------------------------------------------- */
@@ -118,6 +119,10 @@ button {
   text-align: center;
   padding: 0 20px;
 }
+.min_btn_b:hover{
+  background-color:#172c3f ;
+  color: white;
+}
 /* 가로길이 110px 고정 버튼 white */
 .min_btn_w{
   display: inline-block;
@@ -130,6 +135,10 @@ button {
   border: 1px solid #eeeeee;
   text-align: center;
   padding: 0 20px;
+}
+.min_btn_w:hover{
+  background-color: #f0f0f0;
+  color: rgb(0, 0, 0);
 }
 
 /* 부모넓이 없으면 text 길이에 맞게 */
@@ -147,6 +156,10 @@ button {
   cursor: pointer;
   padding: 0px 20px;
 }
+.btn_50_b:hover{
+  background-color:#172c3f ;
+  color: white;
+}
 /* 높이 50px 넓이100%  white 버튼 */
 .btn_50_w{
   display: inline-block;
@@ -158,6 +171,10 @@ button {
   border:1px solid #dddddd;
   background-color: #ffffff;
   padding:  0 20px;
+}
+.btn_50_w:hover{
+  background-color: #f0f0f0;
+  color: rgb(0, 0, 0);
 }
 /* ------------------------------------------------------------------------------------- */
 
