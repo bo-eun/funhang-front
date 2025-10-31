@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
 import BtnLinkForm from "../../components/BtnLinkForm";
@@ -20,10 +20,14 @@ const chgPwFields = [
 
 function FindPw(props) {
     const [checkPw, setCheckPw] = useState(false);
+    const navigate = useNavigate();
     
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false)
+        navigate('/login')
+    };
     const handleShow = () => setShow(true);
 
     const findSchema = yup.object().shape({
@@ -97,12 +101,14 @@ function FindPw(props) {
                 </div>
             </div>
             )}
-        
                 {/* 모달 */}
                 <ShowModal
                     show={show}
                     handleClose={handleClose}
-                    />
+                >
+                    비밀번호가 변경되었습니다.<br />
+                    새 비밀번호로 로그인해 주세요.
+                </ShowModal>
             </>
     );
 }
