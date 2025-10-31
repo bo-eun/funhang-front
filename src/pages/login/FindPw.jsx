@@ -7,21 +7,27 @@ import InputForm from "../../components/InputForm";
 import BtnLinkForm from "../../components/BtnLinkForm";
 import BtnForm from "../../components/BtnForm";
 import ShowModal from "../../components/ShowModal";
+import styles from '../../assets/css/login.module.css';
+
+const findPwFields = [
+  { label: "이름", name: "username", type: "text", placeholder: "이름을 입력하세요" },
+  { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
+];
+const chgPwFields = [
+  { label: "새 비밀번호", name: "password", type: "password", placeholder: "비밀번호를 입력하세요" },
+  { label: "새 비밀번호 확인", name: "passwordCk", type: "password", placeholder: "비밀번호를 입력하세요" },
+];
 
 function FindPw(props) {
     const [checkPw, setCheckPw] = useState(false);
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const updatePw = (e) => {
-    //     setIsModalOpen(true);
-    // };
+    
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const findSchema = yup.object().shape({
-        userName: yup.string().required("이름을 입력하십시오"),
+        username: yup.string().required("이름을 입력하십시오"),
         userId: yup.string().required("아이디를 입력하십시오"),
     });
 
@@ -51,88 +57,47 @@ function FindPw(props) {
     };
     return (
         <>
-        <div className="login-bg">
-        <div className="login-wrap">
-            <span className="page-title">
-            {checkPw === false ? "비밀번호 찾기" : "비밀번호 변경"}
-            </span>
-            {/* 비밀번호 찾기 index */}
             {!checkPw && (
-                <form className="user-loginp-wrap" onSubmit={handleSubmit(onSubmit)}>
-                <InputForm
-                label="이름"
-                type="text"
-                placeholder="이름을 입력해주세요"
-                name="userName"
-                register={register}
-                error={errors.userName}
-                />
+                <form className={styles.user_loginp_wrap} onSubmit={handleSubmit(onSubmit)}>
+                {findPwFields.map((field) => (
+                    <InputForm
+                    key={field.name}
+                    {...field}
+                    register={register}
+                    error={errors[field.name]}
+                    />
+                ))}
 
-                <InputForm
-                label="아이디"
-                type="text"
-                placeholder="아이디를 입력해주세요"
-                name="userId"
-                register={register}
-                error={errors.userId}
-                />
-
-                <div className="btn-wrap">
+                <div className={styles.btn_wrap}>
                 <BtnForm
                     type="submit"
-                    className="btn-50"
+                    className='btn_50_b'
                     btnName="비밀번호찾기"
                     />
                 </div>
             </form>
             )}
             {checkPw && (
-                <div className="user-loginp-wrap">
-                <InputForm
-                label="새 비밀번호"
-                type="password"
-                placeholder="비밀번호를 입력해주세요"
-                name="password"
-                register={register}
-                error={errors.password}
-                />
-
-                <InputForm
-                label="비밀번호 확인"
-                type="password"
-                placeholder="비밀번호를 입력해주세요"
-                name="passwordCk"
-                register={register}
-                error={errors.passwordCk}
-                />
-                <div className="btn-wrap">
+                <div className={styles.user_loginp_wrap}>
+                {chgPwFields.map((field) => (
+                    <InputForm
+                    key={field.name}
+                    {...field}
+                    register={register}
+                    error={errors[field.name]}
+                    />
+                ))}
+                <div className={styles.btn_wrap}>
                 <BtnForm
                     type="button"
                     onClick={handleShow}
-                    className="btn-50"
+                    className='btn_50_b'
                     btnName="비밀번호 변경"
                     />
                 </div>
             </div>
             )}
-        </div>
-    
         
-        {/* {isModalOpen && (
-            <div className="modal">
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content-list">
-            <p>비밀번호가 변경되었습니다.</p>
-            <BtnLinkForm
-            linkPath="/login"
-            className="modal-log-btn"
-            btnName="닫기"
-            />
-            </div>
-            </div>
-            </div>
-            )} */}
-        </div>
                 {/* 모달 */}
                 <ShowModal
                     show={show}

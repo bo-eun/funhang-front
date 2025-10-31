@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from '../assets/css/login.module.css';
 
 function InputForm({ label, type = "text", placeholder, register, name, error }) {
     return (
-        <div className='id-inp user-loginp'>
+        <div className={styles.user_loginp}>
             <label>{label}</label>
             <input
                 type={type}

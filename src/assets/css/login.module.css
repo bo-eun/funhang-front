@@ -1,16 +1,11 @@
 /* 로그인 타이틀 */
-.login-bg{
+.login_bg{
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: calc(100vh - 200px - 250px);
-    margin: 100px auto;
+    margin: 70px auto;
     min-height: 600px;
 }
-.login-bg-long{
-    height: 100%;
-}
-.login-wrap{
+.login_wrap{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,24 +14,29 @@
     /* height: 100%; */
     /* background-color: #2C3E50; */
 }
+.login_wrap form{
+    width: 100%;
+}
 
 
 /* 권한선택 */
-.user-role-wrap{
+.user_role_wrap{
     margin-top: 70px;
     gap: 50px;
     font-size: 18px;
+    text-align: center;
 }
-.user-role-wrap label:first-child{
+.user_role_wrap label:first-child{
     margin-right: 50px;
 }
-.user-role-wrap input{
+.user_role_wrap input{
     margin-right: 10px;
     cursor: pointer;
+    background-color: #2c3e50;
 }
 
 /* input창 */
-.user-loginp-wrap{
+.user_loginp_wrap{
     display: flex; 
     flex-direction: column;
 
@@ -44,11 +44,11 @@
     gap: 25px;
     width: 100%;
 }
-.user-loginp label{
+.user_loginp label{
     margin-left: 24px;
     font-size: 14px;
 }
-.user-loginp input{
+.user_loginp input{
     margin-top: 10px;
     width: 100%;
     height: 50px;
@@ -58,13 +58,13 @@
     font-size: 18px;
     padding: 0 24px;
 }
-.user-loginp input:focus{
+.user_loginp input:focus{
   background-color: #fafafa;
 }
 
 
 /* 찾기로 이동  */
-.find-wrap{
+.find_wrap{
     position: relative;
     width: 100%;
     margin-top: 5px;
@@ -73,35 +73,15 @@
 }
 
 /* height 50px btn & a  */
-.btn-wrap{
+.btn_wrap{
     margin-top: 30px;
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 10px;
 }
-.btn-50{
-    text-align: center;
-    cursor: pointer;
-    height: 50px;
-    line-height: 50px;
-    border-radius: 25px;
-    border: none;
-    background-color: #2C3E50;
-    color: white;
-    cursor: pointer;
-}
-.link-btn-50{
-    text-align: center;
-    cursor: pointer;
-    height: 50px;
-    line-height: 50px;
-    border-radius: 25px;
-    border:1px solid #dddddd;
-    background-color: #ffffff;
-}
 
-.result-id-txt{
+.result_id_txt{
     text-align: center;
     margin: 100px 0;
 }
@@ -122,7 +102,7 @@
 }
 
 /* 모달 창 */
-.modal-content {
+.modal_content {
   background-color: #fff;
   border-radius: 12px;
   width: 500px;
@@ -130,7 +110,7 @@
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
-.modal-content-list {
+.modal_content_list {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -138,13 +118,13 @@
   align-items: center;
 }
 
-.modal-content p {
+.modal_content p {
     font-size: var(--text-size);
     line-height: 34px;
     margin-bottom: 40px;
 }
 
-.modal-log-btn {
+.modal_log_btn {
   width: 140px;
   height: 45px;
   line-height: 45px;

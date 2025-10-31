@@ -1,3 +1,16 @@
+/* 게시판 */
+.board_list_bg{
+    width: 100%;
+}
+.board_list_wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1128px;
+    min-width: 800px;
+    margin: 100px auto;
+}
 
 /* 게시판 검색창 */
 .board_search_wrap{
@@ -7,16 +20,17 @@
     width: 100%;
     margin-top:70px ;
 }
-.board_search_wrap .form-select{
+.board_search_wrap :global(.form-select){
+    border-radius: 10px;
     width: 120px;
     margin-right: 20px;
     height: 45px;
 }
-.board_search_wrap .search_box{
+.board_search_wrap :global(.search_box){
     margin: 0;
     width: 100%;
 }
-.board_search_wrap .search_box input {
+.board_search_wrap :global(.search_box) input {
     width: 100%;
 }
 
@@ -28,7 +42,7 @@
     margin-top: 50px;
     line-height: 45px;
 }
-.brd_list_info .form-select{
+.brd_list_info :global(.form-select){
     width: 170px;
 }
 
@@ -36,7 +50,6 @@
 .board_list{
     width: 100%;
     margin-top: 30px;
-    font-size: var(--text-size);
 }
 
 /* ------------------------------------------ */
@@ -48,7 +61,7 @@
     font-size: 18px;
 }
 .board_title_txt{
-    font-size: --title-size;
+    font-size: var(--title-size);
     font-weight: bold;
 }
 /* 게시판 수정및 등록 */

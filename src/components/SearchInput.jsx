@@ -1,5 +1,6 @@
 import React from 'react';
 import searchbtn from "../assets/img/search_btn.svg"
+import styles from '../assets/css/boardList.module.css';
 
 function SearchInput(props) {
     return (
