@@ -15,6 +15,7 @@ export const authStore = create(
 
             //로그인 여부 판단 함수 
             isAuthenticated : () => !!get().token,
+
             //권한가져오기
             getUserRole : () => get().userRole,
 
@@ -43,7 +44,16 @@ export const authStore = create(
                     state.userId = null;
                     state.suerName = null;
                     state.userRole = null
-            })
+            }),
+
+            // ✅ [개발용] 일반유저 로그인 (테스트용)
+            devLoginAsUser: () =>
+                set((state) => {
+                state.token = 'dummy-user-token';
+                state.userId = 'user001';
+                state.userName = '일반유저';
+                state.userRole = 'ADMIN';
+            }),
 
 
     })),

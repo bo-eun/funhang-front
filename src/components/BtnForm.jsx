@@ -1,6 +1,10 @@
 import React from 'react';
 
 function BtnForm({btnName,type = "button",className='', disabled = false, onClick }) {
+
+    const btnCount = ()=>{
+        
+    }
     return (
         
             <button 

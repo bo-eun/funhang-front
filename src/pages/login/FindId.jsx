@@ -60,7 +60,7 @@ function FindId(props) {
                         />
                     ))}
 
-                    <div className={styles.btn_wrap}>
+                    <div className='long_btn_bg'>
                         <BtnForm
                             type='submit'
                             className='btn_50_b'
@@ -74,7 +74,7 @@ function FindId(props) {
                     <p className={styles.result_id_txt}>
                         회원님의 아이디는 user_99 입니다.
                     </p>
-                    <div className={styles.btn_wrap}>
+                    <div className='long_btn_bg'>
                         {btnList.map((btn)=>(
                             <BtnLinkForm
                                 linkPath={btn.linkPath}

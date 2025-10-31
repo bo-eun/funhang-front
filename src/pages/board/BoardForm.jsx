@@ -612,11 +612,11 @@ function BoardForm({ type }) {
           onChangeSelection={ensureEditor}
           style={{ height: '500px', marginBottom: '50px' }}
         />
-        <div className={styles.brd_btn_bg}>
-          <button type='submit' className='min_link_btn_b' onClick={goSubmit}>
+        <div className='short_btn_bg'>
+          <button type='submit' className='min_btn_b' onClick={goSubmit}>
             {type === "update" ? "수정" : "등록"}
           </button>
-          <a href={type==="update"?"/board/detail":"/board"} className='min_link_btn_w'>취소</a>
+          <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>
         </div>
       </section>
     </form>

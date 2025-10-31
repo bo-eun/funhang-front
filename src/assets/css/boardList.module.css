@@ -88,19 +88,8 @@
     margin-bottom: 40px;
 }
 
-.brd_btn_bg{
-    display: flex;
-    justify-content: center;
-    font-size: 18px;
-    gap: 15px;
 
-}
-.brd_btn_bg button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
+
 
 
 

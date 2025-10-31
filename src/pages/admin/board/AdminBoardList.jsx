@@ -63,7 +63,7 @@ function AdminBoardList(props) {
                 </section>
 
                 <div className="r_btn">
-                    <Link to="/board/write" className="min_link_btn_b">
+                    <Link to="/board/write" className="min_btn_b">
                         글쓰기
                     </Link>
                 </div>

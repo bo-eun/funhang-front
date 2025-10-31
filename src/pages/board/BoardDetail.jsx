@@ -53,17 +53,17 @@ function BoardDetail() {
                     className={`${styles.content_txt} ql-editor`}
                     dangerouslySetInnerHTML={{ __html: board.content }}
                 />
-                <div className={styles.brd_btn_bg}>
+                <div className='short_btn_bg'>
                     <button 
                         type='button'
                         onClick={handleToggle}
-                        className='min_link_btn_b'
+                        className='min_btn_b'
                     >
                         추천
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
-                    <Link to="/board/update" className='min_link_btn_b'>수정</Link>
-                    <Link to="/board" className='min_link_btn_w'>목록</Link>
+                    <Link to="/board/update" className='min_btn_b'>수정</Link>
+                    <Link to="/board" className='min_btn_w'>목록</Link>
                 </div>
             </section>
             <CommentLayout

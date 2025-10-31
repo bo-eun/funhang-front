@@ -65,7 +65,7 @@ function SignUp(props) {
                         />
                     ))}
                 </section>
-                <div className={styles.btn_wrap}>
+                <div className='long_btn_bg'>
                     <BtnForm
                         type='submit'
                         className='btn_50_w'

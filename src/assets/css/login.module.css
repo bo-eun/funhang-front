@@ -39,7 +39,6 @@
 .user_loginp_wrap{
     display: flex; 
     flex-direction: column;
-
     margin-top: 40px;
     gap: 25px;
     width: 100%;
@@ -55,7 +54,7 @@
     border-radius: 25px;
     border: 1px solid #dddddd;
     background-color: white;
-    font-size: 18px;
+    font-size: var(--text-size);
     padding: 0 24px;
 }
 .user_loginp input:focus{
@@ -67,19 +66,12 @@
 .find_wrap{
     position: relative;
     width: 100%;
-    margin-top: 5px;
+    margin: 5px 0 30px;
     font-size: 14px;
     text-align: right;
 }
 
-/* height 50px btn & a  */
-.btn_wrap{
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-}
+
 
 .result_id_txt{
     text-align: center;

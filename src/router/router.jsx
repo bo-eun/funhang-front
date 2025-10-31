@@ -21,6 +21,8 @@ import AdminLayout from "../components/admin/AdminLayout";
 import Coupon from "../pages/mypage/Coupon";
 import DailyCheck from "../pages/mypage/DailyCheck";
 import EditProfile from "../pages/mypage/EditProfile";
+import AdminProtectedRoute from "../components/admin/AdminProtectedRoute";
+import NotAuthorized from "../components/NotAuthorized";
 
 export const router = createBrowserRouter([
   {
@@ -86,7 +88,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <BoardList />,
+            element: <BoardList/>,
           },
           {
             path: "detail",
@@ -133,15 +135,25 @@ export const router = createBrowserRouter([
         ],
       },
       //관리자페이지
-      { element:<AdminLayout/>,
+      { 
         path: "admin",
+        element: (
+          <AdminProtectedRoute>
+            <AdminLayout />
+          </AdminProtectedRoute>
+        ),
         children: [
           {
             index: true,
             element: <AdminBoardList />,
-            handle: { title: "게시판 관리" } 
+            handle: { title: "게시판 관리" },
           },
         ],
+      },
+      // ✅ 접근 차단 페이지 등록
+      {
+        path: "not-authorized",
+        element: <NotAuthorized />,
       },
       
     ],

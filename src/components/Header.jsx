@@ -2,9 +2,12 @@ import React from 'react';
 import styles from '../assets/css/header.module.css';
 import logo from '../assets/img/logo.png';
 import { Link, NavLink } from 'react-router';
+import { authStore } from '../store/authStore';
 
 function Header(props) {
-    const user='ADMIN';
+    const { token, userRole, userName, clearAuth } = authStore();
+    const isLoggedIn = !!token;
+    const isAdmin = userRole === "ADMIN";
     
     return (
         <div className={styles.fixed_bg}>
@@ -12,12 +15,12 @@ function Header(props) {
                 <nav className={styles.header_nav}>
                     <div className={styles.l_menu_bg}>
                         <div className={styles.logo}>
-                            <Link to={user===''||user==='USER'?'/':'/admin'}>
+                            <Link to={isAdmin?'/admin':'/'}>
                                 <img src={logo} alt="편행로고"/>
                             </Link>
                         </div>
 
-                        {user==='' || user==='USER' &&(
+                        {!isAdmin && (
                             <ul className={styles.l_menu_list}>
                                 <li><NavLink to="/product" className={({isActive}) => isActive? "active":""}>CU</NavLink></li>
                                 <li><NavLink to="/gs25" className={({isActive}) => isActive? "active":""}>GS25</NavLink></li>
@@ -26,7 +29,7 @@ function Header(props) {
                                 <li><NavLink to="/store" className={({isActive}) => isActive? "active":""}>매장찾기</NavLink></li>
                             </ul>
                         )}
-                        {user==='ADMIN' &&(
+                        {isAdmin && (
                             <ul className={styles.l_menu_list}>
                                 <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>상품관리</NavLink></li>
                                 <li><NavLink to="/admin" className={({isActive}) => isActive? "active":""}>회원관리</NavLink></li>
@@ -38,7 +41,23 @@ function Header(props) {
                         )}
                     </div>
                     <ul className={styles.r_menu}>
-                        <li><Link to="/login">로그인</Link></li>
+                        {!isLoggedIn && (
+                            <li>
+                                <Link to="/login">로그인</Link>
+                            </li>
+                        )}
+                        {isLoggedIn && (
+                            <>
+                                <li>{userName}님</li>
+                                <li>
+                                <button
+                                    onClick={clearAuth}
+                                >
+                                    로그아웃
+                                </button>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </nav>
             </header>

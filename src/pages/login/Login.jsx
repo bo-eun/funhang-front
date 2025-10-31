@@ -1,5 +1,5 @@
 // import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from "../../assets/css/login.module.css";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -8,22 +8,26 @@ import InputForm from "../../components/InputForm";
 import BtnForm from "../../components/BtnForm";
 import BtnLinkForm from "../../components/BtnLinkForm";
 import { useState } from "react";
+import { authStore } from "../../store/authStore";
 
 const loginFields = [
   { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
   { label: "비밀번호", name: "password", type: "password", placeholder: "비밀번호를 입력하세요" },
 ];
 function Login() {
-    
     const [role, setRole] = useState("user");
+    const { setLogin } = authStore();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setRole(e.target.value);
     };
+
     const schema = yup.object().shape({
         userId: yup.string().required("아이디를 입력하십시오"),
         password: yup.string().required("비밀번호를 입력하십시오"),
     });
+
     const {
         register,
         handleSubmit,
@@ -35,8 +39,23 @@ function Login() {
 
     const onSubmit = (data) => {
         console.log("폼 데이터:", data);
+
+         // 임의로 로그인 처리 (더미 토큰)
+        const dummyToken = "dummy-token-" + role;
+
+        setLogin({
+            token: dummyToken,
+            userId: data.userId,
+            userName: data.userId,
+            userRole: role === "admin" ? "ADMIN" : "USER",
+        });
         reset();
-        location.href = "/";
+        // ✅ 로그인 후 즉시 권한별 페이지 이동
+        if (role === "admin") {
+        navigate("/admin"); // 관리자면 관리자 페이지
+        } else {
+        navigate("/"); // 일반 사용자면 메인 페이지
+        }
     };
     return (
         <>
@@ -81,7 +100,7 @@ function Login() {
                 <span> | </span>
                 <Link to="/login/findPw">비밀번호 찾기</Link>
             </div>
-            <div className={styles.btn_wrap}>
+            <div className='long_btn_bg'>
                 <BtnForm type="submit" className='btn_50_b' btnName="로그인" />
                 <BtnLinkForm
                 linkPath="/login/signUp"
