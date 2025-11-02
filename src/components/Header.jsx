@@ -1,21 +1,29 @@
 import React from 'react';
 import styles from '../assets/css/header.module.css';
 import logo from '../assets/img/logo.png';
-import { Link, NavLink } from 'react-router';
+import { Link, Navigate, NavLink, useNavigate } from 'react-router';
 import { authStore } from '../store/authStore';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import { NavDropdown } from 'react-bootstrap';
 
 function Header(props) {
+    const navigate = useNavigate();
     const { token, userRole, userName, clearAuth } = authStore();
     const isLoggedIn = !!token;
     const isAdmin = userRole === "ADMIN";
+    const handleLogout = () => {
+        clearAuth(); 
+        navigate("/login", { replace: true }); 
+    };
     
     return (
         <div className={styles.fixed_bg}>
             <header className={styles.header_bg}>
-                <nav className={styles.header_nav}>
+                <Navbar className={styles.header_nav}>
                     <div className={styles.l_menu_bg}>
                         <div className={styles.logo}>
-                            <Link to={isAdmin?'/admin':'/'}>
+                            <Link to={isAdmin?'/admin':'/'} >
                                 <img src={logo} alt="편행로고"/>
                             </Link>
                         </div>
@@ -36,30 +44,27 @@ function Header(props) {
                                 <li><NavLink to="/admin/board" className={({isActive}) => isActive? styles.active:""}>게시판 관리</NavLink></li>
                                 <li><NavLink to="/admin/category" className={({isActive}) => isActive? styles.active:""}>카테고리관리</NavLink></li>
                                 <li><NavLink to="/admin/banner" className={({isActive}) => isActive? styles.active:""}>메인 배너 관리</NavLink></li>
-                                <li><NavLink to="/admin/cupon" className={({isActive}) => isActive? styles.active:""}>쿠폰 관리</NavLink></li>
+                                <li><NavLink to="/admin/coupon" className={({isActive}) => isActive? styles.active:""}>쿠폰 관리</NavLink></li>
                             </ul>
                         )}
                     </div>
-                    <ul className={styles.r_menu}>
-                        {!isLoggedIn && (
-                            <li>
-                                <Link to="/login">로그인</Link>
-                            </li>
-                        )}
-                        {isLoggedIn && (
-                            <>
-                                <li>{userName}님</li>
-                                <li>
-                                <button
-                                    onClick={clearAuth}
-                                >
-                                    로그아웃
-                                </button>
-                                </li>
-                            </>
-                        )}
-                    </ul>
-                </nav>
+                    <Navbar.Collapse className={`${styles.r_menu}`}>
+                        {!isLoggedIn?
+                        (
+                                <Nav.Link as={NavLink} to="/login">로그인</Nav.Link>
+                        )
+                        :
+                        (<>
+                            <NavDropdown title={`${userName} 님`}>
+                                {!isAdmin &&(
+                                    <NavDropdown.Item as={NavLink} to="/mypage">회원정보</NavDropdown.Item>
+                                )}
+                                <NavDropdown.Item onClick={handleLogout} >로그아웃</NavDropdown.Item>
+                            </NavDropdown>
+                        </>)
+                        }
+                    </Navbar.Collapse>
+                </Navbar>
             </header>
         </div>
     );

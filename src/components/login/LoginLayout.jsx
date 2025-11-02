@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "../../assets/css/login.module.css";
-import { Outlet, useMatches } from "react-router";
+import { Outlet, useLocation, useMatches } from "react-router";
+import { pageInfo } from "../../hooks/pageTitle";
 
 function LoginLayout() {
-    const matches = useMatches();
-    const current = matches[matches.length - 1];
-    const title = current.handle?.title || "";
+
+    const { pathname } = useLocation();
+    const title = pageInfo[pathname]?.title || "";
+
     return (
         <div className={styles.login_bg}>
             <div className={styles.login_wrap}>

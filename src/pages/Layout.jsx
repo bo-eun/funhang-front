@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation, useMatches } from 'react-router';
 import '../assets/css/common.css';
+import { titleMap } from '../hooks/pageTitle';
 
 function Layout() {
+    const location = useLocation();
+    const pathname = location.pathname;
+    const pageTitle = titleMap[pathname] 
+        ? `${titleMap[pathname]}편행+` 
+        : "편행+";
+
+    useEffect(() => {
+        document.title = pageTitle;
+    }, [pageTitle]);
+
     return (
         <div className='layout-root'>
             <Header/>            

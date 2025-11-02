@@ -41,7 +41,7 @@ function BoardDetail() {
     };
 
     return (
-        <div className={styles.board_list_wrap}>
+        <>
             <div className={styles.board_title_bg}>
                 {/* 제목 표시 */}
                 <p className={styles.board_title_txt}>{board.title}</p>
@@ -71,7 +71,7 @@ function BoardDetail() {
                 onAddComment={addComment}
                 onDeleteComment={deleteComment}
             />
-        </div>
+        </>
     );
 }
 
@@ -107,8 +107,8 @@ function BoardDetail() {
         fetchBoard();
     }, [id]);
 
-    if (loading) return <div className={styles.board_list_wrap}>로딩중...</div>;
-    if (!board) return <div className={styles.board_list_wrap}>게시글을 찾을 수 없습니다.</div>;
+    if (loading) return <div className={styles.base_list_bg}>로딩중...</div>;
+    if (!board) return <div className={styles.base_list_bg}>게시글을 찾을 수 없습니다.</div>;
 
     return (
         // ... 동일한 JSX

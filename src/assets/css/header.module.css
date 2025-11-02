@@ -18,6 +18,7 @@
     justify-content: space-between;
     width: 1128px;
     height: 100%;
+    padding: 0;
 }
 
 .l_menu_list a:hover::before,
@@ -52,14 +53,20 @@
 
 
 
-.l_menu_bg, .l_menu_list, .r_menu{
+.l_menu_bg, .l_menu_list{
     display: flex;
     align-items: center;
     font-size: 18px;
     font-weight: 600;
 }
+.r_menu{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
 .l_menu_bg{
     gap: 40px;
+    height: 100%;
 }
 .l_menu_list{
     height: 100%;
@@ -74,6 +81,9 @@
     height: 100%;
     padding: 0px 30px;
 }
+
+
+
 .logo{
     width: 100px;
 }

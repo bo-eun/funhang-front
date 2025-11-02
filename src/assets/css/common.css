@@ -91,6 +91,12 @@ button {
   justify-content: end;
   gap: 10px;
 }
+.r_btn_cul{
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 10px;
+}
 /* 가로 배치 부모 div */
 .short_btn_bg{
   display: flex;
@@ -202,10 +208,30 @@ button {
   right: 10px; top: 10px;
 }
 
-ul, li{
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* 검색창 & 셀렉트박스 영역 및 요소 */
+.base_search_bg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin:70px 0 50px;
+}
+.base_search_bg .form-select{
+    border-radius: 10px;
+    width: 130px;
+    margin-right: 20px;
+    height: 45px;
+}
+.base_search_bg .search_box{
+    margin: 0;
+    width: 100%;
+}
+.base_search_bg .search_box input {
+    width: 100%;
+}
+
+.total{
+    font-size: 20px;
 }
 
 .layout-root {
@@ -218,11 +244,31 @@ ul, li{
     flex: 1; /* 남은 공간을 채우도록 main 영역 확장 */
 }
 
+/* SubLayout css */
+.base_list_bg{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1128px;
+    min-width: 800px;
+    margin: 100px auto;
+}
+.base_list_bg form{
+    width: 100%;
+}
+.brd_list_info{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    line-height: 45px;
+    flex: 1;
+}
 
 /* 각 페이지 메인 타이틀 */
 .page_title{
     font-size: var(--title-size);
-    font-weight: 600;
+    font-weight: bold;
     text-align: center;
 }
 
@@ -290,4 +336,10 @@ ul, li{
   border-bottom: 1px solid #a8a8a8;
 }
 
+/* 모달 */
 .modal {z-index: 1056 !important;}
+
+/* 네비 */
+.Collapse{
+  display: block;
+}

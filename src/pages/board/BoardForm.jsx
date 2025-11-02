@@ -32,16 +32,10 @@ function BoardForm({ type }) {
   const quality = 0.9;
 
   /** Quill 인스턴스를 안전하게 획득 */
-  const ensureEditor = useCallback(() => {
-    if (quillInstanceRef.current) return;
-    try {
-      const q = quillRef.current?.getEditor();
-      if (q) {
-        quillInstanceRef.current = q;
-        setIsReady(true);
-      }
-    } catch (error) {
-      // 아직 미초기화 상태
+  useEffect(() => {
+    if (quillRef.current && !quillInstanceRef.current) {
+      quillInstanceRef.current = quillRef.current.getEditor();
+      setIsReady(true); // editor 준비 완료
     }
   }, []);
 
@@ -199,9 +193,7 @@ function BoardForm({ type }) {
 
   /** 이미지 업로드 → URL 삽입 */
   const uploadAndInsert = useCallback(
-    async (file) => {
-      if (!file) return;
-      
+    async (file) => {      
       const editor = quillInstanceRef.current;
       if (!editor) {
         alert('에디터가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
@@ -328,7 +320,8 @@ function BoardForm({ type }) {
 
   /** 이미지 핸들 리사이즈 기능 */
   useEffect(() => {
-    const editor = quillRef.current?.getEditor();
+    if (!isReady) return; // editor가 준비될 때까지 기다림
+    const editor = quillInstanceRef.current;
     if (!editor) return;
 
     const editorElement = editor.root;
@@ -524,7 +517,7 @@ function BoardForm({ type }) {
         document.head.removeChild(existingStyle);
       }
     };
-  }, [reuploadResizedImage]);
+  }, [isReady, reuploadResizedImage]);
 
   const modules = useMemo(
     () => ({
@@ -577,7 +570,7 @@ function BoardForm({ type }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.board_list_wrap}>
+    <>
       {USE_MOCK && (
         <div style={{ 
           background: '#fff3cd', 
@@ -589,37 +582,36 @@ function BoardForm({ type }) {
           🎭 Mock 모드 | 이미지 클릭 후 핸들을 드래그하여 크기 조정
         </div>
       )}
-      
-      <div className={styles.board_title_bg}>
-        <input
-          type='text'
-          className={styles['board_title_txt']}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder='제목을 입력하세요'
-        />
-      </div>
-      <section className={styles.content_bg}>
-        <ReactQuill
-          ref={quillRef}
-          theme="snow"
-          value={content}
-          onChange={setContent}
-          modules={modules}
-          formats={formats}
-          placeholder='내용을 입력하세요...'
-          onFocus={ensureEditor}
-          onChangeSelection={ensureEditor}
-          style={{ height: '500px', marginBottom: '50px' }}
-        />
-        <div className='short_btn_bg'>
-          <button type='submit' className='min_btn_b' onClick={goSubmit}>
-            {type === "update" ? "수정" : "등록"}
-          </button>
-          <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.board_title_bg}>
+          <input
+            type='text'
+            className={styles['board_title_txt']}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='제목을 입력하세요'
+            />
         </div>
-      </section>
-    </form>
+        <section className={styles.content_bg}>
+          <ReactQuill
+            ref={quillRef}
+            theme="snow"
+            value={content}
+            onChange={setContent}
+            modules={modules}
+            formats={formats}
+            placeholder='내용을 입력하세요...'
+            style={{ height: '500px', marginBottom: '50px' }}
+            />
+          <div className='short_btn_bg'>
+            <button type='submit' className='min_btn_b' onClick={goSubmit}>
+              {type === "update" ? "수정" : "등록"}
+            </button>
+            <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>
+          </div>
+        </section>
+      </form>
+    </>
   );
 }
 

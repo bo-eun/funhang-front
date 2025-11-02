@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import styles from '../../assets/css/boardList.module.css';
 
-function BoardListItem({boardItem,selectedId,handleCheck,isAdmin}) {
+function BoardListItem({boardItem,selectedId,handleCheck,isAdmin,checked}) {
     
     console.log(selectedId);
     return (
@@ -13,6 +13,7 @@ function BoardListItem({boardItem,selectedId,handleCheck,isAdmin}) {
                         type="checkbox" 
                         id={boardItem.id}
                         onChange={handleCheck}
+                        checked={checked}
                     />
                 )}
             </td>

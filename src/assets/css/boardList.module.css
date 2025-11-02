@@ -1,38 +1,6 @@
-/* 게시판 */
-.board_list_bg{
-    width: 100%;
-}
-.board_list_wrap{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 1128px;
-    min-width: 800px;
-    margin: 100px auto;
-}
 
-/* 게시판 검색창 */
-.board_search_wrap{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin:70px 0 50px;
-}
-.board_search_wrap :global(.form-select){
-    border-radius: 10px;
-    width: 120px;
-    margin-right: 20px;
-    height: 45px;
-}
-.board_search_wrap :global(.search_box){
-    margin: 0;
-    width: 100%;
-}
-.board_search_wrap :global(.search_box) input {
-    width: 100%;
-}
+
+
 
 /* 게시판 정보 및 정렬 */
 .brd_info_wrap{
@@ -47,6 +15,7 @@
     line-height: 45px;
     flex: 1;
 }
+
 .brd_list_info :global(.form-select){
     width: 170px;
 }

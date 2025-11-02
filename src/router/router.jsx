@@ -16,13 +16,14 @@ import MypageLayout from "../components/mypage/Layout";
 import WishList from "../pages/mypage/WishList";
 import Point from "../pages/mypage/Point";
 import LoginLayout from "../components/login/LoginLayout";
-import AdminLayout from "../components/admin/AdminLayout";
 import Coupon from "../pages/mypage/Coupon";
 import DailyCheck from "../pages/mypage/DailyCheck";
 import EditProfile from "../pages/mypage/EditProfile";
 import AdminProtectedRoute from "../components/admin/AdminProtectedRoute";
 import NotAuthorized from "../components/NotAuthorized";
 import AdminProductList from "../pages/admin/product/AdminProductList";
+import SubLayout from "../pages/SubLayout";
+import AdminProductUpdate from "../pages/admin/product/AdminProductUpdate";
 
 export const router = createBrowserRouter([
   {
@@ -35,12 +36,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "main",
-        children: [
-          {
-            index: true,
-            element: <Main />,
-          },
-        ],
+        element: <Main />,
       },
       {
         element: <LoginLayout/>,
@@ -49,22 +45,18 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <Login/>,
-            handle: { title: "로그인" } 
           },
           {
             path: "findId",
             element: <FindId />,
-            handle: { title: "아이디 찾기" } 
           },
           {
             path: "findPw",
             element: <FindPw />,
-            handle: { title: "비밀번호 찾기" } 
           },
           {
             path: "signUp",
             element: <SignUp />,
-            handle: { title: "회원가입" } 
           },
         ],
       },
@@ -84,6 +76,7 @@ export const router = createBrowserRouter([
       },
 
       {
+        element:<SubLayout/>,
         path: "board",
         children: [
           {
@@ -139,7 +132,7 @@ export const router = createBrowserRouter([
         path: "admin",
         element: (
           <AdminProtectedRoute>
-            <AdminLayout />
+            <SubLayout />
           </AdminProtectedRoute>
         ),
         children: [
@@ -149,8 +142,15 @@ export const router = createBrowserRouter([
           },
           {
             path: "product",
-            element: <AdminProductList />,
-            handle: { title: "상품관리" },
+            element: <AdminProductList/>,
+          },
+          {
+            path: "product/update",
+            element: <AdminProductUpdate/>,
+          },
+          {
+            path: "board",
+            element: <BoardList />,
           },
         ],
       },
