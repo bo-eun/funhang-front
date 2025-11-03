@@ -9,10 +9,14 @@ import styles from "../../assets/css/mypage.module.css"
 
 function EditProfile(props) {
     const schema = yup.object().shape({
-        password: yup.string().required("비밀번호를 입력하십시오")
-            .min(6, "비밀번호는 최소 6자리 이상이어야 합니다"),
-        passwordCk: yup.string().required("비밀번호를 입력하십시오")
-            .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다"),
+        passwordCk: yup.string().when("password", {
+            is: (password) => password && password.length > 0, // password가 입력된 경우만
+            then: (schema) =>
+            schema
+                .required("비밀번호 확인을 입력하십시오")
+                .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다"),
+            otherwise: (schema) => schema.notRequired(), // password 없으면 검증 안 함
+        }),
         userName: yup.string().required("이름을 입력하십시오"),
         email: yup.string().required("이메일을 입력하십시오"),
         phone: yup.string().required("휴대폰 번호를 입력하십시오")
@@ -54,15 +58,14 @@ function EditProfile(props) {
                         <InputForm
                             label="비밀번호"
                             type="password"
-                            placeholder="비밀번호를 입력해주세요"
+                            placeholder="새 비밀번호를 입력해주세요"
                             name="password"
                             register={register}
-                            error={errors.password}
                         />
                         <InputForm
                             label="비밀번호 확인"
                             type="password"
-                            placeholder="비밀번호를 입력해주세요"
+                            placeholder="새 비밀번호를 입력해주세요"
                             name="passwordCk"
                             register={register}
                             error={errors.passwordCk}
@@ -108,11 +111,11 @@ function EditProfile(props) {
                             readOnly={true}
                         />
                     </section>
-                    <div className="btn-wrap">
+                    <div className={styles["btn_wrap"]}>
                         <BtnForm
                             type='submit'
                             // onClick={goLogin}
-                            className='btn-50'
+                            className='btn_50_b w-100 mt-3'
                             btnName='수정'
                         />
                     </div>

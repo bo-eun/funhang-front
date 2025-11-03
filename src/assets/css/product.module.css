@@ -27,7 +27,7 @@
     font-size: 20px;
 }
 
-.category_list li a.active {
+.category_list li.active a {
     margin-left: -2px;
     color: #222;
     background: var(--secondary-color);

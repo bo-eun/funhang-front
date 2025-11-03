@@ -191,7 +191,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height }) {
         if (status !== window.kakao.maps.services.Status.OK) return;
 
         // 검색어가 있을 경우 첫 번째 검색 결과를 중심으로 지도 이동
-        if (searchText.trim() && data.length > 0) {
+        if (searchText.trim() && data?.length > 0) {
           const firstPlace = data[0];
           const newCenter = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
           mapInstance.current.setCenter(newCenter);
@@ -224,13 +224,13 @@ function Map({ chainName, searchText = "", setList, selectedItem, height }) {
 
 
   useEffect(() => {
-    if(dataList.length > 0) {
+    if(dataList?.length > 0) {
 
     // 거리순 + category_name 에 편의점 종류를 저장
     const sortedList = dataList.map((data) => {
 
       const arr = data.category_name.split(' > ');
-      data.category_name = arr[arr.length - 1];
+      data.category_name = arr[arr?.length - 1];
       if(data.category_name === '세븐일레븐') {
         data.category_name = "7ELEVEN"
       }

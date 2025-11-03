@@ -254,6 +254,6 @@
 .user-loginp-wrap {
     margin-top: 0;
 }
-.user-loginp-wrap :global(.user-loginp) {
+.user-loginp-wrap > * {
     margin-bottom: 40px;
 }
