@@ -24,6 +24,9 @@ import NotAuthorized from "../components/NotAuthorized";
 import AdminProductList from "../pages/admin/product/AdminProductList";
 import SubLayout from "../pages/SubLayout";
 import AdminProductUpdate from "../pages/admin/product/AdminProductUpdate";
+import AdminCategoryList from "../pages/admin/category/List";
+import AdminCouponList from "../pages/admin/coupon/List";
+import AdminBanner from "../pages/admin/banner/Banner";
 
 export const router = createBrowserRouter([
   {
@@ -152,6 +155,18 @@ export const router = createBrowserRouter([
             path: "board",
             element: <BoardList />,
           },
+          {
+            path: "category",
+            element: <AdminCategoryList />
+          },
+          {
+            path: "coupon",
+            element: <AdminCouponList />
+          },         
+          {
+            path: "banner",
+            element: <AdminBanner />
+          },  
         ],
       },
       {
