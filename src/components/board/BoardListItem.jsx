@@ -21,10 +21,13 @@ function BoardListItem({boardItem,selectedId,handleCheck,isAdmin,checked}) {
             <td>
                 <Link to="/board/detail"
                     className='' 
-                    >{boardItem.title}</Link>
+                >
+                    {boardItem.title}
+
                     {selectedId &&(
                     <span className={styles.selectBrd}>채택</span>
                     )}
+                </Link>
             </td>
             <td>{boardItem.name}</td>
             <td>{boardItem.likeCount}</td>

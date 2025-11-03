@@ -3,9 +3,13 @@ import SearchInput from '../../../components/SearchInput';
 import itemImg from "../../../assets/img/item.png";
 import Item from '../../../components/list/Item';
 import styles from '../../../assets/css/adminProduct.module.css';
+import event from '../../../assets/css/eventIcon.module.css';
 import { Link } from 'react-router';
+import EventIcon from '../../../components/icon/EventIcon';
+import StoreIcon from '../../../components/icon/StoreIcon';
 
 function AdminProductList(props) {
+
     return (
         <>
             <form action="" method="" className='base_search_bg'>
@@ -33,9 +37,17 @@ function AdminProductList(props) {
                     <img src={itemImg} alt="" />
                 </div>
                 <div className={styles.info_box}>
-                    <p className={`${styles.category} ${styles.cu}`}>CU</p>
+                    <div className={styles.icon_wrap}>
+                        <StoreIcon
+                            name='CU'
+                            storeColor='cu'
+                        />
+                        <EventIcon
+                            name='2 + 1'
+                            bgColor="two"
+                        />
+                    </div>
                     <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.event}>1+1</p>
                     <p className={styles.evtMonth}>9월행사상품</p>
                 </div>
                 <span className={styles.price}>2,500원</span>
@@ -49,9 +61,17 @@ function AdminProductList(props) {
                     <img src={itemImg} alt="" />
                 </div>
                 <div className={styles.info_box}>
-                    <p className={`${styles.category} ${styles.cu}`}>CU</p>
+                    <div className={styles.icon_wrap}>
+                        <StoreIcon
+                            name='7ELEVEN'
+                            storeColor='7eleven'
+                        />
+                        <EventIcon
+                            name='1 + 1'
+                            bgColor="one"
+                        />
+                    </div>
                     <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.event}>1+1</p>
                     <p className={styles.evtMonth}>9월행사상품</p>
                 </div>
                 <span className={styles.price}>2,500원</span>
@@ -65,9 +85,17 @@ function AdminProductList(props) {
                     <img src={itemImg} alt="" />
                 </div>
                 <div className={styles.info_box}>
-                    <p className={`${styles.category} ${styles.cu}`}>CU</p>
+                    <div className={styles.icon_wrap}>
+                        <StoreIcon
+                            name='GS25'
+                            storeColor='gs25'
+                        />
+                        <EventIcon
+                            name='1 + 1'
+                            bgColor="one"
+                        />
+                    </div>
                     <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.event}>1+1</p>
                     <p className={styles.evtMonth}>9월행사상품</p>
                 </div>
                 <span className={styles.price}>2,500원</span>

@@ -43,5 +43,6 @@ export const pageInfo = {
 
     "/admin/product": { title: "상품 관리" },
     "/admin/product/update": { title: "상품 수정" },
+    "/admin/user": { title: "회원 관리" },
     "/admin/board": { title: "게시판 관리" },
 };

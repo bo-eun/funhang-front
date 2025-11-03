@@ -36,7 +36,7 @@
 .sub_category_list {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
     padding-top: 86px;
 }
 .sub_category_list.detail {
@@ -69,9 +69,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 30px 0;
-}
-.product_cont .list_section .list_info .total {
-    font-size: 20px;
 }
 .product_cont .list_section .list_info select {
     font-size: 18px;
@@ -122,7 +119,7 @@
     gap: 12px;
     align-items: center;
 }
-.product_cont .detail_section .prd_info .info_box .event {
+/* .product_cont .detail_section .prd_info .info_box .event {
     font-size: 14px;
     font-weight: bold;
     color: #fff;
@@ -131,7 +128,7 @@
 }
 .product_cont .detail_section .prd_info .info_box .event.one {
     background: #EA0000;
-}
+} */
 .product_cont .detail_section .prd_info .info_box .price {
     font-size: 30px;
 }

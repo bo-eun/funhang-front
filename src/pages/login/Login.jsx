@@ -61,7 +61,7 @@ function Login() {
         <>
             <form  onSubmit={handleSubmit(onSubmit)}>
                 <section>
-                    <div className={styles.user_role_wrap}>
+                    <div className={styles.userRole_wrap}>
                         <label>
                             <input
                             type="radio"

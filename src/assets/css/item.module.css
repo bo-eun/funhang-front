@@ -8,17 +8,7 @@
     width: 100%;
     aspect-ratio: 1 / 1.17;
 }
-.prd_item .img_box .event {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 2px 13px;
-    border-radius: 20px;
-    background: #EA0000;
-}
+
 .prd_item .img_box .wish_btn {
     position: absolute;
     right: 10px;
@@ -27,17 +17,7 @@
 .prd_item .info_box {
     margin-top: 15px;
 }
-.prd_item .info_box .category {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 1px 12px;
-    border-radius: 30px;
-}
-.prd_item .info_box .category.cu {
-    background: #C6E857;
-    color:#652F8D;
-}
+
 .prd_item .info_box .title {
     font-size: var(--text-size);
     padding-top: 8px;

@@ -5,6 +5,7 @@ import shareIcon from "../../assets/img/share_icon.svg";
 import Map from "../../components/map/Map";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import CommentLayout from '../../components/comment/CommentLayout';
+import EventIcon from '../../components/icon/EventIcon';
 
 function Detail(props) {
 
@@ -27,7 +28,10 @@ function Detail(props) {
                     <p className={styles.event_text}>9월 행사상품</p>
                     <p className={styles.title}>
                         상품명
-                        <span className={`${styles.event} ${styles.one}`}>1 + 1</span>
+                        <EventIcon
+                            name='1 + 1'
+                            bgColor='one'
+                        />
                     </p>
                     <p className={styles.price}><strong>23,000</strong> 원</p>
                 </div>

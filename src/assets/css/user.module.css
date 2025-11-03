@@ -1,0 +1,28 @@
+.list_wrap{
+    display: flex;
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid #c9c9c9;
+}
+.user_info{
+    flex: 1;
+}
+.userRole, .create_date{
+    color: #7D7D7D;
+}
+.userId{
+    font-size: 20px;
+    display: flex;
+    gap: 10px;
+}
+.deleteAcc{
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 13px;
+    border-radius: 20px;
+    background-color: rgb(197, 37, 37);
+}
+
+.userName{
+    font-size: 18px;
+}

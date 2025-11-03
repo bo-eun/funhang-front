@@ -1,0 +1,29 @@
+:root {
+  --cu-bg: #C6E857;
+  --cu-font: #652F8D;
+  --seven-bg: #147350;
+  --seven-font: white;
+  --gs-bg: #2ABADA;
+  --gs-font: #006FBA;
+}
+.category{
+    display: inline-block;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: bold;
+    padding: 0 13px;
+    border-radius: 30px;
+}
+.category._cu{
+    background: #C6E857;
+    color:#652F8D;
+}
+.category._7eleven{
+    background: #147350;
+    color:white;
+}
+.category._gs25{
+    background: #43d2f1;
+    color:#0062a3;
+}
+

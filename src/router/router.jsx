@@ -24,6 +24,7 @@ import NotAuthorized from "../components/NotAuthorized";
 import AdminProductList from "../pages/admin/product/AdminProductList";
 import SubLayout from "../pages/SubLayout";
 import AdminProductUpdate from "../pages/admin/product/AdminProductUpdate";
+import UserList from "../pages/admin/user/UserList";
 
 export const router = createBrowserRouter([
   {
@@ -147,6 +148,10 @@ export const router = createBrowserRouter([
           {
             path: "product/update",
             element: <AdminProductUpdate/>,
+          },
+          {
+            path: "user",
+            element: <UserList/>,
           },
           {
             path: "board",
