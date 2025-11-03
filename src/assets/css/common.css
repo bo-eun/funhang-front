@@ -59,6 +59,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+input:read-only {
+  background: #F7F7F7 !important;
+}
+
 
 img, picture, video, canvas, svg {
   display: block;
