@@ -66,7 +66,7 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
-        path: "product",
+        path: "product/:id",
         children: [
           {
             index: true,
@@ -109,6 +109,10 @@ export const router = createBrowserRouter([
         path: "mypage",
         element: <MypageLayout />,
         children: [
+          {
+            index: true,
+            element: <Navigate to="wish" replace />
+          },
           {
             path: "wish",
             element: <WishList />,

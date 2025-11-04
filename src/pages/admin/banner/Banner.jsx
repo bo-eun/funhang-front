@@ -14,13 +14,16 @@ import {
 
 function Banner(props) {
 
-    const [bannerImage, setBannerImage] = useState('');
     const [bannerList, setBannerList] = useState([]);
 
     const schema = yup.object().shape({
-        imgUrl: yup.string().required("이미지 주소를 입력하세요"),
-        title: yup.string().required("배너 제목을 입력해주세요"),
-    });  
+        rows: yup.array().of(
+            yup.object().shape({
+                imageFile: yup.mixed().required("이미지 파일을 업로드 해주세요."),
+                title: yup.string().required("배너 제목을 입력해주세요"),
+            })
+        )
+    }); 
 
     const {
         register,
@@ -29,10 +32,14 @@ function Banner(props) {
         reset,
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+            rows: []  // 기본값을 빈 배열로 설정
+        }
     });
 
-    const [rows, setRows] = useState(bannerList);
+    const [rows, setRows] = useState(bannerList); // drag 후 bannerList
     
+    // 드래그 끝나고 리스트 정렬 수정
     const handleDragEnd = (result) => {
         if (!result.destination) return;
 
@@ -43,58 +50,70 @@ function Banner(props) {
         setRows(newRows);
     };
 
-
     const showAddBanner = () => {
         setBannerList(prev => [...prev, 
             {
-                bannerId: 4,
                 image: '',
                 title: "",
                 linkUrl: "",
                 useYn: "Y",  
             }
         ])
-        setRows(prev => [...prev,
-            {
-                bannerId: 4,
-                image: '',
-                title: '',
-                linkUrl: '',
-                useYn: 'Y'
-            }
-        ])
     };
 
-    const addBanner = () => {
-        // 서버에 배너 등록
-        // rows 넘겨주기
-    }
+    // 배너 등록
+    const updateBanners = () => {
+        const formData = new FormData();
 
-    const changeImage = (addImage=false, e, id) => {
-        if(addImage) { // 배너 추가 시 이미지 변경할 경우
-            setBannerImage(e.target.value);
-            return;
+        rows.forEach((banner, index) => {
+
+            // 기존 이미지 수정일 경우
+            // 새 배너 등록일 경우 배너 아이디 보내지 않음
+            if(banner.bannerId) {
+                formData.append(`rows[${index}].bannerId`, banner.bannerId);
+            }
+
+            // 파일이 있는 경우 파일 보내기
+            if (banner.imageFile) {
+                formData.append(`rows[${index}].imageFile`, banner.imageFile);
+            }
+
+            formData.append(`rows[${index}].title`, banner.title);
+            formData.append(`rows[${index}].linkUrl`, banner.linkUrl || '');
+            formData.append(`rows[${index}].useYn`, banner.useYn);
+        })
+
+        try {
+            // 서버에 formData 넘겨주기
+        } catch(e) {
+            console.log(e)
         }
-
-        // 기존 배너 이미지 변경일 경우
-        setBannerList(prev => {
-            const updateList = prev.map((banner) => {
-                if(id == banner.bannerId) {
-                    banner.image = e.target.value
-                }
-                return banner;
-            });
-            return updateList;
-        })
     }
 
-    const deleteBanner = () => {
-        setBannerList(prev => {
-            console.log(prev)
-        })
+    // 배너 삭제
+    const deleteBanner = (index) => {
+        setRows(prev => prev.filter((banner, idx) => index != idx))
+    }
+
+    // 배너 이미지 파일 등록
+    const handleFileChange = (e, index) => {
+        const file = e.target.files[0];
+        if (file) {
+            // 이미지 미리보기 URL 생성
+            const newUrl = URL.createObjectURL(file);
+            setRows(prev => 
+                prev.map((banner, idx) => {
+                    if(index == idx) {
+                        banner.image = newUrl;
+                    }
+                    return banner;
+                })
+            )
+        }
     }
 
     useEffect(() => {
+        // 서버에서 받아온 배너 리스트
         const list = [
             {
                 bannerId: 1,
@@ -120,8 +139,12 @@ function Banner(props) {
         ];
 
         setBannerList(list)
-        setRows(list)
     }, [])
+
+    // 배너리스트 변경될 때 마다 rows도 업데이트
+    useEffect(() => {
+        setRows(bannerList)
+    }, [bannerList])
 
     return (
         <Container className={`${styles.banner_cont} mt-5`}>
@@ -136,100 +159,99 @@ function Banner(props) {
                 <div className="col-1">노출여부</div>
                 <div className="col-1">관리</div>
             </div>
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="table-body">
-                {(provided, snapshot) => {
-                    console.log(provided)
-                    return (
-                        <div className="text-center"
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                        >
-                        {rows?.map((row, index) => (
-
-                            <Draggable key={`draggable_${row.bannerId}`} draggableId={`drag_${row.bannerId}`} index={index}>
-                            {(provided) => (
-                                <div className={`${styles.t_tr} row`}
+            <form action="" autoComplete='off' onSubmit={handleSubmit(updateBanners)}>
+                <DragDropContext onDragEnd={handleDragEnd}>
+                    <Droppable droppableId="table-body">
+                    {(provided, snapshot) => {
+                        return (
+                            <div className="text-center"
                                 ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={{
-                                    ...provided.draggableProps.style,
-                                    cursor: "grab",
-                                }}
-                                id={`drag_${row.bannerId}`}
-                                key={`banner_${row.bannerId}`}
-                                >
-                                    <div className="col-1">{index + 1}</div>
-                                    <div className="col-3">
-                                        {row.image ? 
-                                        <div className={`${styles.img_box}`}>
-                                            <img src={row.image} />      
-                                        </div> 
-                                        : 
-                                        <div className={`${styles.img_box} ${styles.add_box}`}>
-                                            <BsPlus size="50px" color="aaa" />      
-                                        </div>                          
-                                    }
+                                {...provided.droppableProps}
+                            >
+                            {rows?.map((row, index) => (
 
+                                <Draggable key={`draggable_${row.bannerId}`} draggableId={`drag_${row.bannerId}`} index={index}>
+                                {(provided) => (
+                                    <div className={`${styles.t_tr} row`}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                        ...provided.draggableProps.style,
+                                        cursor: "grab",
+                                    }}
+                                    id={`drag_${row.bannerId}`}
+                                    key={`banner_${row.bannerId}`}
+                                    >
+                                        <div className="col-1">{index + 1}</div>
+                                        <div className="col-3">
+                                            <label htmlFor={`imageFile${index}`} className={`${styles.img_box} ${!row.image && styles.add_box}`}>
+                                                {
+                                                    row.image ? 
+                                                    <img src={row.image} />      
+                                                    :      
+                                                    <BsPlus size="50px" color="aaa" />   
+                                                }
+                                            </label>                   
+                                        </div>
+                                        <div className={`${styles.input_box} col-6`}>
+                                            <input 
+                                                type="file" 
+                                                id={`imageFile${index}`}
+                                                name="imageFile" 
+                                                className='d-none'
+                                                {...register(`rows[${index}].imageFile`, {
+                                                    onChange: (e) => handleFileChange(e, index)
+                                                })}
+                                            />
+                                            {errors?.rows?.[index]?.imageFile && <p className="error-msg">{errors.rows[index].imageFile.message}</p>}
+                                            <input
+                                            type="text"
+                                            className="form-control mb-1"
+                                            placeholder="배너 제목을 입력해주세요"
+                                            name="title"
+                                            defaultValue={row.title}
+                                            {...register(`rows[${index}].title`)}
+                                            />
+                                            <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="이미지 클릭 시 이동할 주소를 입력해주세요"
+                                            name="linkUrl"
+                                            defaultValue={row.linkUrl}
+                                            {...register(`rows[${index}].linkUrl`)}
+                                            />
+                                            {errors?.rows?.[index]?.linkUrl && <p className="error-msg">{errors.rows[index].linkUrl.message}</p>}
+                                        </div>
+                                        <div className="col-1">
+                                            <input
+                                            type="checkbox"
+                                            name="useYn"
+                                            value="Y"
+                                            defaultChecked={row.useYn === "Y"}
+                                            {...register(`rows[${index}].useYn`)}
+                                            />
+                                        </div>
+                                        <div className="col-1">
+                                            <button type="button" className="btn btn-outline-danger" onClick={() => deleteBanner(index)}>
+                                            삭제
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className={`${styles.input_box} col-6`}>
-                                        <input
-                                        type="text"
-                                        id="imgUrl"
-                                        name="imgUrl"
-                                        className="form-control mb-1"
-                                        placeholder="이미지 주소를 입력해주세요"
-                                        onChange={(e) => changeImage('', e, row.bannerId)}
-                                        defaultValue={row.image}
-                                        {...register(`rows[${index}].imgUrl`)} // [{}, {}...] 형태로 보내기 위함
-                                        />
-                                        <input
-                                        type="text"
-                                        className="form-control mb-1"
-                                        placeholder="배너 제목을 입력해주세요"
-                                        id="title"
-                                        name="title"
-                                        defaultValue={row.title}
-                                        {...register(`rows[${index}].title`)}
-                                        />
-                                        <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="이미지 클릭 시 이동할 주소를 입력해주세요"
-                                        id="linkUrl"
-                                        name="linkUrl"
-                                        defaultValue={row.linkUrl}
-                                        {...register(`rows[${index}].linkUrl`)}
-                                        />
-                                    </div>
-                                    <div className="col-1">
-                                        <input
-                                        type="checkbox"
-                                        id="useYn"
-                                        name="useYn"
-                                        defaultChecked={row.useYn === "Y"}
-                                        {...register(`rows[${index}].useYn`)}
-                                        />
-                                    </div>
-                                    <div className="col-1">
-                                        <button type="button" className="btn btn-outline-danger" onClick={deleteBanner}>
-                                        삭제
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                        </div>
-                    )
-                }}
-                </Droppable>
-            </DragDropContext>
-            <div className={`${styles.btn_box} text-center w-100 mt-5`}>
-                <BtnForm btnName="배너 수정" type="button" className='btn btn-dark' onClick={addBanner} />
-            </div>
+                                )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                            </div>
+                        )
+                    }}
+                    </Droppable>
+                </DragDropContext>
+                <div className={`${styles.btn_box} text-center w-100 mt-5`}>
+                    <BtnForm btnName="배너 수정" type="submit" className='btn btn-dark' />
+                </div>
+            </form>
+
         </Container>
     );
 }

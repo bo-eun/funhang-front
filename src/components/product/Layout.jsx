@@ -3,10 +3,15 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { Link, Outlet, useLocation, useParams } from 'react-router';
 import styles from "../../assets/css/product.module.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
+import { pageInfo } from "../../hooks/pageTitle";
 
 function Layout(props) {
     const locataion = useLocation();
     const [isDetail, setIsDetail] = useState(false);
+
+    const { pathname } = useLocation();
+    console.log(pathname)
+    const title = pageInfo[pathname]?.title || "";
 
     useEffect(() => {
         setIsDetail(locataion.pathname.includes('/detail'))
@@ -14,7 +19,7 @@ function Layout(props) {
 
     return (
         <Container className={styles.product_cont}>
-            <h2>CU</h2>
+            <h2>{title}</h2>
             <ul className={styles.category_list}>
                 <li className={styles.active}>
                     <Link to="">전체상품</Link>

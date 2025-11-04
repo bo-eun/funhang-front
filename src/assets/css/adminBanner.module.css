@@ -13,7 +13,7 @@
     justify-content: center;
 }
 .banner_cont .t_tr .input_box {
-    display: block;
+    flex-direction: column;
 }
 
 .banner_cont .img_box {
@@ -23,6 +23,7 @@
     justify-content: center;
     aspect-ratio: 1 / 0.5;
     overflow: hidden;
+    cursor: pointer;
 }
 .banner_cont .img_box img {
     max-width: 240px;

@@ -3,6 +3,7 @@ import styles from "../../assets/css/product.module.css";
 import Item from '../../components/list/Item';
 import SearchInput from '../../components/SearchInput';
 function List(props) {
+    const chain = 'cu';
     return (
         <section className={styles.list_section}>
             <SearchInput />
@@ -13,10 +14,10 @@ function List(props) {
                     <option value="best">인기순</option>
                 </select>
             </div>
-            <ul className={styles.prd_list}>
+            <ul className={styles.prd_list}>  
                 <li>
                     <Item 
-                        link='/product/detail'
+                        link={`/product/${chain}/detail`}
                         event={{
                             name: '2 + 1',
                             bgColor: 'two',
@@ -29,55 +30,71 @@ function List(props) {
                             storeColor: 'gs25',
                         }}
                     />
-                </li>
+                </li>     
                 <li>
                     <Item 
-                        link='/product/detail'
+                        link={`/product/${chain}/detail`}
                         event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
+                            name: '2 + 1',
+                            bgColor: 'two',
                             cssPosition: 'absolute',
                             top: '10px',
                             left: '10px',
                         }}
                         store={{
-                            name: '7ELEVEN',
-                            storeColor: '7eleven',
+                            name: 'GS25',
+                            storeColor: 'gs25',
                         }}
                     />
-                </li>
+                </li>    
                 <li>
                     <Item 
-                        link='/product/detail'
+                        link={`/product/${chain}/detail`}
                         event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
+                            name: '2 + 1',
+                            bgColor: 'two',
                             cssPosition: 'absolute',
                             top: '10px',
                             left: '10px',
                         }}
                         store={{
-                            name: 'CU',
-                            storeColor: 'cu',
+                            name: 'GS25',
+                            storeColor: 'gs25',
                         }}
                     />
-                </li>
+                </li>   
                 <li>
                     <Item 
-                        link='/product/detail'
+                        link={`/product/${chain}/detail`}
                         event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
+                            name: '2 + 1',
+                            bgColor: 'two',
                             cssPosition: 'absolute',
                             top: '10px',
                             left: '10px',
                         }}
                         store={{
-                            name: 'CU',
-                            storeColor: 'cu',
+                            name: 'GS25',
+                            storeColor: 'gs25',
                         }}
                     />
-                </li>                                         
+                </li>   
+                <li>
+                    <Item 
+                        link={`/product/${chain}/detail`}
+                        event={{
+                            name: '2 + 1',
+                            bgColor: 'two',
+                            cssPosition: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                        }}
+                        store={{
+                            name: 'GS25',
+                            storeColor: 'gs25',
+                        }}
+                    />
+                </li>                                                                                                  
             </ul>
         
         </section>

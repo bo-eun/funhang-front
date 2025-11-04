@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/header.module.css';
 import logo from '../assets/img/logo.png';
-import { Link, Navigate, NavLink, useNavigate } from 'react-router';
+import { Link, Navigate, NavLink, useLocation, useNavigate } from 'react-router';
 import { authStore } from '../store/authStore';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -12,10 +12,18 @@ function Header(props) {
     const { token, userRole, userName, clearAuth } = authStore();
     const isLoggedIn = !!token;
     const isAdmin = userRole === "ADMIN";
+    
+    const [isAdminPage, setIsAdminPage] = useState(false);
+
     const handleLogout = () => {
         clearAuth(); 
         navigate("/login", { replace: true }); 
     };
+    const location = useLocation();
+    
+    useEffect(() => {
+        setIsAdminPage(location.pathname.split('/')[1] == 'admin');
+    }, [location])
     
     return (
         <div className={styles.fixed_bg}>
@@ -28,16 +36,18 @@ function Header(props) {
                             </Link>
                         </div>
 
-                        {!isAdmin && (
+                        {/* 관리자가 아니거나, 관리자 페이지가 아닐 떄 노출 */}
+                        {(!isAdmin || !isAdminPage) && (
                             <ul className={styles.l_menu_list}>
-                                <li><NavLink to="/product" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
-                                <li><NavLink to="/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
-                                <li><NavLink to="/7eleven" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
+                                <li><NavLink to="/product/cu" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
+                                <li><NavLink to="/product/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
+                                <li><NavLink to="/product/7eleven" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
                                 <li><NavLink to="/board" className={({isActive}) => isActive? styles.active:""}>게시판</NavLink></li>
                                 <li><NavLink to="/store" className={({isActive}) => isActive? styles.active:""}>매장찾기</NavLink></li>
                             </ul>
                         )}
-                        {isAdmin && (
+                        {/* 관리자이고, 관리자 페이지일 때 노출 */}
+                        {(isAdmin && isAdminPage) && (
                             <ul className={styles.l_menu_list}>
                                 <li><NavLink to="/admin/product" className={({isActive}) => isActive? styles.active:""}>상품 관리</NavLink></li>
                                 <li><NavLink to="/admin/user" className={({isActive}) => isActive? styles.active:""}>회원 관리</NavLink></li>
@@ -56,9 +66,20 @@ function Header(props) {
                         :
                         (<>
                             <NavDropdown title={`${userName} 님`}>
-                                {!isAdmin &&(
-                                    <NavDropdown.Item as={NavLink} to="/mypage">회원정보</NavDropdown.Item>
-                                )}
+                                {isAdmin ?
+                                    <>
+                                        {
+                                            isAdminPage ? 
+                                            <NavDropdown.Item as={Link} to="/">사용자 페이지</NavDropdown.Item>
+                                            :
+                                            <NavDropdown.Item as={Link} to="/admin">관리자 페이지</NavDropdown.Item>
+                                        }
+                                    </>
+                                    :
+                                    <>
+                                        <NavDropdown.Item as={NavLink} to="/mypage">마이페이지</NavDropdown.Item>
+                                    </>
+                                }
                                 <NavDropdown.Item onClick={handleLogout} >로그아웃</NavDropdown.Item>
                             </NavDropdown>
                         </>)

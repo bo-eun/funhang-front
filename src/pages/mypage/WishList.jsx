@@ -12,10 +12,70 @@ function WishList(props) {
             </p>
 
             <ul className={styles.item_list}>
-                <Item />
-                <Item />
-                <Item />
-                <Item />
+                <li>
+                    <Item  
+                        link={""}
+                        event={{
+                            name: '1 + 1',
+                            bgColor: 'one',
+                            cssPosition: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                        }}
+                        store={{
+                            name: 'CU',
+                            storeColor: 'cu',
+                        }}
+                    />
+                </li>
+                <li>
+                    <Item  
+                        link={""}
+                        event={{
+                            name: '1 + 1',
+                            bgColor: 'one',
+                            cssPosition: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                        }}
+                        store={{
+                            name: 'CU',
+                            storeColor: 'cu',
+                        }}
+                    />
+                </li>
+                <li>
+                    <Item  
+                        link={""}
+                        event={{
+                            name: '1 + 1',
+                            bgColor: 'one',
+                            cssPosition: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                        }}
+                        store={{
+                            name: 'CU',
+                            storeColor: 'cu',
+                        }}
+                    />
+                </li>
+                <li>
+                    <Item  
+                        link={""}
+                        event={{
+                            name: '1 + 1',
+                            bgColor: 'one',
+                            cssPosition: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                        }}
+                        store={{
+                            name: 'CU',
+                            storeColor: 'cu',
+                        }}
+                    />
+                </li>
             </ul>
         </div>
     );
