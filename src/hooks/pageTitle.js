@@ -33,7 +33,8 @@ export const titleMap = {
     "/admin/board": "게시판 관리 - ",
     "/admin/category": "카테고리 관리 - ",
     "/admin/banner": "배너 관리 - ",
-    "/admin/coupon": "쿠폰 관리 - ",
+    "/admin/coupon/regist": "쿠폰 관리 - ",
+    "/admin/coupon/grant": "쿠폰 발급 현황 - ",
 };
 
 export const pageInfo = {
@@ -56,6 +57,7 @@ export const pageInfo = {
     "/admin/user": { title: "회원 관리" },
     "/admin/board": { title: "게시판 관리" },
     "/admin/category": { title: "카테고리 관리" },
-    "/admin/coupon": { title: "쿠폰 등록" },
+    "/admin/coupon/regist": { title: "쿠폰 리스트" },
+    "/admin/coupon/grant": { title: "쿠폰 발급 현황" },
     "/admin/banner": { title: "메인 배너 관리" },
 };

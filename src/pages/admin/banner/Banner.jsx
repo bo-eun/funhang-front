@@ -51,7 +51,7 @@ function Banner(props) {
     };
 
     const showAddBanner = () => {
-        setBannerList(prev => [...prev, 
+        setRows(prev => [...prev, 
             {
                 image: '',
                 title: "",
@@ -143,8 +143,11 @@ function Banner(props) {
 
     // 배너리스트 변경될 때 마다 rows도 업데이트
     useEffect(() => {
+        console.log('배너 리스트 변경')
         setRows(bannerList)
     }, [bannerList])
+
+    console.log(rows)
 
     return (
         <Container className={`${styles.banner_cont} mt-5`}>
@@ -170,7 +173,7 @@ function Banner(props) {
                             >
                             {rows?.map((row, index) => (
 
-                                <Draggable key={`draggable_${row.bannerId}`} draggableId={`drag_${row.bannerId}`} index={index}>
+                                <Draggable key={`draggable_${index}`} draggableId={`drag_${index}`} index={index}>
                                 {(provided) => (
                                     <div className={`${styles.t_tr} row`}
                                     ref={provided.innerRef}
@@ -180,8 +183,8 @@ function Banner(props) {
                                         ...provided.draggableProps.style,
                                         cursor: "grab",
                                     }}
-                                    id={`drag_${row.bannerId}`}
-                                    key={`banner_${row.bannerId}`}
+                                    id={`drag_${index}`}
+                                    key={`banner_${index}`}
                                     >
                                         <div className="col-1">{index + 1}</div>
                                         <div className="col-3">

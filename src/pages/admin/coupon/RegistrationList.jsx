@@ -5,11 +5,17 @@ import InputForm from '../../../components/InputForm';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from 'react-router';
+import Table from '../../../components/board/Table';
+
+const colWidth = ['60px', '70%'];
+const headers = ['NO' ,'쿠폰 이름', '관리'];
 
 function List(props) {
 
     const [showModal, setShowModal] = useState(false);
     const [couponList, setCouponList] = useState([]);
+    const [columns, setColumns] = useState([]);
     const [currentCoupon, setCurrentCoupon] = useState(null);
 
     const schema = yup.object().shape({
@@ -49,21 +55,25 @@ function List(props) {
 
     useEffect(() => {
         setCouponList([
-        {
-            couponId: 1,
-            couponName: '5,000원 쿠폰',
-            description: '5,000원 쿠폰입니다.',
-            requiredPoint: 5000,
-            couponFile: '',
-        },
-        {
-            couponId: 2,
-            couponName: '10,000원 쿠폰',
-            description: '10,000원 쿠폰입니다.',
-            requiredPoint: 10000,
-            couponFile: '',
-        }
-    ]);
+            {
+                couponId: 1,
+                couponName: '5,000원 쿠폰',
+            },
+            {
+                couponId: 2,
+                couponName: '10,000원 쿠폰',
+            }
+        ]);
+        setColumns([
+            {
+                couponId: 1,
+                couponName: '5,000원 쿠폰',
+            },
+            {
+                couponId: 2,
+                couponName: '10,000원 쿠폰',
+            }
+        ])
     }, [])
 
     useEffect(() => {
@@ -85,34 +95,21 @@ function List(props) {
     return (
         <>
             <div className='w-50 mx-auto mt-5'>
-                <div className="btn_box text-end">
+                <div className="btn_box text-end mb-3">
                     <button type="button" className='btn btn-outline-dark px-3 me-2' onClick={openCouponModal}>등록</button>
                     <button type="button" className='btn btn-outline-danger px-3'>삭제</button>
+                    <Link to="/admin/coupon/grant" className='btn btn-dark ms-2'>쿠폰 발급 현황</Link>
                 </div>
-                <table className=" table mt-3" id="" name="" autoComplete='false'>
-                    <colgroup>
-                        <col width="60px" />
-                        <col width="70%" />
-                    </colgroup>
-                    <thead>
-                        <tr className='text-center'>
-                            <th></th>
-                            <th>쿠폰 이름</th>
-                            <th>관리</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {couponList && couponList.map((coupon, index) => 
-                            <AdminTableList 
-                                key={`coupon${index}`}
-                                text={coupon.couponName} 
-                                id={`coupon${index}`} 
-                                onClick={() => openCouponModal("update", coupon)} 
-                            />
-                        )}
-                
-                    </tbody>
-                </table>
+
+                <Table 
+                    colWidth={colWidth} 
+                    data={couponList} 
+                    columns={columns}
+                    headers={headers} 
+                    isCheckbox={true} 
+                    setCheckedList={""} 
+                    clickColumnBtn={() => openCouponModal('update', currentCoupon)} 
+                />
             </div>
             <ShowModal show={showModal} handleClose={closeModal} title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} isSubmit={true}>
                 <form action="" id="" name="">

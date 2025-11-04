@@ -54,7 +54,7 @@ function Header(props) {
                                 <li><NavLink to="/admin/board" className={({isActive}) => isActive? styles.active:""}>게시판 관리</NavLink></li>
                                 <li><NavLink to="/admin/category" className={({isActive}) => isActive? styles.active:""}>카테고리관리</NavLink></li>
                                 <li><NavLink to="/admin/banner" className={({isActive}) => isActive? styles.active:""}>메인 배너 관리</NavLink></li>
-                                <li><NavLink to="/admin/coupon" className={({isActive}) => isActive? styles.active:""}>쿠폰 관리</NavLink></li>
+                                <li><NavLink to="/admin/coupon/grant" className={({isActive}) => isActive? styles.active:""}>쿠폰 관리</NavLink></li>
                             </ul>
                         )}
                     </div>

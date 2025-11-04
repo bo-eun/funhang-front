@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import styles from "../../assets/css/boardList.module.css";
 import SearchInput from "../../components/SearchInput";
 import BoardListItem from '../../components/board/BoardListItem';
 import Pagination from "../../components/Pagination";
 import { authStore } from "../../store/authStore";
+import Table from "../../components/board/Table";
+
+const colWidth = ['50px', '', '160px', '80px', '130px'];
+const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
+
 
 function BoardList(props) {
     const {userRole} = authStore();
     const isAdmin = userRole === "ADMIN";
     const [chkOn,setChkOn] = useState([]);
     const [selected, setSelected]= useState([]);
+
+    const [columns, setColumns] = useState([]);
 
     const [boardList, setBoardList] = useState([
         {
@@ -19,6 +26,7 @@ function BoardList(props) {
         name: "김땡땡",
         likeCount: "5",
         date: new Date().toISOString().slice(0, 10),
+        adminPick: false,
         },
         {
         id: 2,
@@ -26,6 +34,7 @@ function BoardList(props) {
         name: "김땡땡",
         likeCount: "5",
         date: new Date().toISOString().slice(0, 10),
+        adminPick: false,
         },
         {
         id: 3,
@@ -33,32 +42,42 @@ function BoardList(props) {
         name: "김땡땡",
         likeCount: "5",
         date: new Date().toISOString().slice(0, 10),
+        adminPick: false,
         },
     ]);
 
-    const handleCheck =(id)=>{
-        setChkOn((prev) =>
-            prev.includes((id)) ? prev.filter((item) => item !== id) : [...prev, id]
-        );
-    }
+    // 채택
     const selectBrd=()=>{
-        setSelected((prevSelected)=>{
-            // chkOn에 있는 ID는 추가, 이미 있으면 그대로
-            const newSelected = [...prevSelected];
-            chkOn.forEach((id) => {
-            if (!newSelected.includes(id)) newSelected.push(id);
-            });
-             // chkOn에 체크 해제된 ID는 제거
-            return newSelected;
-        });
-        // 체크박스 초기화
+        console.log(selected);
+        setBoardList((prev) => 
+            prev.map(list => {
+                if(chkOn.includes(list.id)) {
+                    list.adminPick = true;
+                }
+
+                return list
+            })
+
+        )
         setChkOn([]);
     }
 
+    // 삭제
     const delBrd=()=>{
         setBoardList((prev)=>prev.filter((item)=>!chkOn.includes(item.id)));
         setChkOn([]);
     }
+
+
+    useEffect(() => {
+        const tableList = boardList.map((list) => {
+            const { adminPick, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
+            return rest; // 새로운 객체 반환
+        });
+        setColumns(tableList); // 새로운 배열로 setColumns 호출
+    }, [boardList]);
+
+    console.log(columns)
 
     return (
         <>
@@ -88,7 +107,15 @@ function BoardList(props) {
             </div>
 
             <section className={styles.board_list}>
-                <table className="table">
+                <Table 
+                    colWidth={colWidth}
+                    headers={headers}
+                    setCheckedList={setChkOn}
+                    columns={columns}
+                    isCheckbox={true}
+                    data={boardList}
+                />
+                {/* <table className="table">
                     <colgroup>
                         <col style={{ width: "10%" }} />
                         <col style={{ width: "10%" }} />
@@ -122,7 +149,7 @@ function BoardList(props) {
                                 </>
                         ))}
                     </tbody>
-                </table>
+                </table> */}
             </section>
 
             <div className="r_btn">

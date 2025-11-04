@@ -26,7 +26,8 @@ import SubLayout from "../pages/SubLayout";
 import AdminProductUpdate from "../pages/admin/product/AdminProductUpdate";
 import UserList from "../pages/admin/user/UserList";
 import AdminCategoryList from "../pages/admin/category/List";
-import AdminCouponList from "../pages/admin/coupon/List";
+import AdminCouponRegistList from "../pages/admin/coupon/RegistrationList";
+import AdminCouponGrantList from "../pages/admin/coupon/GrantList";
 import AdminBanner from "../pages/admin/banner/Banner";
 
 export const router = createBrowserRouter([
@@ -169,8 +170,12 @@ export const router = createBrowserRouter([
             element: <AdminCategoryList />
           },
           {
-            path: "coupon",
-            element: <AdminCouponList />
+            path: "coupon/regist",
+            element: <AdminCouponRegistList />
+          },   
+          {
+            path: "coupon/grant",
+            element: <AdminCouponGrantList />
           },         
           {
             path: "banner",
