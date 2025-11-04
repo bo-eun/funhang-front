@@ -1,24 +1,35 @@
 export const mockProducts = [
   {
-    crawl_id: 1,
-    source_chain: "GS25",
-    product_name: "서울우유 강릉커피",
+    crawlId: 1,
+    sourceChain: "GS25",
+    productName: "서울우유 강릉커피",
     price: 2500,
-    image_url: "https://example.com/images/coffee_gs25.jpg",
-    promo_type: "TWO_PLUS_ONE",  // 2+1 행사
-    product_type: "DRINK",
-    like_count: 120,
-    crawled_at: "2025-11-04T10:30:00",
+    imageUrl: "https://image.woodongs.com/imgsvr/item/GD_8801155745004_001.jpg",
+    promoType: "TWO_PLUS_ONE",  // 2+1 행사
+    productType: "DRINK",
+    likeCount: 120,
+    crawledAt: "2025-11-04T10:30:00",
   },
   {
-    crawl_id: 2,
-    source_chain: "7ELEVEN",
-    product_name: "오리온 초코파이",
+    crawlId: 2,
+    sourceChain: "7ELEVEN",
+    productName: "오리온 초코파이",
     price: 1500,
-    image_url: "https://example.com/images/chocopie_7eleven.jpg",
-    promo_type: "ONE_PLUS_ONE",  // 1+1 행사
-    product_type: "SNACK",
-    like_count: 80,
-    crawled_at: "2025-11-03T15:20:00",
+    imageUrl: "https://wimg.heraldcorp.com/content/default/2014/04/13/20140413000157_0.jpg",
+    promoType: "ONE_PLUS_ONE",  // 1+1 행사
+    productType: "SNACK",
+    likeCount: 80,
+    crawledAt: "2025-11-03T15:20:00",
+  },
+  {
+    crawlId: 3,
+    sourceChain: "CU",
+    productName: "신라면",
+    price: 1800,
+    imageUrl: "https://image.nongshim.com/non/pro/1734997205368.jpg",
+    promoType: "ONE_PLUS_ONE",  // 1+1 행사
+    productType: "FOOD",
+    likeCount: 80,
+    crawledAt: "2025-11-02T15:20:00",
   },
 ];

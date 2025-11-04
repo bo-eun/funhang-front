@@ -3,25 +3,26 @@ import PropTypes from "prop-types";
 import styles from '../../assets/css/eventIcon.module.css';
 
 function EventIcon({ product, cssPosition="absolute", top="0", left="0" }) {
-    
+    if (!product || !product.promoType) return null;
+
     let name = "";
     let bgColor = "one";
 
-    switch(product.promo_type) {
+    switch(product.promoType) {
         case "ONE_PLUS_ONE":
-            name = "1+1";
+            name = "1 + 1";
             bgColor = "one";
             break;
         case "TWO_PLUS_ONE":
-            name = "2+1";
+            name = "2 + 1";
             bgColor = "two";
             break;
         case "GIFT":
-            name = "덤증정";
+            name = "덤 증정";
             bgColor = "one";
             break;
         default:
-            name = "";
+            name = "행사";
             bgColor = "one";
     }
 
@@ -46,7 +47,7 @@ function EventIcon({ product, cssPosition="absolute", top="0", left="0" }) {
 
 EventIcon.propTypes = {
     product: PropTypes.shape({
-        promo_type: PropTypes.oneOf(["ONE_PLUS_ONE", "TWO_PLUS_ONE", "GIFT", "NONE", "전체"])
+        promoType: PropTypes.oneOf(["ONE_PLUS_ONE", "TWO_PLUS_ONE", "GIFT", "NONE", "전체"])
     }).isRequired,
     cssPosition: PropTypes.oneOf(["absolute", "relative", "fixed", "static"]),
     top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -94,7 +94,7 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
-        path: "gs25",
+        path: "GS25",
         children: [
           {
             index: true,
@@ -108,7 +108,7 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
-        path: "7eleven",
+        path: "7ELEVEN",
         children: [
           {
             index: true,

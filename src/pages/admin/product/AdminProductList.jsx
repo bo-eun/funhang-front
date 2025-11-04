@@ -8,8 +8,10 @@ import { Link } from 'react-router';
 import EventIcon from '../../../components/icon/EventIcon';
 import StoreIcon from '../../../components/icon/StoreIcon';
 import ListBtnLayout from '../../../components/ListBtnLayout';
+import { mockProducts } from '../../../hooks/mockProducts';
 
 function AdminProductList(props) {
+    const products = mockProducts;
 
     return (
         <>
@@ -34,97 +36,33 @@ function AdminProductList(props) {
                     총 <strong>30</strong> 개
                 </div>
             </div>
-
-            <ListBtnLayout
-                topBtn={{ 
-                    type: 'link',
-                    to:'/admin/product/update',
-                    name: '수정',
-                }}
-                bottomBtn={{ 
-                    type: 'button', 
-                    name: '삭제',
-                }}
-            >
-                <div className={styles.item_box}>
-                    <img src={itemImg} alt="" />
-                </div>
-                <div className={styles.info_box}>
-                    <div className={styles.icon_wrap}>
-                        <StoreIcon
-                            name='GS25'
-                            storeColor='gs25'
-                            />
-                        <EventIcon
-                            name='1 + 1'
-                            bgColor="one"
-                            />
+            {products?.map((product)=>(
+                <ListBtnLayout
+                    topBtn={{ 
+                        type: 'link',
+                        to:'/admin/product/update',
+                        name: '수정',
+                    }}
+                    bottomBtn={{ 
+                        type: 'button', 
+                        name: '삭제',
+                    }}
+                >
+                    <div className={styles.item_box}>
+                        <img src={product.imageUrl} alt={product.productName} />
                     </div>
-                    <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.evtMonth}>9월행사상품</p>
-                </div>
-                <span className={styles.price}>2,500원</span>
-            </ListBtnLayout>
-            <ListBtnLayout
-                topBtn={{ 
-                    type: 'link',
-                    to:'/admin/product/update',
-                    name: '수정',
-                }}
-                bottomBtn={{ 
-                    type: 'button', 
-                    name: '삭제',
-                }}
-            >
-                <div className={styles.item_box}>
-                    <img src={itemImg} alt="" />
-                </div>
-                <div className={styles.info_box}>
-                    <div className={styles.icon_wrap}>
-                        <StoreIcon
-                            name='CU'
-                            storeColor='cu'
-                            />
-                        <EventIcon
-                            name='2 + 1'
-                            bgColor="two"
-                            />
+                    <div className={styles.info_box}>
+                        <div className={styles.icon_wrap}>
+                            <StoreIcon product={product.sourceChain}/>
+                            <EventIcon product={product} />
+                        </div>
+                        <p className={styles.title}>{product.productName}</p>
+                        <p className={styles.evtMonth}>9월행사상품</p>
                     </div>
-                    <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.evtMonth}>9월행사상품</p>
-                </div>
-                <span className={styles.price}>2,500원</span>
-            </ListBtnLayout>
-            <ListBtnLayout
-                topBtn={{ 
-                    type: 'link',
-                    to:'/admin/product/update',
-                    name: '수정',
-                }}
-                bottomBtn={{ 
-                    type: 'button', 
-                    name: '삭제',
-                }}
-            >
-                <div className={styles.item_box}>
-                    <img src={itemImg} alt="" />
-                </div>
-                <div className={styles.info_box}>
-                    <div className={styles.icon_wrap}>
-                        <StoreIcon
-                            name='7ELEVEN'
-                            storeColor='7eleven'
-                            />
-                        <EventIcon
-                            name='2 + 1'
-                            bgColor="two"
-                            />
-                    </div>
-                    <p className={styles.title}>서울우유 강릉커피</p>
-                    <p className={styles.evtMonth}>9월행사상품</p>
-                </div>
-                <span className={styles.price}>2,500원</span>
-            </ListBtnLayout>
+                    <span className={styles.price}>{product.price.toLocaleString()}원</span>
+                </ListBtnLayout>
+            ))}
+            
             
         </>
     );

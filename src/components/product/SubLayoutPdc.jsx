@@ -10,9 +10,9 @@ function SubLayoutPdc({titleName, moreLink, children }) {
                 {titleName}
                 <Link to={moreLink}>더보기 {">"}</Link>
             </h2>
-            <ul className={styles.prd_list}>
+            
                 {children}
-            </ul>
+            
         </section>
     );
 }

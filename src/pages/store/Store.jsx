@@ -74,8 +74,7 @@ function Store(props) {
                                 console.log(item);
                                 return <li key={`${chainName}${item.id}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
                                     <StoreIcon
-                                        name={item.category_name}
-                                        storeColor={item.category_name}
+                                        product={chainName}
                                     />
                                     <p className="title">
                                         {item.place_name}
