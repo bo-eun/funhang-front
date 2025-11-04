@@ -66,6 +66,20 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
+        path: "category",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "detail",
+            element: <Detail />,
+          },
+        ],
+      },
+      {
+        element: <ProductLayout />,
         path: "product",
         children: [
           {
@@ -78,7 +92,34 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
+      {
+        element: <ProductLayout />,
+        path: "gs25",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "detail",
+            element: <Detail />,
+          },
+        ],
+      },
+      {
+        element: <ProductLayout />,
+        path: "7eleven",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "detail",
+            element: <Detail />,
+          },
+        ],
+      },
       {
         element:<SubLayout/>,
         path: "board",

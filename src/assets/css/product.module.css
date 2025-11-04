@@ -78,7 +78,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     min-height: 200px;
-    gap: 12px;
+    gap: 30px;
 }
 
 
@@ -119,16 +119,6 @@
     gap: 12px;
     align-items: center;
 }
-/* .product_cont .detail_section .prd_info .info_box .event {
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
-    padding: 2px 15px;
-    border-radius: 20px;
-}
-.product_cont .detail_section .prd_info .info_box .event.one {
-    background: #EA0000;
-} */
 .product_cont .detail_section .prd_info .info_box .price {
     font-size: 30px;
 }

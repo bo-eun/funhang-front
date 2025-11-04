@@ -6,8 +6,16 @@ import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import styles from "../../assets/css/main.module.css"
 import mainBanner01 from "../../assets/img/main_banner01.svg"
+import allImg from '../../assets/img/all.png';
+import snackImg from '../../assets/img/snack.png';
+import drinkImg from '../../assets/img/drink.png';
+import foodImg from '../../assets/img/food.png';
+import dailyItemImg from '../../assets/img/dailyItem.png';
+import milk from '../../assets/img/item.png';
 import Item from '../../components/list/Item';
 import { Link } from 'react-router';
+import SubLayoutPdc from '../../components/product/SubLayoutPdc';
+import { mockProducts } from '../../hooks/mockProducts';
 
 function Main(props) {
 
@@ -16,6 +24,21 @@ function Main(props) {
         'CU 10월 이벤트',
         '7ELEVEN 10월 이벤트'
     ]);
+    const categoryList = [
+        { name: '전체상품', img: allImg , url: '/category'},
+        { name: '과자', img: snackImg },
+        { name: '음료수', img: drinkImg },
+        { name: '식품', img: foodImg },
+        { name: '생활용품', img: dailyItemImg },
+    ];
+
+    const products = mockProducts;
+
+    
+
+
+            
+    
 
     const paginationRef = useRef(null);
 
@@ -64,6 +87,21 @@ function Main(props) {
 
                 </Swiper>
             </div>
+            <SubLayoutPdc
+                titleName='인기 행사 상품'
+                moreLink='/category?sort=popular'
+            >
+                    {products?.map((product)=>(
+                        <Item
+                            key={product.crawl_id}
+                            name={product.product_name}
+                            price={product.price}
+                            promoType={product.promo_type}
+                            store={product.source_chain}
+                            image={product.image_url}
+                        />
+                    ))}
+            </SubLayoutPdc>
             
             <section className={`${styles.prd_section} ${styles.best_prd}`}>
                 <h2>
@@ -329,6 +367,25 @@ function Main(props) {
                             }}
                         />
                     </li>
+                </ul>
+            </section>
+            <section className={`${styles.prd_section} ${styles.cat_prd}`}>
+                <h2>
+                    카테고리 별
+                    <Link to="/category">전체보기 {">"}</Link>
+                </h2>
+                <ul className={styles.cat_list}>
+                    {categoryList?.map((category,index)=>(
+                        <li key={index} className={styles.cat_item}>
+                            <Link to={category.url}>
+                                <div className={styles.cat_img_wrap}>
+                                    <img src={category.img} alt={`${category.name} 이미지`} />
+                                </div>
+                                {category.name}
+                            </Link>
+                        </li>
+                    ))}
+                    
                 </ul>
             </section>            
         </Container>

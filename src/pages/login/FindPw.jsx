@@ -100,6 +100,7 @@ function FindPw(props) {
                 <ShowModal
                     show={show}
                     handleClose={handleClose}
+                    closeBtnName='닫기'
                 >
                     비밀번호가 변경되었습니다.<br />
                     새 비밀번호로 로그인해 주세요.

@@ -7,13 +7,16 @@ import { Link } from "react-router";
 import EventIcon from "../icon/EventIcon";
 import StoreIcon from "../icon/StoreIcon";
 
-function Item({link,event,store}) {
+function Item({link,event,store,product}) {
   return (
     <Link to={link}>
     <div className={styles.prd_item}>
       <div className={styles.img_box}>
         <EventIcon
           {...event}
+        />
+        <EventIcon
+
         />
         <img src={itemImg} alt="" />
         {/* <button type='button' className='wish_btn'><img src={wishiIcon} alt="" /></button> */}

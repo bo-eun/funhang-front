@@ -11,6 +11,8 @@ export const titleMap = {
     "/board/update": "게시판 수정 - ",
     "/board/write": "게시판 등록 - ",
 
+    "/category": "전체상품 - ",
+
     "/product": "상품 - ",
     "/product/detail": "상품 - ",
 
@@ -40,6 +42,11 @@ export const pageInfo = {
     "/board": { title: "게시판" },
 
     // "/mypage/wish": { title: "찜 목록" },
+
+    "/category": { title: "전체상품" },
+    "/product": { title: "CU" },
+    "/gs25": { title: "GS25" },
+    "/7eleven": { title: "7ELEVEN" },
 
     "/admin/product": { title: "상품 관리" },
     "/admin/product/update": { title: "상품 수정" },

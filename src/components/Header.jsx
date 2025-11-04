@@ -30,6 +30,7 @@ function Header(props) {
 
                         {!isAdmin && (
                             <ul className={styles.l_menu_list}>
+                                <li><NavLink to="/category" className={({isActive}) => isActive? styles.active:""}>전체상품</NavLink></li>
                                 <li><NavLink to="/product" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
                                 <li><NavLink to="/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
                                 <li><NavLink to="/7eleven" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>

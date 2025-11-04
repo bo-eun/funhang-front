@@ -1,11 +1,4 @@
-:root {
-  --cu-bg: #C6E857;
-  --cu-font: #652F8D;
-  --seven-bg: #147350;
-  --seven-font: white;
-  --gs-bg: #2ABADA;
-  --gs-font: #006FBA;
-}
+
 .category{
     display: inline-block;
     font-size: 14px;

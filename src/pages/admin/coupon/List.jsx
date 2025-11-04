@@ -114,7 +114,10 @@ function List(props) {
                     </tbody>
                 </table>
             </div>
-            <ShowModal show={showModal} handleClose={closeModal} title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} isSubmit={true}>
+            <ShowModal show={showModal} handleClose={closeModal} 
+                    title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} handleEvent={true}
+                    eventBtnName={currentCoupon ? "수정" : "등록"}
+                    closeBtnName='닫기'>
                 <form action="" id="" name="">
                     <InputForm 
                         register={register} 

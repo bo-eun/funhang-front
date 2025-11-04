@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../../assets/css/storeIcon.module.css';
 import PropTypes from 'prop-types';
 
-function StoreIcon({name,storeColor}) {
+function StoreIcon({ name = "Unknown", storeColor = "default" }) {
     const toCssClass = (storeColor) => `_${storeColor.toLowerCase()}`;
     return (
         <span className={`${styles.category} ${styles[toCssClass(storeColor)]}`}>
