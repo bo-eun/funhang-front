@@ -10,8 +10,8 @@ import ShowModal from "../../components/ShowModal";
 import styles from '../../assets/css/login.module.css';
 
 const findPwFields = [
-  { label: "이름", name: "username", type: "text", placeholder: "이름을 입력하세요" },
-  { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
+    { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
+    { label: "이메일", name: "email", type: "text", placeholder: "이메일을 입력하세요" },
 ];
 const chgPwFields = [
   { label: "새 비밀번호", name: "password", type: "password", placeholder: "비밀번호를 입력하세요" },
@@ -31,8 +31,8 @@ function FindPw(props) {
     const handleShow = () => setShow(true);
 
     const findSchema = yup.object().shape({
-        username: yup.string().required("이름을 입력하십시오"),
         userId: yup.string().required("아이디를 입력하십시오"),
+        email: yup.string().required("이메일을 입력하십시오"),
     });
 
     const changePwSchema = yup.object().shape({

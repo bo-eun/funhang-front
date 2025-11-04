@@ -20,16 +20,16 @@
 
 
 /* 권한선택 */
-.user_role_wrap{
+.userRole_wrap{
     margin-top: 70px;
     gap: 50px;
     font-size: 18px;
     text-align: center;
 }
-.user_role_wrap label:first-child{
+.userRole_wrap label:first-child{
     margin-right: 50px;
 }
-.user_role_wrap input{
+.userRole_wrap input{
     margin-right: 10px;
     cursor: pointer;
     background-color: #2c3e50;

@@ -71,11 +71,86 @@ function Main(props) {
                     <Link to="">더보기 {">"}</Link>
                 </h2>
                 <ul className={styles.prd_list}>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '2 + 1',
+                                bgColor: 'two',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'GS25',
+                                storeColor: 'gs25',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: '7ELEVEN',
+                                storeColor: '7eleven',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
                 </ul>
             </section>
 
@@ -85,11 +160,86 @@ function Main(props) {
                     <Link to="">더보기 {">"}</Link>
                 </h2>
                 <ul className={styles.prd_list}>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
                 </ul>
             </section>
 
@@ -99,11 +249,86 @@ function Main(props) {
                     <Link to="">더보기 {">"}</Link>
                 </h2>
                 <ul className={styles.prd_list}>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
-                    <li><Item link={""} /></li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
+                    <li>
+                        <Item  
+                            link={""}
+                            event={{
+                                name: '1 + 1',
+                                bgColor: 'one',
+                                cssPosition: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                            }}
+                            store={{
+                                name: 'CU',
+                                storeColor: 'cu',
+                            }}
+                        />
+                    </li>
                 </ul>
             </section>            
         </Container>

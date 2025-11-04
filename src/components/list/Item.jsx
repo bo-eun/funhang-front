@@ -4,13 +4,17 @@ import wishiIcon from "../../assets/img/wish.svg";
 import wishiActiveIcon from "../../assets/img/wish_active.svg";
 import styles from "../../assets/css/item.module.css";
 import { Link } from "react-router";
+import EventIcon from "../icon/EventIcon";
+import StoreIcon from "../icon/StoreIcon";
 
-function Item({link}) {
+function Item({link,event,store}) {
   return (
     <Link to={link}>
     <div className={styles.prd_item}>
       <div className={styles.img_box}>
-        <div className={styles.event}>1 + 1</div>
+        <EventIcon
+          {...event}
+        />
         <img src={itemImg} alt="" />
         {/* <button type='button' className='wish_btn'><img src={wishiIcon} alt="" /></button> */}
         <button type="button" className={styles.wish_btn}>
@@ -18,7 +22,9 @@ function Item({link}) {
         </button>
       </div>
       <div className={styles.info_box}>
-        <span className={`${styles.category} ${styles.cu}`}>CU</span>
+        <StoreIcon
+          {...store}
+        />
         <p className={styles.title}>서울우유 강릉커피</p>
         <p className={styles.price}>2,500원</p>
       </div>

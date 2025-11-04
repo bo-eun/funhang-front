@@ -235,7 +235,7 @@ button {
 }
 
 .total{
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .layout-root {
@@ -275,29 +275,6 @@ button {
     font-weight: bold;
     text-align: center;
 }
-
-/* 편의점명 */
-.chain_title {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 25px;
-  padding: 0 12px;
-  border-radius: 30px;
-}
-.chain_title.chain_CU {
-  background: #C6E857;
-  color: #652F8D;
-}
-.chain_title.chain_GS25 {
-  background: #3AA0E3;
-  color: #fff;
-}
-.chain_title.chain_7ELEVEN {
-  background: #24946B;
-  color: #fff;
-}
-
 
 /* quill */
 .ql-editor {

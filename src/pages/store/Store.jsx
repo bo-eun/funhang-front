@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Map from '../../components/map/Map';
 import "../../assets/css/store.css"
 import searchbtn from "../../assets/img/search_btn.svg"
+import StoreIcon from '../../components/icon/StoreIcon';
 
 function Store(props) {
 
@@ -70,10 +71,12 @@ function Store(props) {
                     <div className="search_list_cont">
                         <ul className='search_list'>
                             {list?.length > 0 && list.map((item) => {
+                                console.log(item);
                                 return <li key={`${chainName}${item.id}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
-                                    <span className={`chain_title chain_${item.category_name}`}>
-                                        {item.category_name}
-                                    </span>
+                                    <StoreIcon
+                                        name={item.category_name}
+                                        storeColor={item.category_name}
+                                    />
                                     <p className="title">
                                         {item.place_name}
                                     </p>
