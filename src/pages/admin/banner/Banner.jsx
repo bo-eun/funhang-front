@@ -71,11 +71,12 @@ function Banner(props) {
     }
 
     const changeImage = (addImage=false, e, id) => {
-        if(addImage) {
+        if(addImage) { // 배너 추가 시 이미지 변경할 경우
             setBannerImage(e.target.value);
             return;
         }
 
+        // 기존 배너 이미지 변경일 경우
         setBannerList(prev => {
             const updateList = prev.map((banner) => {
                 if(id == banner.bannerId) {
@@ -85,8 +86,12 @@ function Banner(props) {
             });
             return updateList;
         })
+    }
 
-
+    const deleteBanner = () => {
+        setBannerList(prev => {
+            console.log(prev)
+        })
     }
 
     useEffect(() => {
@@ -177,28 +182,38 @@ function Banner(props) {
                                         placeholder="이미지 주소를 입력해주세요"
                                         onChange={(e) => changeImage('', e, row.bannerId)}
                                         defaultValue={row.image}
+                                        {...register(`rows[${index}].imgUrl`)} // [{}, {}...] 형태로 보내기 위함
                                         />
                                         <input
                                         type="text"
                                         className="form-control mb-1"
                                         placeholder="배너 제목을 입력해주세요"
+                                        id="title"
+                                        name="title"
                                         defaultValue={row.title}
+                                        {...register(`rows[${index}].title`)}
                                         />
                                         <input
                                         type="text"
                                         className="form-control"
                                         placeholder="이미지 클릭 시 이동할 주소를 입력해주세요"
+                                        id="linkUrl"
+                                        name="linkUrl"
                                         defaultValue={row.linkUrl}
+                                        {...register(`rows[${index}].linkUrl`)}
                                         />
                                     </div>
                                     <div className="col-1">
                                         <input
                                         type="checkbox"
+                                        id="useYn"
+                                        name="useYn"
                                         defaultChecked={row.useYn === "Y"}
+                                        {...register(`rows[${index}].useYn`)}
                                         />
                                     </div>
                                     <div className="col-1">
-                                        <button type="button" className="btn btn-outline-danger" onClick={""}>
+                                        <button type="button" className="btn btn-outline-danger" onClick={deleteBanner}>
                                         삭제
                                         </button>
                                     </div>
