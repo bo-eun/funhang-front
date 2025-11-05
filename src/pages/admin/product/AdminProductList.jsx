@@ -1,13 +1,9 @@
 import React from 'react';
 import SearchInput from '../../../components/SearchInput';
-import itemImg from "../../../assets/img/item.png";
-import Item from '../../../components/list/Item';
-import styles from '../../../assets/css/adminProduct.module.css';
-import event from '../../../assets/css/eventIcon.module.css';
-import { Link } from 'react-router';
+import styles from '@/pages/admin/product/adminProduct.module.css';
 import EventIcon from '../../../components/icon/EventIcon';
 import StoreIcon from '../../../components/icon/StoreIcon';
-import ListBtnLayout from '../../../components/ListBtnLayout';
+import ListBtnLayout from '../../../components/btn/ListBtnLayout';
 import { mockProducts } from '../../../hooks/mockProducts';
 
 function AdminProductList(props) {

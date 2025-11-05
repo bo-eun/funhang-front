@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AdminTableList from '../../../components/admin/AdminTableList';
-import ShowModal from '../../../components/ShowModal';
+import ShowModal from '@/components/modal/ShowModal';
 import InputForm from '../../../components/InputForm';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import styles from "./AdminBanner.module.css";
 import { BsPlus } from 'react-icons/bs';
-import BtnForm from '../../../components/BtnForm';
+import BtnForm from '@/components/btn/BtnForm';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';

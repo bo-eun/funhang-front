@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../assets/css/btn.module.css';
+import styles from '@/components/btn/btn.module.css';
 import ButtonOrLink from './ButtonOrLink';
 
 function ListBtnLayout({children,topBtn, bottomBtn,}) {

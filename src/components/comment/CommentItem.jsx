@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/comment.module.css';
+import styles from '@/components/comment/comment.module.css';
 
 function CommentItem({comment,onDelete}) {
     return (

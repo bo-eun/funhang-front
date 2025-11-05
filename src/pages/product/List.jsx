@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../../assets/css/product.module.css";
+import styles from "@/pages/product/product.module.css";
 import Item from '../../components/list/Item';
 import SearchInput from '../../components/SearchInput';
 import { mockProducts } from '../../hooks/mockProducts';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import styles from "../../assets/css/mypage.module.css"
+import styles from "@/pages/mypage/mypage.module.css";
 import { Link, NavLink, Outlet } from 'react-router';
 
 

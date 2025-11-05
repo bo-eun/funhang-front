@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import "../assets/css/modal.css"
+import "@/components/modal/modal.css";
 
 
 function ShowModal({show, handleClose, handleEvent=false, 

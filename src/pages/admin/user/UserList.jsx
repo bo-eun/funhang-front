@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import SearchInput from '../../../components/SearchInput';
 import { Link } from 'react-router';
-import styles from '../../../assets/css/user.module.css';
-import EventIcon from '../../../components/icon/EventIcon';
-import ShowModal from '../../../components/ShowModal';
+import styles from '@/pages/admin/user/user.module.css';
+import ShowModal from '../../../components/modal/ShowModal';
 import InputForm from '../../../components/InputForm';
-import ListBtnLayout from '../../../components/ListBtnLayout';
+import ListBtnLayout from '../../../components/btn/ListBtnLayout';
 
 function UserList(props) {
     const [showModal, setshowModal] =useState(false);

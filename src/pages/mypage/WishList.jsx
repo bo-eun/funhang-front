@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../../assets/css/mypage.module.css"
+import styles from "@/pages/mypage/mypage.module.css";
 import Item from '../../components/list/Item';
 import { mockProducts } from '../../hooks/mockProducts';
 

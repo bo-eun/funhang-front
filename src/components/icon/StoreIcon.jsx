@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/css/storeIcon.module.css';
+import styles from '@/components/icon/storeIcon.module.css';
 import PropTypes from 'prop-types';
 
 function StoreIcon({product}) {

@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
-import BtnForm from "../../components/BtnForm";
-import styles from '../../assets/css/login.module.css';
+import BtnForm from "../../components/btn/BtnForm";
+import styles from '@/pages/login/login.module.css';
 
 const signUpFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },

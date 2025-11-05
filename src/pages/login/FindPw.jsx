@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
-import BtnLinkForm from "../../components/BtnLinkForm";
-import BtnForm from "../../components/BtnForm";
-import ShowModal from "../../components/ShowModal";
-import styles from '../../assets/css/login.module.css';
+import BtnLinkForm from "../../components/btn/BtnLinkForm";
+import BtnForm from "../../components/btn/BtnForm";
+import ShowModal from "../../components/modal/ShowModal";
+import styles from '@/pages/login/login.module.css';
 
 const findPwFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },

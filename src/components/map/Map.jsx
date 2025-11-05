@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cuIcon from "../../assets/img/cu_icon.svg";
 import gs25Icon from "../../assets/img/gs25_icon.svg";
 import sevenIcon from "../../assets/img/seven_icon.svg";
-import "../../assets/css/map.css";
+import "@/components/map/map.css";
 
 const KAKAO_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 

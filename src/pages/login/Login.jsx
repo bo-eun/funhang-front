@@ -1,12 +1,12 @@
 // import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import styles from "../../assets/css/login.module.css";
+import styles from '@/pages/login/login.module.css';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputForm from "../../components/InputForm";
-import BtnForm from "../../components/BtnForm";
-import BtnLinkForm from "../../components/BtnLinkForm";
+import BtnForm from "../../components/btn/BtnForm";
+import BtnLinkForm from "../../components/btn/BtnLinkForm";
 import { useState } from "react";
 import { authStore } from "../../store/authStore";
 

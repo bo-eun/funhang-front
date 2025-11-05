@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
-import BtnForm from "../../components/BtnForm";
-import styles from "../../assets/css/mypage.module.css"
+import BtnForm from "../../components/btn/BtnForm";
+import styles from "@/pages/mypage/mypage.module.css";
 
 function EditProfile(props) {
     const schema = yup.object().shape({
