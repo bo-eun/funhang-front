@@ -20,7 +20,11 @@ function AdminBanner(props) {
     const schema = yup.object().shape({
         rows: yup.array().of(
             yup.object().shape({
-                imageFile: yup.mixed().required("이미지 파일을 업로드 해주세요."),
+                imageFile: yup.mixed().when("imgUrl", {
+                    is: (val) => !val, // 값이 없으면
+                    then: yup.mixed().required("이미지 파일을 업로드 해주세요."),
+                    otherwise: yup.mixed(),
+                }),
                 title: yup.string().required("배너 제목을 입력해주세요"),
             })
         )
@@ -52,12 +56,13 @@ function AdminBanner(props) {
         newRows.splice(result.destination.index, 0, movedItem);
 
         setRows(newRows);
+        reset({rows: newRows});
     };
 
     const showAddBanner = () => {
         setRows(prev => [...prev, 
             {
-                image: '',
+                imgUrl: '',
                 title: "",
                 linkUrl: "",
                 useYn: "Y",  
@@ -69,19 +74,13 @@ function AdminBanner(props) {
     const updateBanners = async() => {
         const formData = new FormData();
 
-        const rowsData = rows.map((banner, index) => ({
-
-            // 기존 이미지 수정일 경우
-            // 새 배너 등록일 경우 배너 아이디 보내지 않음
-            bannerId: banner.bannerId,
-
-            // 파일이 있는 경우 파일 보내기
-            file: banner.imageFile,
-
-            title: banner.title,
-            linkUrl: banner.linkUrl,
-            useYn: banner.useYn,
-        }))
+        rows.forEach((banner, index) => {
+            if (banner.bannerId) formData.append(`rows[${index}].bannerId`, banner.bannerId);
+            if (banner.imageFile && banner.imageFile[0]) formData.append(`rows[${index}].imageFile`, banner.imageFile[0]);
+            formData.append(`rows[${index}].title`, banner.title);
+            formData.append(`rows[${index}].linkUrl`, banner.linkUrl || '');
+            formData.append(`rows[${index}].useYn`, banner.useYn);
+        });
 
         console.log(formData)
         try {
@@ -108,7 +107,7 @@ function AdminBanner(props) {
             setRows(prev => 
                 prev.map((banner, idx) => {
                     if(index == idx) {
-                        banner.image = newUrl;
+                        banner.imgUrl = newUrl;
                     }
                     return banner;
                 })
@@ -121,21 +120,21 @@ function AdminBanner(props) {
         const list = [
             {
                 bannerId: 1,
-                image: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
+                imgUrl: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
                 title: "GS25 11월 상품",
                 linkUrl: "https://...",
                 useYn: "Y",
             },
             {
                 bannerId: 2,
-                image: 'https://www.7-eleven.co.kr/upload/event/20251030153024104r202.png',
+                imgUrl: 'https://www.7-eleven.co.kr/upload/event/20251030153024104r202.png',
                 title: "세븐일레븐 11월 상품",
                 linkUrl: "https://...",
                 useYn: "Y",
             },
             {
                 bannerId: 3,
-                image: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
+                imgUrl: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
                 title: "CU 11월 상품",
                 linkUrl: "https://...",
                 useYn: "Y",
@@ -150,6 +149,7 @@ function AdminBanner(props) {
         console.log('배너 리스트 변경')
         setRows(bannerList)
     }, [bannerList])
+
 
     console.log(rows)
 
@@ -192,10 +192,10 @@ function AdminBanner(props) {
                                     >
                                         <div className="col-1">{index + 1}</div>
                                         <div className="col-3">
-                                            <label htmlFor={`imageFile${index}`} className={`${styles.img_box} ${!row.image && styles.add_box}`}>
+                                            <label htmlFor={`imageFile${index}`} className={`${styles.img_box} ${!row.imgUrl && styles.add_box}`}>
                                                 {
-                                                    row.image ? 
-                                                    <img src={row.image} />      
+                                                    row.imgUrl ? 
+                                                    <img src={row.imgUrl} />      
                                                     :      
                                                     <BsPlus size="50px" color="aaa" />   
                                                 }
