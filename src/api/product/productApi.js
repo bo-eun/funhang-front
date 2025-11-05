@@ -12,23 +12,14 @@ export const productApi = {
         return response.data;
     },
 
-    getChainList: async (sourceChain, promoTypeName, size=20) => {
+    getChainList: async (sourceChain, promoType, productType, size=20) => {
         const queryParams = new URLSearchParams({
             size
         });
         
         const response = await api.get(
-            `/api/v1/crawl/${sourceChain}/${promoTypeName}?${queryParams.toString()}`
+            `/api/v1/crawl/${sourceChain}/${promoType}/${productType}?${queryParams.toString()}`
         );
-        return response.data;
-    },
-    getProductCu: async(sourceChain,size=20)=>{
-        const queryParams = new URLSearchParams({
-            size
-        });
-        const response = await api.get(
-            `/api/v1/crawl/chain/${sourceChain}?${queryParams.toString()}`
-        )
         return response.data;
     },
     getProduct: async()=>{

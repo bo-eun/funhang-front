@@ -47,7 +47,7 @@ function Main(props) {
     queryKey: ['crawl', 'ONE_PLUS_ONE'],
     queryFn: async () => {
         const res = await productApi.getPromo5List('ONE_PLUS_ONE');
-        return res.response.items;
+        return res?.response?.items || [];
     },
     });
 
