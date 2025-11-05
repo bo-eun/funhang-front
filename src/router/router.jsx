@@ -25,7 +25,7 @@ import AdminProductList from "../pages/admin/product/AdminProductList";
 import SubLayout from "../pages/SubLayout";
 import AdminProductUpdate from "../pages/admin/product/AdminProductUpdate";
 import UserList from "../pages/admin/user/UserList";
-import AdminCategoryList from "../pages/admin/category/List";
+import AdminCategory from "../pages/admin/category/AdminCategory";
 import AdminCouponRegistList from "../pages/admin/coupon/RegistrationList";
 import AdminCouponGrantList from "../pages/admin/coupon/GrantList";
 import AdminBanner from "../pages/admin/banner/AdminBanner";
@@ -194,7 +194,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "category",
-            element: <AdminCategoryList />
+            element: <AdminCategory />
           },
           {
             path: "coupon/regist",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import styles from '../../assets/css/boardList.module.css';
+import styles from '../table/Table.module.css';
 
 function BoardListItem({boardItem,selectedId,handleCheck,isAdmin,checked}) {
     

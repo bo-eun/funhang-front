@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from 'react-router';
-import Table from '../../../components/board/Table';
+import Table from '../../../components/table/Table';
 
 const colWidth = ['60px', '70%'];
 const headers = ['NO' ,'쿠폰 이름', '관리'];

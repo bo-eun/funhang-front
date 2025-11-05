@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BoardListItem from '../../../components/board/BoardListItem';
 import { authStore } from '../../../store/authStore';
-import Table from '../../../components/board/Table';
+import Table from '../../../components/table/Table';
 import { Link } from 'react-router';
 
 

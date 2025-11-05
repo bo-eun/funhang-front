@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import styles from "../../assets/css/boardList.module.css";
 import SearchInput from "../../components/SearchInput";
-import BoardListItem from '../../components/board/BoardListItem';
 import Pagination from "../../components/Pagination";
 import { authStore } from "../../store/authStore";
-import Table from "../../components/board/Table";
+import Table from "../../components/table/Table";
 
 const colWidth = ['50px', '', '160px', '80px', '130px'];
 const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
@@ -115,41 +114,6 @@ function BoardList(props) {
                     isCheckbox={true}
                     data={boardList}
                 />
-                {/* <table className="table">
-                    <colgroup>
-                        <col style={{ width: "10%" }} />
-                        <col style={{ width: "10%" }} />
-                        <col style={{ width: "45%" }} />
-                        <col style={{ width: "15%" }} />
-                        <col style={{ width: "10%" }} />
-                        <col style={{ width: "20%" }} />
-                    </colgroup>
-                    <thead className="table-title">
-                        <tr>
-                            <th></th>
-                            <th>NO</th>
-                            <th>제목</th>
-                            <th>글쓴이</th>
-                            <th>추천 수</th>
-                            <th>작성 일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {boardList?.map((item) => (
-                            <>
-                            <BoardListItem
-                                key={item.id}
-                                boardItem={item}
-                                selectedId={selected.includes((item.id))}
-                                handleCheck={() => handleCheck(item.id)}
-                                isAdmin={isAdmin}
-                                checked={chkOn.includes(item.id)}
-                                />
-                                {console.log(item.id)}
-                                </>
-                        ))}
-                    </tbody>
-                </table> */}
             </section>
 
             <div className="r_btn">

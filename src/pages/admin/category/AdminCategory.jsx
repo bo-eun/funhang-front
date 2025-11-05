@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AdminTableList from '../../../components/admin/AdminTableList';
-import styles from "./adminList.module.css";
+import styles from "../../../components/table/Table.module.css";
 
-function List(props) {
+function AdminCategory(props) {
     const [cateList, setCateList] = useState([]);
 
     const showAddCate = () => {
@@ -85,4 +85,4 @@ function List(props) {
     );
 }
 
-export default List;
+export default AdminCategory;

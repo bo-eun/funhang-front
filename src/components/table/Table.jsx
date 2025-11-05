@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from "../../assets/css/boardList.module.css";
+import styles from "./Table.module.css";
 
 function Table({ headers, data, colWidth, columns=data, isCheckbox=false, setCheckedList, clickColumnBtn=null }) {
 
