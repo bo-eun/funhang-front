@@ -12,7 +12,7 @@
 }
 .swiper_cont .swiper {
     flex: 3.6;
-    border: 1px solid #C9C9C9;
+    border: 1px solid #d9d9d9;
     border-radius: 0 15px 15px 0;    
 }
 
@@ -55,7 +55,7 @@
     font-weight: bold;
 }
 .prd_section h2 a {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
 }
 
@@ -63,7 +63,30 @@
 .prd_list {
     display: grid; 
     grid-template-columns: repeat(5, 1fr);
-    gap: 30px;
+    gap: 24px;
     border-bottom: 1px solid #C9C9C9;
     padding-bottom: 50px;
+}
+
+/* 카테고리 영역 */
+.cat_list{
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr);
+    gap: 30px;
+}
+.cat_item{
+    text-align: center;
+}
+.cat_img_wrap{
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    
+}
+.cat_img_wrap img{
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    object-fit: contain;
 }

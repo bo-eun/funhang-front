@@ -7,26 +7,32 @@ import { Link } from "react-router";
 import EventIcon from "../icon/EventIcon";
 import StoreIcon from "../icon/StoreIcon";
 
-function Item({link,event,store}) {
+function Item({product}) {
+  if (!product) return null;
   return (
-    <Link to={link}>
+    <Link to={`/${product.sourceChain}/${product.crawlId}`}>
     <div className={styles.prd_item}>
       <div className={styles.img_box}>
         <EventIcon
-          {...event}
+          product={product}
+          cssPosition="absolute"
+          top="10px"
+          left="10px"
         />
-        <img src={itemImg} alt="" />
+        {/* 상품 이미지 */}
+        <img src={product.imageUrl} alt={product.productName} />
         {/* <button type='button' className='wish_btn'><img src={wishiIcon} alt="" /></button> */}
+        {/* 찜 버튼 */} 
         <button type="button" className={styles.wish_btn}>
           <img src={wishiActiveIcon} alt="" />
         </button>
       </div>
       <div className={styles.info_box}>
         <StoreIcon
-          {...store}
+          product={product.sourceChain}
         />
-        <p className={styles.title}>서울우유 강릉커피</p>
-        <p className={styles.price}>2,500원</p>
+        <p className={styles.title}>{product.productName}</p>
+        <p className={styles.price}>{product.price.toLocaleString()}원</p>
       </div>
     </div>
     </Link>

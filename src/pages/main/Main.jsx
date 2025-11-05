@@ -6,8 +6,16 @@ import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import styles from "../../assets/css/main.module.css"
 import mainBanner01 from "../../assets/img/main_banner01.svg"
+import allImg from '../../assets/img/all.png';
+import snackImg from '../../assets/img/snack.png';
+import drinkImg from '../../assets/img/drink.png';
+import foodImg from '../../assets/img/food.png';
+import dailyItemImg from '../../assets/img/dailyItem.png';
+import milk from '../../assets/img/item.png';
 import Item from '../../components/list/Item';
 import { Link } from 'react-router';
+import SubLayoutPdc from '../../components/product/SubLayoutPdc';
+import { mockProducts } from '../../hooks/mockProducts';
 
 function Main(props) {
 
@@ -16,6 +24,21 @@ function Main(props) {
         'CU 10월 이벤트',
         '7ELEVEN 10월 이벤트'
     ]);
+    const categoryList = [
+        { name: '전체상품', img: allImg , url: '/category'},
+        { name: '과자', img: snackImg },
+        { name: '음료수', img: drinkImg },
+        { name: '식품', img: foodImg },
+        { name: '생활용품', img: dailyItemImg },
+    ];
+
+    const products = mockProducts;
+
+    
+
+
+            
+    
 
     const paginationRef = useRef(null);
 
@@ -64,273 +87,62 @@ function Main(props) {
 
                 </Swiper>
             </div>
-            
-            <section className={`${styles.prd_section} ${styles.best_prd}`}>
-                <h2>
-                    인기 행사 상품
-                    <Link to="">더보기 {">"}</Link>
-                </h2>
+            <SubLayoutPdc
+                titleName='인기 행사 상품'
+                moreLink='/category?sort=popular'
+            >
                 <ul className={styles.prd_list}>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '2 + 1',
-                                bgColor: 'two',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'GS25',
-                                storeColor: 'gs25',
-                            }}
+                    {products?.map((product)=>(
+                        <Item
+                        key={product.crawlId} 
+                        product={product}
                         />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: '7ELEVEN',
-                                storeColor: '7eleven',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
+                    ))}
                 </ul>
-            </section>
-
-            <section className={`${styles.prd_section} ${styles.best_prd}`}>
-                <h2>
-                    1+1 행사
-                    <Link to="">더보기 {">"}</Link>
-                </h2>
+            </SubLayoutPdc>
+            <SubLayoutPdc
+                titleName='1 + 1 행사'
+                moreLink='/category?sort='
+            >
                 <ul className={styles.prd_list}>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
+                    {products?.map((product)=>(
+                        <Item
+                        key={product.crawlId} 
+                        product={product}
                         />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
+                    ))}
                 </ul>
-            </section>
-
-            <section className={`${styles.prd_section} ${styles.best_prd}`}>
-                <h2>
-                    2+1 행사
-                    <Link to="">더보기 {">"}</Link>
-                </h2>
+            </SubLayoutPdc>
+            <SubLayoutPdc
+                titleName='2 + 1 행사'
+                moreLink='/category?sort='
+            >
                 <ul className={styles.prd_list}>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
+                    {products?.map((product)=>(
+                        <Item
+                        key={product.crawlId} 
+                        product={product}
                         />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
-                    <li>
-                        <Item  
-                            link={""}
-                            event={{
-                                name: '1 + 1',
-                                bgColor: 'one',
-                                cssPosition: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                            }}
-                            store={{
-                                name: 'CU',
-                                storeColor: 'cu',
-                            }}
-                        />
-                    </li>
+                    ))}
                 </ul>
-            </section>            
+            </SubLayoutPdc>
+            <SubLayoutPdc
+                titleName='카테고리 별'
+                moreLink='/category'
+            >
+                <ul className={styles.cat_list}>
+                    {categoryList?.map((category,index)=>(
+                        <li key={index} className={styles.cat_item}>
+                            <Link to={category.url}>
+                                <div className={styles.cat_img_wrap}>
+                                    <img src={category.img} alt={`${category.name} 이미지`} />
+                                </div>
+                                {category.name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </SubLayoutPdc>           
         </Container>
     );
 }

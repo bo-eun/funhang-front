@@ -49,7 +49,10 @@ function Point(props) {
             </table>
         </div>
 
-        <ShowModal show={show} handleClose={handleClose} title="쿠폰 교환" className={styles.coupon_modal}>
+        <ShowModal show={show} handleClose={handleClose} title="쿠폰 교환"
+        className={styles.coupon_modal}
+        closeBtnName='교환'
+        >
             <div className={styles.notice_box}>
                 <p>※ 포인트 교환으로 받으신 상품권은 취소가 불가합니다.</p>
                 <p>※ 오프라인 전용 쿠폰입니다.</p>

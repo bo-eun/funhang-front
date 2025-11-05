@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from "../../assets/css/mypage.module.css"
 import Item from '../../components/list/Item';
+import { mockProducts } from '../../hooks/mockProducts';
 
 function WishList(props) {
+    const products = mockProducts;
     return (
         <div className={styles.wish_cont}>
             <h3>찜목록</h3>
@@ -12,70 +14,12 @@ function WishList(props) {
             </p>
 
             <ul className={styles.item_list}>
-                <li>
-                    <Item  
-                        link={""}
-                        event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'CU',
-                            storeColor: 'cu',
-                        }}
-                    />
-                </li>
-                <li>
-                    <Item  
-                        link={""}
-                        event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'CU',
-                            storeColor: 'cu',
-                        }}
-                    />
-                </li>
-                <li>
-                    <Item  
-                        link={""}
-                        event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'CU',
-                            storeColor: 'cu',
-                        }}
-                    />
-                </li>
-                <li>
-                    <Item  
-                        link={""}
-                        event={{
-                            name: '1 + 1',
-                            bgColor: 'one',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'CU',
-                            storeColor: 'cu',
-                        }}
-                    />
-                </li>
+                {products?.map((product)=>(
+                        <Item
+                        key={product.crawlId} 
+                        product={product}
+                        />
+                    ))}
             </ul>
         </div>
     );

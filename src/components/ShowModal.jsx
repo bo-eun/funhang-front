@@ -2,12 +2,21 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import "../assets/css/modal.css"
 
-function ShowModal({show, handleClose, title, className="", children, isSubmit=false}) {
+
+function ShowModal({show, handleClose, handleEvent=false, 
+  closeBtnName, eventBtnName, title, className="", children,
+}) {
   return (
     <>
 
 
-      <Modal show={show} onHide={handleClose} centered dialogClassName={className}>
+      <Modal 
+        show={show} 
+        onHide={handleClose} 
+        centered dialogClassName={className}
+
+      >
+
         {title && 
           <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>
@@ -17,15 +26,18 @@ function ShowModal({show, handleClose, title, className="", children, isSubmit=f
           {children}
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <Button variant="secondary" onClick={handleClose}>
-            닫기
-          </Button>
-          {isSubmit && 
-            <Button variant="primary" onClick={handleClose}>
-              저장
+          {handleEvent && 
+            <Button className='min_btn_b' onClick={handleEvent}>
+              {eventBtnName}
             </Button>
           }
+          {handleClose &&
+          <Button className={!handleEvent?'min_btn_b':'min_btn_w'} onClick={handleClose}>
+            {closeBtnName}
+          </Button>
+          }
         </Modal.Footer>
+
       </Modal>
     </>
   );

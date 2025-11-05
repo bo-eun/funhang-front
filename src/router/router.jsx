@@ -67,6 +67,34 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
+        path: "category",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "detail",
+            element: <Detail />,
+          },
+        ],
+      },
+      {
+        element: <ProductLayout />,
+        path: "category",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "detail",
+            element: <Detail />,
+          },
+        ],
+      },
+      {
+        element: <ProductLayout />,
         path: "product/:id",
         children: [
           {
@@ -79,7 +107,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
       {
         element:<SubLayout/>,
         path: "board",

@@ -2,8 +2,10 @@ import React from 'react';
 import styles from "../../assets/css/product.module.css";
 import Item from '../../components/list/Item';
 import SearchInput from '../../components/SearchInput';
+import { mockProducts } from '../../hooks/mockProducts';
 function List(props) {
-    const chain = 'cu';
+    const products = mockProducts;
+    
     return (
         <section className={styles.list_section}>
             <SearchInput />
@@ -14,87 +16,15 @@ function List(props) {
                     <option value="best">인기순</option>
                 </select>
             </div>
-            <ul className={styles.prd_list}>  
-                <li>
-                    <Item 
-                        link={`/product/${chain}/detail`}
-                        event={{
-                            name: '2 + 1',
-                            bgColor: 'two',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'GS25',
-                            storeColor: 'gs25',
-                        }}
-                    />
-                </li>     
-                <li>
-                    <Item 
-                        link={`/product/${chain}/detail`}
-                        event={{
-                            name: '2 + 1',
-                            bgColor: 'two',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'GS25',
-                            storeColor: 'gs25',
-                        }}
-                    />
-                </li>    
-                <li>
-                    <Item 
-                        link={`/product/${chain}/detail`}
-                        event={{
-                            name: '2 + 1',
-                            bgColor: 'two',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'GS25',
-                            storeColor: 'gs25',
-                        }}
-                    />
-                </li>   
-                <li>
-                    <Item 
-                        link={`/product/${chain}/detail`}
-                        event={{
-                            name: '2 + 1',
-                            bgColor: 'two',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'GS25',
-                            storeColor: 'gs25',
-                        }}
-                    />
-                </li>   
-                <li>
-                    <Item 
-                        link={`/product/${chain}/detail`}
-                        event={{
-                            name: '2 + 1',
-                            bgColor: 'two',
-                            cssPosition: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                        }}
-                        store={{
-                            name: 'GS25',
-                            storeColor: 'gs25',
-                        }}
-                    />
-                </li>                                                                                                  
+            <ul className={styles.prd_list}>
+                {products?.map((product)=>(
+                    <li>
+                        <Item
+                        key={product.crawlId} 
+                        product={product}
+                        />
+                    </li>
+                ))}
             </ul>
         
         </section>

@@ -1,11 +1,4 @@
-:root {
-  --cu-bg: #C6E857;
-  --cu-font: #652F8D;
-  --seven-bg: #147350;
-  --seven-font: white;
-  --gs-bg: #2ABADA;
-  --gs-font: #006FBA;
-}
+
 .category{
     display: inline-block;
     font-size: 14px;
@@ -25,5 +18,9 @@
 .category._gs25{
     background: #43d2f1;
     color:#0062a3;
+}
+.category._default{
+    background: #147350;
+    color:white;
 }
 

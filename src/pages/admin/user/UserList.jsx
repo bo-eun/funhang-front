@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import styles from '../../../assets/css/user.module.css';
 import EventIcon from '../../../components/icon/EventIcon';
 import ShowModal from '../../../components/ShowModal';
+import InputForm from '../../../components/InputForm';
+import ListBtnLayout from '../../../components/ListBtnLayout';
 
 function UserList(props) {
     const [showModal, setshowModal] =useState(false);
@@ -50,41 +52,87 @@ function UserList(props) {
                 </select>
                 <SearchInput />
             </form>
-            <div className={styles.list_wrap}>
+            
+            <ListBtnLayout
+                topBtn={{ 
+                    type: 'button', 
+                    onClick: goUpdate, 
+                    name: '수정',
+                }}
+                bottomBtn={{ 
+                    type: 'button', 
+                    onClick: deleteBtn,
+                    name: '탈퇴',
+                    style: {backgroundColor: userList.useYn ? '' : '#c9c9c9',},
+                    disabled: !userList.useYn
+                }}
+            >  
                 <div className={styles.user_info}>
                     <p className={styles.userRole}>{userList.userRole}</p>
                     <p className={styles.userId}>
                         {userList.userId}
                         {userList.useYn?
                         '':<span className={styles.deleteAcc}>탈퇴</span>
-                        }
+                    }
                     </p>
                     <p className={styles.userName}>{userList.userName}</p>
                     <p className={styles.createAt}>{userList.createAt}</p>
                 </div>
-
-                <div className='r_btn_cul'>
-                    <button className='min_btn_b' onClick={goUpdate}>수정</button>
-                    <button className='min_btn_w'
-                            onClick={deleteBtn} 
-                            disabled={!userList.useYn} 
-                            style={{backgroundColor: userList.useYn ? '' : '#c9c9c9',}}
-                    >
-                        탈퇴
-                    </button>
-                </div>
-            </div>
+            </ListBtnLayout>
+            
             <ShowModal
                 show={showModal}
+                title='회원정보 수정'
                 handleClose={handleClose}
-            >
-                <h3>회원정보 수정</h3>
-                <p>{userList.userId}</p>
-                <p>{userList.userName}</p>
-                <p>{userList.email}</p>
-                <p>{userList.nickName}</p>
-                <p>{userList.birth}</p>
-                <input value={point} onChange={(e) => setPoint(e.target.value)}></input>
+                handleEvent={handleClose}
+                eventBtnName='수정'
+                closeBtnName='닫기'
+                className={styles.user_info_form}
+            >   
+                    <InputForm
+                        className={styles.info}
+                        label='가입일'
+                        readOnly={true}
+                        defaultValue={userList.createAt}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        label='아이디'
+                        readOnly={true}
+                        defaultValue={userList.userId}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        label='이름'
+                        readOnly={true}
+                        defaultValue={userList.userName}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        label='이메일'
+                        readOnly={true}
+                        defaultValue={userList.email}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        label='닉네임'
+                        readOnly={true}
+                        defaultValue={userList.nickName}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        label='생년월일'
+                        readOnly={true}
+                        defaultValue={userList.birth}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        type='number'
+                        label='보유 포인트'
+                        defaultValue={point}
+                        setValue={(e) => setPoint(e.target.value)}
+                    />
+                
                 
             </ShowModal>
         </>

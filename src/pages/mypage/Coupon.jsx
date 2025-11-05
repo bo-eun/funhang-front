@@ -24,7 +24,9 @@ function Coupon(props) {
                 </ul>
             </div>
 
-            <ShowModal show={show} handleClose={handleClose} title="보유 쿠폰" className={styles.coupon_modal}>
+            <ShowModal show={show} handleClose={handleClose} title="보유 쿠폰" 
+            className={styles.coupon_modal}
+            closeBtnName='닫기'>
                 <div className={styles.img_box}>
                     <img src="" />
                 </div>

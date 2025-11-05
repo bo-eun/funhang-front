@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    border: 1px solid #C9C9C9;
+    border: 1px solid #d9d9d9;
     border-radius: 20px;
     width: 100%;
     aspect-ratio: 1 / 1.17;
@@ -20,10 +20,9 @@
 
 .prd_item .info_box .title {
     font-size: var(--text-size);
-    padding-top: 8px;
+    padding-top: 10px;
 }
 .prd_item .info_box .price {
     font-size: 20px;
     font-weight: bold;
-    padding-top: 10px;
 }

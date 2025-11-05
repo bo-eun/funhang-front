@@ -3,19 +3,19 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { Link, Outlet, useLocation, useParams } from 'react-router';
 import styles from "../../assets/css/product.module.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
-import { pageInfo } from "../../hooks/pageTitle";
+import { pageInfo } from '../../hooks/pageTitle';
 
 function Layout(props) {
-    const locataion = useLocation();
+    const location = useLocation();
     const [isDetail, setIsDetail] = useState(false);
-
-    const { pathname } = useLocation();
-    console.log(pathname)
-    const title = pageInfo[pathname]?.title || "";
+    const matchKey = Object.keys(pageInfo).find((key) =>
+        location.pathname.startsWith(key)
+    );
+    const title = matchKey ? pageInfo[matchKey].title : "";
 
     useEffect(() => {
-        setIsDetail(locataion.pathname.includes('/detail'))
-    }, [locataion.pathname])
+        setIsDetail(location.pathname.includes('/detail'))
+    }, [location.pathname])
 
     return (
         <Container className={styles.product_cont}>
