@@ -28,7 +28,7 @@ import UserList from "../pages/admin/user/UserList";
 import AdminCategoryList from "../pages/admin/category/List";
 import AdminCouponRegistList from "../pages/admin/coupon/RegistrationList";
 import AdminCouponGrantList from "../pages/admin/coupon/GrantList";
-import AdminBanner from "../pages/admin/banner/Banner";
+import AdminBanner from "../pages/admin/banner/AdminBanner";
 
 export const router = createBrowserRouter([
   {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import styles from "../../../assets/css/adminBanner.module.css";
+import styles from "./AdminBanner.module.css";
 import { BsPlus } from 'react-icons/bs';
 import BtnForm from '../../../components/BtnForm';
 import * as yup from "yup";
@@ -12,7 +12,7 @@ import {
   Draggable,
 } from "@hello-pangea/dnd";
 
-function Banner(props) {
+function AdminBanner(props) {
 
     const [bannerList, setBannerList] = useState([]);
 
@@ -259,4 +259,4 @@ function Banner(props) {
     );
 }
 
-export default Banner;
+export default AdminBanner;
