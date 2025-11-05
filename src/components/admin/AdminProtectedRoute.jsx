@@ -10,7 +10,7 @@ function AdminProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (userRole !== "ADMIN") {
+  if (userRole !== "ROLE_ADMIN") {
     // 로그인은 했지만 일반 사용자 → 접근 차단 페이지
     return <Navigate to="/not-authorized" replace />;
   }

@@ -20,15 +20,16 @@ export const authStore = create(
             getUserRole : () => get().userRole,
 
             //로그인 후 정보를 저장하는 함수 
-            setLogin: ({token, userId, userName, userRole}) =>
-               
-                set((state)=>{
-                    
-                    state.token = token;
-                    state.userId = userId;
-                    state.userName = userName;
-                    state.userRole = userRole
-            }),
+            setLogin: ({token, userId, userName, userRole}) => {
+                    set((state)=>{
+                        
+                        state.token = token;
+                        state.userId = userId;
+                        state.userName = userName;
+                        state.userRole = userRole
+                })
+            },
+
             //토큰만 갱신
             setToken : (token) =>
                 set((state)=>{

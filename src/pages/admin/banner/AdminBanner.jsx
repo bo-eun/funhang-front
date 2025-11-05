@@ -5,7 +5,7 @@ import { BsPlus } from 'react-icons/bs';
 import BtnForm from '@/components/btn/BtnForm';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import {
   DragDropContext,
   Droppable,
@@ -15,15 +15,11 @@ import { useAdmin } from '../../../hooks/useAdmin';
 
 function AdminBanner(props) {
 
-    const [bannerList, setBannerList] = useState([]);
-
     const schema = yup.object().shape({
         rows: yup.array().of(
             yup.object().shape({
-                imageFile: yup.mixed().when("imgUrl", {
-                    is: (val) => !val, // 값이 없으면
-                    then: yup.mixed().required("이미지 파일을 업로드 해주세요."),
-                    otherwise: yup.mixed(),
+                file: yup.mixed().when("imgUrl", (imgUrl, schema) => {
+                    return imgUrl ? schema : schema.required("이미지 파일을 업로드 해주세요.");
                 }),
                 title: yup.string().required("배너 제목을 입력해주세요"),
             })
@@ -31,8 +27,12 @@ function AdminBanner(props) {
     }); 
 
     const {
+        control,
         register,
         handleSubmit,
+        setValue,
+        getValues,
+        watch,
         formState: { errors },
         reset,
     } = useForm({
@@ -42,32 +42,24 @@ function AdminBanner(props) {
         }
     });
 
+    const { fields, append, remove, move, replace } = useFieldArray({
+        control,
+        name: "rows",
+    });
+
+    const rows = watch("rows"); // form 상태에서 직접 가져오기
+
     const { createBannerMutation } = useAdmin();
 
-
-    const [rows, setRows] = useState(bannerList); // drag 후 bannerList
-    
     // 드래그 끝나고 리스트 정렬 수정
     const handleDragEnd = (result) => {
         if (!result.destination) return;
-
-        const newRows = [...rows];
-        const [movedItem] = newRows.splice(result.source.index, 1);
-        newRows.splice(result.destination.index, 0, movedItem);
-
-        setRows(newRows);
-        reset({rows: newRows});
+         move(result.source.index, result.destination.index);
     };
 
+    // 배너 추가
     const showAddBanner = () => {
-        setRows(prev => [...prev, 
-            {
-                imgUrl: '',
-                title: "",
-                linkUrl: "",
-                useYn: "Y",  
-            }
-        ])
+        append({ imgUrl: '', title: '', linkUrl: '', useYn: 'Y' });
     };
 
     // 배너 등록
@@ -76,18 +68,19 @@ function AdminBanner(props) {
 
         rows.forEach((banner, index) => {
             if (banner.bannerId) formData.append(`rows[${index}].bannerId`, banner.bannerId);
-            if (banner.imageFile && banner.imageFile[0]) formData.append(`rows[${index}].imageFile`, banner.imageFile[0]);
+            if (banner.file && banner.file[0]) formData.append(`rows[${index}].file`, banner.file[0]);
             formData.append(`rows[${index}].title`, banner.title);
             formData.append(`rows[${index}].linkUrl`, banner.linkUrl || '');
             formData.append(`rows[${index}].useYn`, banner.useYn);
         });
 
-        console.log(formData)
         try {
             // 서버에 formData 넘겨주기
-            // await createBannerMutation.mutate(formData); // 배너 등록
-            // 
-
+            await createBannerMutation.mutate(formData); // 배너 등록
+            console.log(formData)
+            for (let pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
         } catch(e) {
             console.log(e)
         }
@@ -95,7 +88,7 @@ function AdminBanner(props) {
 
     // 배너 삭제
     const deleteBanner = (index) => {
-        setRows(prev => prev.filter((banner, idx) => index != idx))
+        remove(index);
     }
 
     // 배너 이미지 미리보기
@@ -104,17 +97,18 @@ function AdminBanner(props) {
         if (file) {
             // 이미지 미리보기 URL 생성
             const newUrl = URL.createObjectURL(file);
-            setRows(prev => 
-                prev.map((banner, idx) => {
-                    if(index == idx) {
-                        banner.imgUrl = newUrl;
-                    }
-                    return banner;
-                })
-            )
+            const currentRows = getValues("rows");
+            const newRows = [...currentRows];
+            newRows[index] = {
+                ...newRows[index],
+                file: [file],
+                imgUrl: newUrl
+            };
+            setValue("rows", newRows);
         }
     }
 
+    // 서버에서 배너 리스트 받아오기
     useEffect(() => {
         // 서버에서 받아온 배너 리스트
         const list = [
@@ -123,6 +117,7 @@ function AdminBanner(props) {
                 imgUrl: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
                 title: "GS25 11월 상품",
                 linkUrl: "https://...",
+                file: "",
                 useYn: "Y",
             },
             {
@@ -130,6 +125,7 @@ function AdminBanner(props) {
                 imgUrl: 'https://www.7-eleven.co.kr/upload/event/20251030153024104r202.png',
                 title: "세븐일레븐 11월 상품",
                 linkUrl: "https://...",
+                file: "",
                 useYn: "Y",
             },
             {
@@ -141,18 +137,9 @@ function AdminBanner(props) {
             },
         ];
 
-        setBannerList(list)
+        replace(list);
     }, [])
-
-    // 배너리스트 변경될 때 마다 rows도 업데이트
-    useEffect(() => {
-        console.log('배너 리스트 변경')
-        setRows(bannerList)
-    }, [bannerList])
-
-
-    console.log(rows)
-
+    
     return (
         <Container className={`${styles.banner_cont} mt-5`}>
             <div className="btn_box text-end mb-2">
@@ -175,7 +162,7 @@ function AdminBanner(props) {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                            {rows?.map((row, index) => (
+                            {fields.map((row, index) => (
 
                                 <Draggable key={`draggable_${index}`} draggableId={`drag_${index}`} index={index}>
                                 {(provided) => (
@@ -188,11 +175,10 @@ function AdminBanner(props) {
                                         cursor: "grab",
                                     }}
                                     id={`drag_${index}`}
-                                    key={`banner_${index}`}
                                     >
                                         <div className="col-1">{index + 1}</div>
                                         <div className="col-3">
-                                            <label htmlFor={`imageFile${index}`} className={`${styles.img_box} ${!row.imgUrl && styles.add_box}`}>
+                                            <label htmlFor={`file${index}`} className={`${styles.img_box} ${!row.imgUrl && styles.add_box}`}>
                                                 {
                                                     row.imgUrl ? 
                                                     <img src={row.imgUrl} />      
@@ -204,20 +190,19 @@ function AdminBanner(props) {
                                         <div className={`${styles.input_box} col-6`}>
                                             <input 
                                                 type="file" 
-                                                id={`imageFile${index}`}
-                                                name="imageFile" 
+                                                id={`file${index}`}
+                                                name="file" 
                                                 className='d-none'
-                                                {...register(`rows[${index}].imageFile`, {
+                                                {...register(`rows[${index}].file`, {
                                                     onChange: (e) => handleFileChange(e, index)
                                                 })}
                                             />
-                                            {errors?.rows?.[index]?.imageFile && <p className="error-msg">{errors.rows[index].imageFile.message}</p>}
+                                            {errors?.rows?.[index]?.file && <p className="error-msg">{errors.rows[index].file.message}</p>}
                                             <input
                                             type="text"
                                             className="form-control mb-1"
                                             placeholder="배너 제목을 입력해주세요"
                                             name="title"
-                                            defaultValue={row.title}
                                             {...register(`rows[${index}].title`)}
                                             />
                                             <input
@@ -225,7 +210,6 @@ function AdminBanner(props) {
                                             className="form-control"
                                             placeholder="이미지 클릭 시 이동할 주소를 입력해주세요"
                                             name="linkUrl"
-                                            defaultValue={row.linkUrl}
                                             {...register(`rows[${index}].linkUrl`)}
                                             />
                                             {errors?.rows?.[index]?.linkUrl && <p className="error-msg">{errors.rows[index].linkUrl.message}</p>}
@@ -235,7 +219,6 @@ function AdminBanner(props) {
                                             type="checkbox"
                                             name="useYn"
                                             value="Y"
-                                            defaultChecked={row.useYn === "Y"}
                                             {...register(`rows[${index}].useYn`)}
                                             />
                                         </div>

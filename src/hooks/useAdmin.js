@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import api from "../api/axiosApi";
+import { adminApi } from "../api/banner/bannerAdminApi";
 import { authStore } from "../store/authStore";
 
 export const useAdmin = () => {
@@ -12,11 +12,8 @@ export const useAdmin = () => {
   const createBannerMutation = useMutation({
     mutationFn: async(formData) => {
         try {
-            const resonse = await api.post("/api/v1/admin/banner", formData, {
-                headers: {"Content-Type" : "multipart/form-data"},
-                "Authorization": `Bearer ${token}`,
-            })
-            console.log(resonse);
+            const resonse = await adminApi.create(formData);
+            return resonse;
         } catch(error) {
             throw error.response?.data || error;
         }
@@ -26,14 +23,8 @@ export const useAdmin = () => {
   const updateBannerMutation = useMutation({
     mutationFn: async(formData) => {
         try {
-            const resonse = await api.put("/api/v1/admin/banner", formData, {
-                headers: {
-                    "Content-Type" : "multipart/form-data",
-                    "Authorization": `Bearer ${token}`,
-                },
-                
-            })
-            console.log(resonse);
+            const resonse = await adminApi.update(formData);
+            return resonse;
         } catch(error) {
             throw error.response?.data || error;
         }

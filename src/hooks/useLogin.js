@@ -12,28 +12,23 @@ export const useLogin = () => {
 
     return useMutation({
         mutationFn :  async (credentials) => {
-            console.log(credentials)
-            try {
-                const response = await api.post('/api/v1/login', credentials, {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                });
-               
-                return response.data;
-            } catch (error) {
-                throw error.response?.data || error;
-            }
+            const response = await api.post(`/api/v1/user/login`, credentials, {
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            });
+
+            return response;
         },
         onSuccess : (data) =>{
             //캐시무효화 
             queryClient.invalidateQueries( {queryKey : ['users']});
-            //토클 저장
-            setLogin(data.content);
-            navigate('/board');
+            
+            //토큰 저장
+            setLogin(data.data.content);
+            navigate('/');
         },
         onError : (error) =>{
             console.error('Login 실패', error);
+            alert('아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.')
         }
     })
 
