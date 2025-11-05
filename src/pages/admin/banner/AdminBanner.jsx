@@ -11,6 +11,7 @@ import {
   Droppable,
   Draggable,
 } from "@hello-pangea/dnd";
+import { useAdmin } from '../../../hooks/useAdmin';
 
 function AdminBanner(props) {
 
@@ -37,6 +38,9 @@ function AdminBanner(props) {
         }
     });
 
+    const { createBannerMutation } = useAdmin();
+
+
     const [rows, setRows] = useState(bannerList); // drag 후 bannerList
     
     // 드래그 끝나고 리스트 정렬 수정
@@ -62,29 +66,29 @@ function AdminBanner(props) {
     };
 
     // 배너 등록
-    const updateBanners = () => {
+    const updateBanners = async() => {
         const formData = new FormData();
 
-        rows.forEach((banner, index) => {
+        const rowsData = rows.map((banner, index) => ({
 
             // 기존 이미지 수정일 경우
             // 새 배너 등록일 경우 배너 아이디 보내지 않음
-            if(banner.bannerId) {
-                formData.append(`rows[${index}].bannerId`, banner.bannerId);
-            }
+            bannerId: banner.bannerId,
 
             // 파일이 있는 경우 파일 보내기
-            if (banner.imageFile) {
-                formData.append(`rows[${index}].imageFile`, banner.imageFile);
-            }
+            file: banner.imageFile,
 
-            formData.append(`rows[${index}].title`, banner.title);
-            formData.append(`rows[${index}].linkUrl`, banner.linkUrl || '');
-            formData.append(`rows[${index}].useYn`, banner.useYn);
-        })
+            title: banner.title,
+            linkUrl: banner.linkUrl,
+            useYn: banner.useYn,
+        }))
 
+        console.log(formData)
         try {
             // 서버에 formData 넘겨주기
+            // await createBannerMutation.mutate(formData); // 배너 등록
+            // 
+
         } catch(e) {
             console.log(e)
         }
@@ -95,7 +99,7 @@ function AdminBanner(props) {
         setRows(prev => prev.filter((banner, idx) => index != idx))
     }
 
-    // 배너 이미지 파일 등록
+    // 배너 이미지 미리보기
     const handleFileChange = (e, index) => {
         const file = e.target.files[0];
         if (file) {
