@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import styles from '../../assets/css/login.module.css';
+import styles from '@/pages/login/login.module.css';
 import InputForm from "../../components/InputForm";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";

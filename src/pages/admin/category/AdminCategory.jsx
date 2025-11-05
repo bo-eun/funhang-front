@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import AdminTableList from '../../../components/admin/AdminTableList';
-import styles from "../../../components/table/Table.module.css";
 
 function AdminCategory(props) {
     const [cateList, setCateList] = useState([]);

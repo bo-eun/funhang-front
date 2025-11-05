@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from "../../assets/css/product.module.css";
+import styles from "@/pages/product/product.module.css";
 import itemImg from "../../assets/img/item.png";
 import shareIcon from "../../assets/img/share_icon.svg";
 import Map from "../../components/map/Map";

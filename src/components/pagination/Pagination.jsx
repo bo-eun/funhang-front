@@ -1,5 +1,5 @@
 import React, {useMemo } from 'react';
-import styles from '../assets/css/pagination.module.css';
+import styles from '@/components/pagination/pagination.module.css';
 
 function Pagination({
   page,

@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router';
-import styles from '../../assets/css/main.module.css'
+import styles from "@/pages/main/main.module.css";
 import Item from '../list/Item';
 
 function SubLayoutPdc({titleName, moreLink, children }) {

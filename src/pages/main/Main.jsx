@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Pagination } from 'swiper/modules';
-import styles from "../../assets/css/main.module.css"
+import styles from "@/pages/main/main.module.css";
 import mainBanner01 from "../../assets/img/main_banner01.svg"
 import allImg from '../../assets/img/all.png';
 import snackImg from '../../assets/img/snack.png';

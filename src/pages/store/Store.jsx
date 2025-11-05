@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Map from '../../components/map/Map';
-import "../../assets/css/store.css"
+import "@/pages/store/store.css";
 import searchbtn from "../../assets/img/search_btn.svg"
 import StoreIcon from '../../components/icon/StoreIcon';
 
@@ -74,7 +74,7 @@ function Store(props) {
                                 console.log(item);
                                 return <li key={`${chainName}${item.id}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
                                     <StoreIcon
-                                        product={chainName}
+                                        product={item.category_name}
                                     />
                                     <p className="title">
                                         {item.place_name}

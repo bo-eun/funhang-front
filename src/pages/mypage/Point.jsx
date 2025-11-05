@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styles from "../../assets/css/mypage.module.css"
-import ShowModal from '../../components/ShowModal';
+import styles from "@/pages/mypage/mypage.module.css";
+import ShowModal from '../../components/modal/ShowModal';
 
 function Point(props) {
     const [show, setShow] = useState(false);

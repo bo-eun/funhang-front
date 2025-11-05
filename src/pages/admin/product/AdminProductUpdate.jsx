@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../../../assets/css/adminProduct.module.css';
+import styles from '@/pages/admin/product/adminProduct.module.css';
 import EventIcon from '../../../components/icon/EventIcon';
 import { Link } from 'react-router';
 import errorImg from '../../../assets/img/errorImg.png';
@@ -14,6 +14,18 @@ const Fields = [
 function AdminProductUpdate(props) {
     const [viewImg, setViewImg]= useState('');
     const [inputURL,setInputURL]=useState('');
+
+    const mockProduct ={
+        crawlId: 1,
+        sourceChain: "GS25",
+        productName: "서울우유 강릉커피",
+        price: 2500,
+        imageUrl: "https://image.woodongs.com/imgsvr/item/GD_8801155745004_001.jpg",
+        promoType: "TWO_PLUS_ONE",  // 2+1 행사
+        productType: "DRINK",
+        likeCount: 120,
+        crawledAt: "2025-11-04T10:30:00",
+    }
 
     const handleChange =(e)=>{
         setInputURL(e.target.value);
@@ -46,8 +58,8 @@ function AdminProductUpdate(props) {
             <div className={styles.content_bg}>
                 <div className={styles.view_img_wrap}>
                     {viewImg && 
-                        <img src={viewImg} 
-                            alt="상품 이미지" 
+                        <img src={mockProduct.imageUrl} 
+                            alt={mockProduct.productName}
                             onError={(e) => e.currentTarget.src = errorImg}
                         />
                     }
@@ -56,16 +68,17 @@ function AdminProductUpdate(props) {
                     
                     <label htmlFor="store">편의점</label>
                     <select name="store" id="store" className="form-select">
-                        <option value="">CU</option>
-                        <option value="">7ELEVEN</option>
-                        <option value="">GS25</option>
+                        <option value="CU">CU</option>
+                        <option value="7ELEVEN">7ELEVEN</option>
+                        <option value="GS25">GS25</option>
                     </select>
 
                     <label htmlFor="category">카테고리</label>
                     <select name="category" id="category" className="form-select">
-                        <option value="">과자</option>
-                        <option value="">아이스크림</option>
-                        <option value="">신선식품</option>
+                        <option value="snack">과자</option>
+                        <option value="drink">음료수</option>
+                        <option value="food">식품</option>
+                        <option value="dailyItem">생활용품</option>
                     </select>
                     
                     <label htmlFor="productName">상품명</label>
@@ -74,6 +87,7 @@ function AdminProductUpdate(props) {
                         name='productName' 
                         id='productName' 
                         className='form-control'
+                        value={mockProduct.productName}
                     />
 
                     <label htmlFor="price">가격</label>

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import styles from '../../assets/css/boardList.module.css';
+import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 
 // Quill Size 설정

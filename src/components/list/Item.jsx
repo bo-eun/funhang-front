@@ -2,7 +2,7 @@ import React from "react";
 import itemImg from "../../assets/img/item.png";
 import wishiIcon from "../../assets/img/wish.svg";
 import wishiActiveIcon from "../../assets/img/wish_active.svg";
-import styles from "../../assets/css/item.module.css";
+import styles from "@/components/list/item.module.css";
 import { Link } from "react-router";
 import EventIcon from "../icon/EventIcon";
 import StoreIcon from "../icon/StoreIcon";

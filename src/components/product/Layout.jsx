@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Link, Outlet, useLocation, useParams } from 'react-router';
-import styles from "../../assets/css/product.module.css";
+import styles from "@/pages/product/product.module.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
 import { pageInfo } from '../../hooks/pageTitle';
 

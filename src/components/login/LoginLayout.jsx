@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../assets/css/login.module.css";
+import styles from '@/pages/login/login.module.css';
 import { Outlet, useLocation, useMatches } from "react-router";
 import { pageInfo } from "../../hooks/pageTitle";
 

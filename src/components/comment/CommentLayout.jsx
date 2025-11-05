@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CommentItem from './CommentItem';
-import styles from '../../assets/css/comment.module.css';
-import BtnForm from '../BtnForm';
+import styles from '@/components/comment/comment.module.css';
+import BtnForm from '../btn/BtnForm';
 
 function CommentLayout({ comments, onAddComment, onDeleteComment }) {
     const [text, setText] = useState('');

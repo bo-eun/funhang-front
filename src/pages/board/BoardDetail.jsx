@@ -4,7 +4,7 @@ import likeOn from '../../assets/img/likeOn.png';
 import likeOff from '../../assets/img/likeOff.png';
 import CommentLayout from '../../components/comment/CommentLayout';
 import 'react-quill-new/dist/quill.snow.css';
-import styles from '../../assets/css/boardList.module.css';
+import styles from '@/pages/board/boardList.module.css';
 
 function BoardDetail() {
     const [isActive, setIsActive] = useState(false);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
-import styles from "../../assets/css/boardList.module.css";
+import styles from '@/pages/board/boardList.module.css';
 import SearchInput from "../../components/SearchInput";
-import Pagination from "../../components/Pagination";
+import Pagination from "@/components/pagination/Pagination";
 import { authStore } from "../../store/authStore";
 import Table from "../../components/table/Table";
 

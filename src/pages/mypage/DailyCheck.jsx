@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
-import styles from "../../assets/css/mypage.module.css"
+import styles from "@/pages/mypage/mypage.module.css";
 import Calendar from 'react-calendar';
 import arrowLeft from "../../assets/img/calendar_arr_l.png"
 import arrowRight from "../../assets/img/calendar_arr_r.png"
