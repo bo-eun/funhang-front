@@ -13,9 +13,6 @@ export const titleMap = {
 
     "/category": "전체상품 - ",
 
-    "/category": "전체상품 - ",
-
-
     "/product/cu": "cu - ",
     "/product/gs25": "gs25 - ",
     "/product/7eleven": "세븐일레븐 - ",
@@ -48,6 +45,7 @@ export const pageInfo = {
     "/login/findPw": { title: "비밀번호 찾기" },
     "/login/signUp": { title: "회원가입" },
 
+    "/category": { title: "전체상품" },
     "/product/cu": { title: "CU" },
     "/product/gs25": { title: "GS25" },
     "/product/7eleven": { title: "7ELEVEN" },
@@ -56,13 +54,6 @@ export const pageInfo = {
     "/product/7eleven/detail": { title: "7ELEVEN" },
 
     "/board": { title: "게시판" },
-
-    // "/mypage/wish": { title: "찜 목록" },
-
-    "/category": { title: "전체상품" },
-    "/product/cu": { title: "CU" },
-    "/product/gs25": { title: "GS25" },
-    "/product/7eleven": { title: "7ELEVEN" },
 
     "/admin/product": { title: "상품 관리" },
     "/admin/product/update": { title: "상품 수정" },

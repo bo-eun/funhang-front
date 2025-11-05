@@ -13,9 +13,15 @@
     position: absolute;
     right: 10px;
     bottom: 10px;
+
 }
 .prd_item .info_box {
     margin-top: 15px;
+}
+.prd_img{
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
 }
 
 .prd_item .info_box .title {
