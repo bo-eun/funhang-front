@@ -67,43 +67,32 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
-        path: "category",
+        path: "product/:chainId",
         children: [
           {
-            index: true,
+            index : true,// ex) /product/GS25
+            element: <Navigate to="all/all" replace />,
+          },
+          {
+            path: ":promoId", // ex) /product/GS25/ONE_PLUS_ONE
+            element: (
+              <Navigate
+                to={(() => {
+                  const pathname = window.location.pathname;
+                  const promoId = pathname.split('/').pop();
+                  return `${promoId}/all`;
+                })()}
+                replace
+              />
+            ),
+          },
+          {
+            path: ":promoId/:categoryId",// ex) /product/GS25/ONE_PLUS_ONE/SNACK
             element: <List />,
           },
           {
-            path: "detail",
-            element: <Detail />,
-          },
-        ],
-      },
-      {
-        element: <ProductLayout />,
-        path: "category",
-        children: [
-          {
-            index: true,
-            element: <List />,
-          },
-          {
-            path: "detail",
-            element: <Detail />,
-          },
-        ],
-      },
-      {
-        element: <ProductLayout />,
-        path: "product/:id",
-        children: [
-          {
-            index: true,
-            element: <List />,
-          },
-          {
-            path: "detail",
-            element: <Detail />,
+            path: ":promoId/:categoryId/:productId", // ex) /product/GS25/ONE_PLUS_ONE/SNACK/123
+            element: <Detail />, // 상세보기
           },
         ],
       },
@@ -209,15 +198,6 @@ export const router = createBrowserRouter([
             element: <AdminBanner />
           },  
         ],
-      },
-      {
-        path: "admin/board",
-        element: (
-          <AdminProtectedRoute>
-            <BoardList/>
-          </AdminProtectedRoute>
-        ),
-        handle: { title: "게시판 관리" },
       },
       // ✅ 접근 차단 페이지 등록
       {

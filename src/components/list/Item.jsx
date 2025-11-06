@@ -20,7 +20,7 @@ function Item({product}) {
           left="10px"
         />
         {/* 상품 이미지 */}
-        <img src={product.imageUrl} alt={product.productName} />
+        <img src={product.imageUrl} alt={product.productName} className={styles.prd_img}/>
         {/* <button type='button' className='wish_btn'><img src={wishiIcon} alt="" /></button> */}
         {/* 찜 버튼 */} 
         <button type="button" className={styles.wish_btn}>

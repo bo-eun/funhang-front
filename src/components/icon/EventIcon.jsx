@@ -29,6 +29,10 @@ function EventIcon({ product, cssPosition="relative", top="0", left="0",
                 name = "덤 증정";
                 bgColor = "one";
                 break;
+            case "NONE":
+                name = "할인";
+                bgColor = "one";
+                break;
             default:
                 name = "행사";
                 bgColor = "one";

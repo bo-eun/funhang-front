@@ -45,6 +45,7 @@ export const pageInfo = {
     "/login/findPw": { title: "비밀번호 찾기" },
     "/login/signUp": { title: "회원가입" },
 
+    "/product/all": { title: "전체상품" },
     "/product/cu": { title: "CU" },
     "/product/gs25": { title: "GS25" },
     "/product/7eleven": { title: "7ELEVEN" },

@@ -6,6 +6,9 @@ import Map from "../../components/map/Map";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import CommentLayout from '../../components/comment/CommentLayout';
 import EventIcon from '../../components/icon/EventIcon';
+import { productApi } from '../../api/product/productApi';
+import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router';
 
 function Detail(props) {
 
@@ -14,6 +17,7 @@ function Detail(props) {
         copy(window.location);
         alert('주소가 클립보드에 복사되었습니다');
     }
+    
 
     return (
         <section className={styles.detail_section}>

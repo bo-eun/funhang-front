@@ -16,31 +16,52 @@ import Item from '../../components/list/Item';
 import { Link } from 'react-router';
 import SubLayoutPdc from '../../components/product/SubLayoutPdc';
 import { mockProducts } from '../../hooks/mockProducts';
+import { useQuery } from '@tanstack/react-query';
+import { productApi } from '../../api/product/productApi';
+
+const categoryList = [
+    { name: '전체상품', img: allImg , url: '/category'},
+    { name: '과자', img: snackImg },
+    { name: '음료수', img: drinkImg },
+    { name: '식품', img: foodImg },
+    { name: '생활용품', img: dailyItemImg },
+];
+
 
 function Main(props) {
+    const paginationRef = useRef(null);
 
     const [slideTexts, setSlideText] = useState([
         'GS25 10월 이벤트',
         'CU 10월 이벤트',
         '7ELEVEN 10월 이벤트'
     ]);
-    const categoryList = [
-        { name: '전체상품', img: allImg , url: '/category'},
-        { name: '과자', img: snackImg },
-        { name: '음료수', img: drinkImg },
-        { name: '식품', img: foodImg },
-        { name: '생활용품', img: dailyItemImg },
-    ];
 
-    const products = mockProducts;
+    const {data, isLoading}=useQuery({
+        queryKey:['crawl'],
+        queryFn:()=>productApi.getProduct()
+    });
+    console.log(data);
 
-    
+    const { data: onePlusOneProducts, isLoading: onePlusOneLoading } = useQuery({
+    queryKey: ['crawl', 'ONE_PLUS_ONE'],
+    queryFn: async () => {
+        const res = await productApi.getPromo5List('ONE_PLUS_ONE');
+        return res?.response?.items || [];
+    },
+    });
+
+    const { data: twoPlusOneProducts, isLoading: twoPlusOneLoading } = useQuery({
+    queryKey: ['crawl', 'TWO_PLUS_ONE'],
+    queryFn: async () => {
+        const res = await productApi.getPromo5List('TWO_PLUS_ONE');
+        return res.response.items;
+    },
+    });
 
 
-            
-    
+    console.log(onePlusOneProducts);
 
-    const paginationRef = useRef(null);
 
 
     return (
@@ -87,7 +108,7 @@ function Main(props) {
 
                 </Swiper>
             </div>
-            <SubLayoutPdc
+            {/* <SubLayoutPdc
                 titleName='인기 행사 상품'
                 moreLink='/category?sort=popular'
             >
@@ -99,33 +120,28 @@ function Main(props) {
                         />
                     ))}
                 </ul>
-            </SubLayoutPdc>
+            </SubLayoutPdc> */}
             <SubLayoutPdc
                 titleName='1 + 1 행사'
-                moreLink='/category?sort='
+                moreLink='/category?promo=ONE_PLUS_ONE'
             >
                 <ul className={styles.prd_list}>
-                    {products?.map((product)=>(
-                        <Item
-                        key={product.crawlId} 
-                        product={product}
-                        />
-                    ))}
+                {onePlusOneProducts?.map((product) => (
+                    <Item key={product.crawlId} product={product} />
+                ))}
                 </ul>
             </SubLayoutPdc>
             <SubLayoutPdc
                 titleName='2 + 1 행사'
-                moreLink='/category?sort='
+                moreLink='/category?promo=TWO_PLUS_ONE'
             >
                 <ul className={styles.prd_list}>
-                    {products?.map((product)=>(
-                        <Item
-                        key={product.crawlId} 
-                        product={product}
-                        />
-                    ))}
+                {twoPlusOneProducts?.map((product) => (
+                    <Item key={product.crawlId} product={product} />
+                ))}
                 </ul>
             </SubLayoutPdc>
+            
             <SubLayoutPdc
                 titleName='카테고리 별'
                 moreLink='/category'
