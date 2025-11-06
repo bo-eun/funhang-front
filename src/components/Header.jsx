@@ -11,7 +11,7 @@ function Header(props) {
     const navigate = useNavigate();
     const { token, userRole, userName, clearAuth } = authStore();
     const isLoggedIn = !!token;
-    const isAdmin = userRole === "ADMIN";
+    const isAdmin = userRole === "ROLE_ADMIN";
     
     const [isAdminPage, setIsAdminPage] = useState(false);
 
