@@ -10,7 +10,7 @@ import StoreIcon from "../icon/StoreIcon";
 function Item({product}) {
   if (!product) return null;
   return (
-    <Link to={`/${product.sourceChain}/${product.crawlId}`}>
+    <Link to={`/product/${product.sourceChain}/${product.promoType}/${product.productType}/${product.crawlId}`}>
     <div className={styles.prd_item}>
       <div className={styles.img_box}>
         <EventIcon

@@ -67,35 +67,27 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProductLayout />,
-        path: "product/:chainId",
+        path: "product",
         children: [
           {
-            index : true,// ex) /product/GS25
-            element: <Navigate to="all/all" replace />,
-          },
-          {
-            path: ":promoId", // ex) /product/GS25/ONE_PLUS_ONE
-            element: (
-              <Navigate
-                to={(() => {
-                  const pathname = window.location.pathname;
-                  const promoId = pathname.split('/').pop();
-                  return `${promoId}/all`;
-                })()}
-                replace
-              />
-            ),
-          },
-          {
-            path: ":promoId/:categoryId",// ex) /product/GS25/ONE_PLUS_ONE/SNACK
+            path: ":sourceChain",
             element: <List />,
           },
           {
-            path: ":promoId/:categoryId/:productId", // ex) /product/GS25/ONE_PLUS_ONE/SNACK/123
-            element: <Detail />, // 상세보기
+            path: ":sourceChain/:promoType", //product/GS25/ONE_PLUS_ONE
+            element: <List />,
+          },
+          {
+            path: ":sourceChain/:promoType/:productType", //product/GS25/ONE_PLUS_ONE/SNACK
+            element: <List />,
+          },
+          {
+            path: ":sourceChain/:promoType/:productType/:productId", //product/GS25/ONE_PLUS_ONE/SNACK/123
+            element: <Detail />,
           },
         ],
       },
+
       {
         element:<SubLayout/>,
         path: "board",

@@ -13,12 +13,12 @@ export const titleMap = {
 
     "/category": "전체상품 - ",
 
-    "/product/cu": "cu - ",
-    "/product/gs25": "gs25 - ",
-    "/product/7eleven": "세븐일레븐 - ",
-    "/product/cu/detail": "상품상세 - ",
-    "/product/gs25/detail": "상품상세 - ",
-    "/product/7eleven/detail": "상품상세 - ",
+    "/product/CU": "CU - ",
+    "/product/GS25": "GS25 - ",
+    "/product/SEV": "세븐일레븐 - ",
+    "/product/CU/detail": "상품상세 - ",
+    "/product/GS25/detail": "상품상세 - ",
+    "/product/SEV/detail": "상품상세 - ",
 
     "/store": "매장찾기 - ",
     
@@ -45,13 +45,13 @@ export const pageInfo = {
     "/login/findPw": { title: "비밀번호 찾기" },
     "/login/signUp": { title: "회원가입" },
 
-    "/product/all": { title: "전체상품" },
-    "/product/cu": { title: "CU" },
-    "/product/gs25": { title: "GS25" },
-    "/product/7eleven": { title: "7ELEVEN" },
-    "/product/cu/detail": { title: "CU" },
-    "/product/gs25/detail": { title: "GS25" },
-    "/product/7eleven/detail": { title: "7ELEVEN" },
+    "/product/ALL": { title: "전체상품" },
+    "/product/CU": { title: "CU" },
+    "/product/GS25": { title: "GS25" },
+    "/product/SEV": { title: "7ELEVEN" },
+    "/product/CU/detail": { title: "CU" },
+    "/product/GS25/detail": { title: "GS25" },
+    "/product/SEV/detail": { title: "7ELEVEN" },
 
     "/board": { title: "게시판" },
 

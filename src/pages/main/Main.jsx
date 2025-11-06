@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SearchInput from '../../components/SearchInput';
 import { Container } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,16 +20,19 @@ import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
 
 const categoryList = [
-    { name: '전체상품', img: allImg , url: '/category'},
-    { name: '과자', img: snackImg },
-    { name: '음료수', img: drinkImg },
-    { name: '식품', img: foodImg },
-    { name: '생활용품', img: dailyItemImg },
+    { name: '전체상품', img: allImg , url: '/product/ALL/ALL/ALL'},
+    { name: '과자', img: snackImg, url: '/product/ALL/ALL/SNACK' },
+    { name: '음료수', img: drinkImg, url: '/product/ALL/ALL/DRINK' },
+    { name: '식품', img: foodImg, url: '/product/ALL/ALL/FOOD' },
+    { name: '생활용품', img: dailyItemImg , url: '/product/ALL/ALL/LIFE'},
 ];
 
 
 function Main(props) {
     const paginationRef = useRef(null);
+    const [promoPop,setPromoPop] = useState([]);
+    const [promoOne,setPromoOne] = useState([]);
+    const [promoTwo,setPromoTwo] = useState([]);
 
     const [slideTexts, setSlideText] = useState([
         'GS25 10월 이벤트',
@@ -37,32 +40,22 @@ function Main(props) {
         '7ELEVEN 10월 이벤트'
     ]);
 
-    const {data, isLoading}=useQuery({
-        queryKey:['crawl'],
-        queryFn:()=>productApi.getProduct()
-    });
-    console.log(data);
-
-    const { data: onePlusOneProducts, isLoading: onePlusOneLoading } = useQuery({
+    const { data: onePlusOne } = useQuery({
     queryKey: ['crawl', 'ONE_PLUS_ONE'],
-    queryFn: async () => {
-        const res = await productApi.getPromo5List('ONE_PLUS_ONE');
-        return res?.response?.items || [];
-    },
+    queryFn: async () =>productApi.getPromo5List('ONE_PLUS_ONE'),
     });
 
-    const { data: twoPlusOneProducts, isLoading: twoPlusOneLoading } = useQuery({
+    const { data: twoPlusOne } = useQuery({
     queryKey: ['crawl', 'TWO_PLUS_ONE'],
-    queryFn: async () => {
-        const res = await productApi.getPromo5List('TWO_PLUS_ONE');
-        return res.response.items;
-    },
+    queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
     });
 
-
-    console.log(onePlusOneProducts);
-
-
+    useEffect(()=>{
+        if(onePlusOne,twoPlusOne){
+            setPromoOne(onePlusOne.response.items)
+            setPromoTwo(twoPlusOne.response.items)
+        }
+    },[onePlusOne,twoPlusOne]);
 
     return (
         <Container className={styles.main_cont}>
@@ -123,20 +116,20 @@ function Main(props) {
             </SubLayoutPdc> */}
             <SubLayoutPdc
                 titleName='1 + 1 행사'
-                moreLink='/category?promo=ONE_PLUS_ONE'
+                moreLink='/product/ALL/ONE_PLUS_ONE/ALL'
             >
                 <ul className={styles.prd_list}>
-                {onePlusOneProducts?.map((product) => (
+                {promoOne?.map((product) => (
                     <Item key={product.crawlId} product={product} />
                 ))}
                 </ul>
             </SubLayoutPdc>
             <SubLayoutPdc
                 titleName='2 + 1 행사'
-                moreLink='/category?promo=TWO_PLUS_ONE'
+                moreLink='/product/ALL/TWO_PLUS_ONE/ALL'
             >
                 <ul className={styles.prd_list}>
-                {twoPlusOneProducts?.map((product) => (
+                {promoTwo?.map((product) => (
                     <Item key={product.crawlId} product={product} />
                 ))}
                 </ul>

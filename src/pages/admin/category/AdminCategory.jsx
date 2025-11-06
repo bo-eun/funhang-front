@@ -22,31 +22,31 @@ function AdminCategory(props) {
     useEffect(() => {
         setCateList([
             {
-                categoryId: 1,
+                productType: 1,
                 categoryCode: 'aaa',
                 categoryName: '도시락', 
                 useYn: 'Y'
             },
             {
-                categoryId: 2,
+                productType: 2,
                 categoryCode: 'abb',
                 categoryName: '신선식품', 
                 useYn: 'Y'
             },
             {
-                categoryId: 3,
+                productType: 3,
                 categoryCode: 'aab',
                 categoryName: '과자류', 
                 useYn: 'Y'
             },    
             {
-                categoryId: 4,
+                productType: 4,
                 categoryCode: 'bbb',
                 categoryName: '음료', 
                 useYn: 'Y'
             },      
             {
-                categoryId: 5,
+                productType: 5,
                 categoryCode: 'bbbc',
                 categoryName: '아이스크림', 
                 useYn: 'Y'
