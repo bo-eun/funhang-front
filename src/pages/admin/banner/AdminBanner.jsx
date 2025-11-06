@@ -64,23 +64,32 @@ function AdminBanner(props) {
 
     // 배너 등록
     const updateBanners = async() => {
-        const formData = new FormData();
+
+        const createForm = new FormData(); // 등록용 데이터
+        const updateForm = new FormData(); // 수정용 데이터
+
+        const createList = [];
+        const updateList = [];
 
         rows.forEach((banner, index) => {
-            if (banner.bannerId) formData.append(`rows[${index}].bannerId`, banner.bannerId);
-            if (banner.file && banner.file[0]) formData.append(`rows[${index}].file`, banner.file[0]);
-            formData.append(`rows[${index}].title`, banner.title);
-            formData.append(`rows[${index}].linkUrl`, banner.linkUrl || '');
-            formData.append(`rows[${index}].useYn`, banner.useYn);
+            if (banner.bannerId) updateList[index].bannerId = banner.bannerId;
+            updateList[index].title = banner.title;
+            createList[index].title = banner.title;
+
+            updateList[index].linkUrl = banner.linkUrl;
+            createList[index].linkUrl = banner.linkUrl;    
+
+            updateList[index].useYn = banner.useYn;
+            createList[index].useYn = banner.useYn;
+
+            updateList[index].file = banner.file;
+            createList[index].file = banner.file;             
         });
 
         try {
             // 서버에 formData 넘겨주기
-            await createBannerMutation.mutate(formData); // 배너 등록
-            console.log(formData)
-            for (let pair of formData.entries()) {
-                console.log(pair[0], pair[1]);
-            }
+            await createBannerMutation.mutate(createForm); // 배너 등록
+            console.log(createForm)
         } catch(e) {
             console.log(e)
         }
