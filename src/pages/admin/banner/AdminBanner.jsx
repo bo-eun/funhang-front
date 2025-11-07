@@ -13,7 +13,6 @@ import {
 } from "@hello-pangea/dnd";
 import { useAdmin } from '../../../hooks/useAdmin';
 import { adminApi } from '../../../api/banner/bannerAdminApi';
-
 function AdminBanner(props) {
 
     const schema = yup.object().shape({
@@ -49,7 +48,7 @@ function AdminBanner(props) {
     });
 
     const rows = watch("rows"); // form 상태에서 직접 가져오기
-    const { createBannerMutation } = useAdmin();
+    const { createBannerMutation, deleteBannerMutation } = useAdmin();
 
     // 드래그 끝나고 리스트 정렬 수정
     const handleDragEnd = (result) => {
@@ -72,6 +71,7 @@ function AdminBanner(props) {
 
         let fileLength = 0;
         rows.forEach((item, index) => {
+            console.log(item)
             formData.append('files',item.file[0]);
             item.file[0] ? rows[index].fileIndex = fileLength++ : -1;
         });
@@ -87,18 +87,34 @@ function AdminBanner(props) {
         const formData = makeFormData();
 
         try {
-            createBannerMutation.mutate(formData); // 배너 등록
-            replace(fields);
-            alert("배너 수정이 완료되었습니다.");
-        } catch(e) {
-            console.log(e);
-            alert('요청 중 오류가 발생했습니다.');
+            const result = createBannerMutation.mutate(formData); // 배너 등록
+            if(result.status == 200) {
+                replace(fields);
+                alert("배너 수정이 완료되었습니다.");
+            } else {
+                alert('요청 중 오류가 발생했습니다.');
+            }
+        } catch(error) {
+            console.log(error);
         }
     }
 
     // 배너 삭제
     const deleteBanner = (index) => {
-        remove(index);
+        try {
+            const result = deleteBannerMutation.mutate(rows[index].bannerId);
+            console.log(result);
+            if(result.status == 200) {
+                console.log("삭제");
+                remove(index);
+            } else {
+                console.log("삭제 오류")
+            }
+
+        } catch(error) {
+            console.log(error);
+            alert('요청 중 오류가 발생했습니다.');
+        }
     }
 
     // 배너 이미지 미리보기

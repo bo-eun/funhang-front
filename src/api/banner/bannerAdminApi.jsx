@@ -20,8 +20,8 @@ export const adminApi = {
         console.log(response);
         return response.data.response;
     },
-    delete: async (brdId) => {
-        const response = await api.delete(`/api/v1/admin/banner/${brdId}`);
+    delete: async (bannerId) => {
+        const response = await api.delete(`/api/v1/admin/banner/${bannerId}`);
         return response.data.response;
     },
 }

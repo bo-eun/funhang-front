@@ -12,8 +12,8 @@ export const useAdmin = () => {
   const createBannerMutation = useMutation({
     mutationFn: async(formData) => {
         try {
-            const resonse = await adminApi.create(formData);
-            return resonse;
+            const response = await adminApi.create(formData);
+            return response;
         } catch(error) {
             throw error.response?.data || error;
         }
@@ -23,15 +23,26 @@ export const useAdmin = () => {
   const updateBannerMutation = useMutation({
     mutationFn: async(formData) => {
         try {
-            const resonse = await adminApi.update(formData);
-            return resonse;
+            const response = await adminApi.update(formData);
+            return response;
         } catch(error) {
             throw error.response?.data || error;
         }
     }
   });
+
+  const deleteBannerMutation = useMutation({
+    mutationFn: async(bannerId) => {
+      try {
+        const response = await adminApi.delete(bannerId);
+        return response;
+      } catch(error) {
+        throw error.response?.data || error;
+      }
+    }
+  })
   
 
 
-  return { createBannerMutation, updateBannerMutation }
+  return { createBannerMutation, deleteBannerMutation }
 }
