@@ -8,11 +8,23 @@ import CommentLayout from '../../components/comment/CommentLayout';
 import EventIcon from '../../components/icon/EventIcon';
 import { productApi } from '../../api/product/productApi';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 
-function Detail(props) {
+function Detail() {
+    const {productId} = useParams();
 
-    const [copiedText, copy] = useCopyToClipboard(); // 클립보드
+    const {data}= useQuery({
+        queryKey:['crawl', productId],
+        queryFn: async()=> productApi.getDetail({
+            crawlId: productId
+        }),
+        keepPreviousData: true,
+    });
+
+    console.log(data);
+
+    //클립보드
+    const [copiedText, copy] = useCopyToClipboard();
     const copyUrl = () => {
         copy(window.location);
         alert('주소가 클립보드에 복사되었습니다');

@@ -42,7 +42,7 @@ function Header(props) {
                                 <li><NavLink to="/product/all" className={({isActive}) => isActive? styles.active:""}>전체상품</NavLink></li>
                                 <li><NavLink to="/product/cu" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
                                 <li><NavLink to="/product/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
-                                <li><NavLink to="/product/7eleven" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
+                                <li><NavLink to="/product/sev" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
                                 <li><NavLink to="/board" className={({isActive}) => isActive? styles.active:""}>게시판</NavLink></li>
                                 <li><NavLink to="/store" className={({isActive}) => isActive? styles.active:""}>매장찾기</NavLink></li>
                             </ul>
