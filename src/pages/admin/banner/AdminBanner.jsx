@@ -12,6 +12,7 @@ import {
   Draggable,
 } from "@hello-pangea/dnd";
 import { useAdmin } from '../../../hooks/useAdmin';
+import { adminApi } from '../../../api/banner/bannerAdminApi';
 
 function AdminBanner(props) {
 
@@ -62,36 +63,32 @@ function AdminBanner(props) {
         append({ imgUrl: '', title: '', linkUrl: '', useYn: 'Y' });
     };
 
+
+    // 폼데이터 만들기
+    const makeFormData = () => {
+        const formData = new FormData(); // 등록용 데이터
+
+        formData.append('data', JSON.stringify(rows));
+
+        rows.forEach((item) => {
+            console.log(item)
+            if (item.file) formData.append('files', item.file[0]);
+        }); 
+
+
+        return formData;
+    }
+
     // 배너 등록
     const updateBanners = async() => {
-
-        const createForm = new FormData(); // 등록용 데이터
-        const updateForm = new FormData(); // 수정용 데이터
-
-        const createList = [];
-        const updateList = [];
-
-        rows.forEach((banner, index) => {
-            if (banner.bannerId) updateList[index].bannerId = banner.bannerId;
-            updateList[index].title = banner.title;
-            createList[index].title = banner.title;
-
-            updateList[index].linkUrl = banner.linkUrl;
-            createList[index].linkUrl = banner.linkUrl;    
-
-            updateList[index].useYn = banner.useYn;
-            createList[index].useYn = banner.useYn;
-
-            updateList[index].file = banner.file;
-            createList[index].file = banner.file;             
-        });
+        const formData = makeFormData();
 
         try {
-            // 서버에 formData 넘겨주기
-            await createBannerMutation.mutate(createForm); // 배너 등록
-            console.log(createForm)
+            createBannerMutation.mutate(formData); // 배너 등록
+            // alert("배너 수정이 완료되었습니다.");
         } catch(e) {
-            console.log(e)
+            console.log(e);
+            alert('요청 중 오류가 발생했습니다.');
         }
     }
 
@@ -119,35 +116,20 @@ function AdminBanner(props) {
 
     // 서버에서 배너 리스트 받아오기
     useEffect(() => {
-        // 서버에서 받아온 배너 리스트
-        const list = [
-            {
-                bannerId: 1,
-                imgUrl: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
-                title: "GS25 11월 상품",
-                linkUrl: "https://...",
-                file: "",
-                useYn: "Y",
-            },
-            {
-                bannerId: 2,
-                imgUrl: 'https://www.7-eleven.co.kr/upload/event/20251030153024104r202.png',
-                title: "세븐일레븐 11월 상품",
-                linkUrl: "https://...",
-                file: "",
-                useYn: "Y",
-            },
-            {
-                bannerId: 3,
-                imgUrl: 'https://hpsimg.gsretail.com/medias/sys_master/images/images/he6/h53/9129317892126.jpg',
-                title: "CU 11월 상품",
-                linkUrl: "https://...",
-                useYn: "Y",
-            },
-        ];
+        const fetchBannerList = async() => {
+            try {
+                const result = await adminApi.list();   
+                const list = result.data.response.data;
+                console.log(result.data.response.data);
+                replace(list);
+            } catch(error) {
+                console.log(error);
+            }
+        }
 
-        replace(list);
-    }, [])
+        fetchBannerList();
+
+    }, [replace])
     
     return (
         <Container className={`${styles.banner_cont} mt-5`}>

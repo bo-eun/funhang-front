@@ -6,16 +6,12 @@ const token = authStore.getState().token;
 
 export const adminApi = {
 
-    list: async (page) => {
+    list: async () => {
         const response = await api.get(`/api/v1/admin/banner`);
-        return response.data.response;
+        return response;
     },
 
-    get: async (brdId) => {
-        const response = await api.get(`/api/v1/admin/banner/${brdId}`);
-        return response.data.response;
-    },
-
+    // 등록, 수정 모두 create로 요청
     create: async (formData) => {
         const response = await api.post(`/api/v1/admin/banner`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
@@ -24,18 +20,6 @@ export const adminApi = {
         console.log(response);
         return response.data.response;
     },
-
-    update: async (formData) => {
-        const response = await api.put(`/api/v1/admin/banner`, formData, { 
-            headers: {
-                "Content-Type" : "multipart/form-data",
-                "Authorization": `Bearer ${token}`,
-            },
-        });
-        console.log(response);
-        return response.data.response;
-    },
-
     delete: async (brdId) => {
         const response = await api.delete(`/api/v1/admin/banner/${brdId}`);
         return response.data.response;
