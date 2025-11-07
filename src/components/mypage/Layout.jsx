@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import styles from "@/pages/mypage/mypage.module.css";
 import { Link, NavLink, Outlet } from 'react-router';
 
 
 function Layout(props) {
+    const [wishCount, setWishCount] = useState(0);
+    const handleWishCountChange = (count) => {
+        setWishCount(count);
+    };
     return (
         <Container className={styles.my_cont}>
             <h2 className={styles['page_title']}>마이페이지</h2>
@@ -17,7 +21,7 @@ function Layout(props) {
                     <li>
                         <Link to="/mypage/wish">
                             <span>찜한상품</span>
-                            <p><b>20</b> 개</p>
+                            <p><b>0</b> 개</p>
                         </Link>
                     </li>
                     <li>

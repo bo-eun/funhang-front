@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "@/pages/mypage/mypage.module.css";
 import Item from '../../components/list/Item';
 import { mockProducts } from '../../hooks/mockProducts';
+import { useQueries, useQuery } from '@tanstack/react-query';
+import { mypageApi } from '../../api/mypage/mypageApi';
 
-function WishList(props) {
-    const products = mockProducts;
+function WishList() {
+    const [wishList, setWishList]= useState([]);
+
+    const {data} = useQuery({
+        queryKey : ['crawl'],
+        queryFn: async()=> mypageApi.list(),
+        keepPreviousData: true,
+    })
+
+    useEffect(()=>{
+        if(data){
+            setWishList(data.content || []);
+        }
+    }, [data]);
+
+    console.log(wishList.length);
+
     return (
         <div className={styles.wish_cont}>
             <h3>찜목록</h3>
@@ -14,7 +31,7 @@ function WishList(props) {
             </p>
 
             <ul className={styles.item_list}>
-                {products?.map((product)=>(
+                {wishList?.map((product)=>(
                         <Item
                         key={product.crawlId} 
                         product={product}

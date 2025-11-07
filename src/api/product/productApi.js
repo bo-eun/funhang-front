@@ -2,23 +2,24 @@ import React from 'react';
 import api from '../axiosApi';
 
 export const productApi = {
-
+    //메인페이지 행사별 상품 5개 노출
     getPromo5List: async(promoTypeName,size=5)=>{
         const queryParams = new URLSearchParams({
             size
         });
         const response = await api.get(
-            `/api/v1/crawl/ALL/${promoTypeName}?${queryParams.toString()}`
+            `/api/v1/crawl/promo/${promoTypeName}?${queryParams.toString()}`
         )
-        return response.data;
+        return response.data.response;
     },
-
+    
+    //메인메뉴 편의점별 리스트
     getChainListAll: async ({
         sourceChain, 
         promoType, 
         productType, 
         q='',
-        size, 
+        size=20, 
         page = 0, 
         sort = 'price,asc'
     }) => {
@@ -37,14 +38,17 @@ export const productApi = {
         const url = urlParts === '' ? `/api/v1/crawl` : `/api/v1/crawl/${urlParts}`;
 
         const response = await api.get(`${url}?${params.toString()}`);
-        return response.data;
+        return response.data.response;
     },
-
+    //상품 디테일 
     getDetail : async({
         crawlId,
     })=>{
         const response = await api.get(`/api/v1/crawl/detail/${crawlId}`);
-        return response.data;
+        return response.data.response;
     }
+
+
+    
 }
 

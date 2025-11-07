@@ -66,8 +66,8 @@ function List() {
 
     useEffect(() => {
         if (data) {
-            setPrdList(data.response.items || []);
-            setTotalRows(data.response.totalElements || 0);
+            setPrdList(data.items || []);
+            setTotalRows(data.totalElements || 0);
         }
     }, [data]);
 

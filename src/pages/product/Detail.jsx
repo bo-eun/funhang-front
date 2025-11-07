@@ -32,7 +32,7 @@ function Detail() {
     
     useEffect(()=>{
         if(data){
-            setPrd(data.response ||[]);
+            setPrd(data ||[]);
         }
     }, [data]);
 

@@ -53,8 +53,8 @@ function Main(props) {
 
     useEffect(()=>{
         if(onePlusOne,twoPlusOne){
-            setPromoOne(onePlusOne.response.items)
-            setPromoTwo(twoPlusOne.response.items)
+            setPromoOne(onePlusOne.items)
+            setPromoTwo(twoPlusOne.items)
         }
     },[onePlusOne,twoPlusOne]);
 
