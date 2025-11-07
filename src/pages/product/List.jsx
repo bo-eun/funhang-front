@@ -91,7 +91,7 @@ function List() {
                     ))}
                 </ul>
             </section>
-            <Pagination page={currentPage} totalRows={totalRows} movePage={movePage} />
+            <Pagination page={currentPage} totalRows={totalRows} pagePerRows='20' movePage={movePage} />
         </>
     );
 }

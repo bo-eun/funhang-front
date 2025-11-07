@@ -18,7 +18,7 @@ export const productApi = {
         promoType, 
         productType, 
         q='',
-        size = 20, 
+        size, 
         page = 0, 
         sort = 'price,asc'
     }) => {

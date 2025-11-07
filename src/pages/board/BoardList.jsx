@@ -125,7 +125,8 @@ function BoardList(props) {
             <section className="">
                 <Pagination
                     page="0"
-                    totalRows="2"
+                    // totalRows={}
+                    pagePerRows = "10"
                     // movePage={}
                 />
             </section>

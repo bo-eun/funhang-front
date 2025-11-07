@@ -70,21 +70,13 @@ export const router = createBrowserRouter([
         path: "product",
         children: [
           {
-            path: ":sourceChain",
-            element: <List />,
+            path: ":sourceChain/:promoType?/:productType?",
+            element:<List />
           },
           {
-            path: ":sourceChain/:promoType", //product/GS25/ONE_PLUS_ONE
-            element: <List />,
-          },
-          {
-            path: ":sourceChain/:promoType/:productType", //product/GS25/ONE_PLUS_ONE/SNACK
-            element: <List />,
-          },
-          {
-            path: ":sourceChain/:promoType/:productType/:productId", //product/GS25/ONE_PLUS_ONE/SNACK/123
-            element: <Detail />,
-          },
+            path:':sourceChain/:promoType?/:productType?/:productId?',
+            element:<Detail />
+          }
         ],
       },
 
