@@ -11,8 +11,8 @@ export const titleMap = {
     "/board/update": "게시판 수정 - ",
     "/board/write": "게시판 등록 - ",
 
-    "/category": "전체상품 - ",
-
+    
+    "/product/ALL": "전체상품 - ",
     "/product/CU": "CU - ",
     "/product/GS25": "GS25 - ",
     "/product/SEV": "세븐일레븐 - ",

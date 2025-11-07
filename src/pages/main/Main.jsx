@@ -13,7 +13,7 @@ import foodImg from '../../assets/img/food.png';
 import dailyItemImg from '../../assets/img/dailyItem.png';
 import milk from '../../assets/img/item.png';
 import Item from '../../components/list/Item';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import SubLayoutPdc from '../../components/product/SubLayoutPdc';
 import { mockProducts } from '../../hooks/mockProducts';
 import { useQuery } from '@tanstack/react-query';
@@ -30,6 +30,7 @@ const categoryList = [
 
 function Main(props) {
     const paginationRef = useRef(null);
+    const navigate = useNavigate();
     const [promoPop,setPromoPop] = useState([]);
     const [promoOne,setPromoOne] = useState([]);
     const [promoTwo,setPromoTwo] = useState([]);
@@ -57,9 +58,19 @@ function Main(props) {
         }
     },[onePlusOne,twoPlusOne]);
 
+    // -------------------------
+    // 검색
+    // -------------------------
+    const handleSearch=(newQuery)=>{
+        const params = new URLSearchParams(location.search);
+        params.set('q', newQuery);
+        params.set('page', 0);
+        navigate(`/product/ALL/ALL/ALL?${params.toString()}`);
+    }
+
     return (
         <Container className={styles.main_cont}>
-            <SearchInput />
+            <SearchInput onChange={handleSearch}/>
             
             <div className={styles.swiper_cont}>
                 <div className={styles.pagination} ref={paginationRef}></div>

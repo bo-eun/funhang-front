@@ -39,10 +39,10 @@ function Header(props) {
                         {/* 관리자가 아니거나, 관리자 페이지가 아닐 떄 노출 */}
                         {(!isAdmin || !isAdminPage) && (
                             <ul className={styles.l_menu_list}>
-                                <li><NavLink to="/product/all" className={({isActive}) => isActive? styles.active:""}>전체상품</NavLink></li>
-                                <li><NavLink to="/product/cu" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
-                                <li><NavLink to="/product/gs25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
-                                <li><NavLink to="/product/sev" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
+                                <li><NavLink to="/product/ALL" className={({isActive}) => isActive? styles.active:""}>전체상품</NavLink></li>
+                                <li><NavLink to="/product/CU" className={({isActive}) => isActive? styles.active:""}>CU</NavLink></li>
+                                <li><NavLink to="/product/GS25" className={({isActive}) => isActive? styles.active:""}>GS25</NavLink></li>
+                                <li><NavLink to="/product/SEV" className={({isActive}) => isActive? styles.active:""}>7ELEVEN</NavLink></li>
                                 <li><NavLink to="/board" className={({isActive}) => isActive? styles.active:""}>게시판</NavLink></li>
                                 <li><NavLink to="/store" className={({isActive}) => isActive? styles.active:""}>매장찾기</NavLink></li>
                             </ul>

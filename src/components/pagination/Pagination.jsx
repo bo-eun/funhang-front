@@ -5,7 +5,7 @@ function Pagination({
   page,
   totalRows,
   movePage,
-  pagePerRows = 8,
+  pagePerRows= 10,
   blockPerCount = 10,
   wrapperClass = styles['pagination-wrapper'],
   listClass = styles['pagination-list'],

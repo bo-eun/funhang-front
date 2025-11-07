@@ -6,7 +6,7 @@ import "@/components/map/map.css";
 
 const KAKAO_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
-function Map({ chainName, searchText = "", setList, selectedItem, height }) {
+function Map({ chainName, searchText = "", setList, selectedItem, height ,showAlert=true}) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [myLocation, setMyLocation] = useState({});
   const mapInstance = useRef(null);
@@ -184,7 +184,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height }) {
     const search = (keyword, isLast = false) => {
       ps.keywordSearch(keyword, (data, status) => {
         if(isLast && status === window.kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 없습니다.')
+          if(showAlert) alert('검색 결과가 없습니다.')
           return;
         }
 

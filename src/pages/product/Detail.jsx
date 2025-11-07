@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "@/pages/product/product.module.css";
 import itemImg from "../../assets/img/item.png";
 import shareIcon from "../../assets/img/share_icon.svg";
@@ -12,6 +12,14 @@ import { useLocation, useParams } from 'react-router';
 
 function Detail() {
     const {productId} = useParams();
+    const [prd,setPrd] = useState([]);
+    const [mapName, setMapName] = useState('');
+
+    const CHAIN_MAP = {
+        SEV: '7ELEVEN',
+        GS25: 'GS25',
+        CU: 'CU',
+    };
 
     const {data}= useQuery({
         queryKey:['crawl', productId],
@@ -21,7 +29,25 @@ function Detail() {
         keepPreviousData: true,
     });
 
-    console.log(data);
+    
+    useEffect(()=>{
+        if(data){
+            setPrd(data.response ||[]);
+        }
+    }, [data]);
+
+    const [month, setMonth] = useState(null);
+
+    useEffect(() => {
+        if (prd?.crawledAt) {
+            const match = prd.crawledAt.match(/-(\d{2})-/);
+            setMonth(match ? parseInt(match[1], 10) : null);
+        }
+        if(prd?.sourceChain){
+            const mappedName = CHAIN_MAP[prd.sourceChain] || prd.sourceChain;
+            setMapName(mappedName);
+        }
+    }, [prd]);
 
     //클립보드
     const [copiedText, copy] = useCopyToClipboard();
@@ -35,28 +61,27 @@ function Detail() {
         <section className={styles.detail_section}>
             <div className={styles.prd_info}>
                 <div className={styles.img_box}>
-                    <img src={itemImg} alt="" />
+                    <img src={prd.imageUrl} alt="" />
                 </div>
                 <div className={styles.info_box}>
                     <button type="button" className={styles.share_btn} onClick={copyUrl}>
                         <img src={shareIcon} alt="" />
                     </button>
-                    <p className={styles.event_text}>9월 행사상품</p>
+                    <p className={styles.event_text}>{month}월 행사상품</p>
                     <p className={styles.title}>
-                        상품명
+                        {prd.productName}
                         <EventIcon
-                            name='1 + 1'
-                            bgColor='one'
+                            product={prd}
                         />
                     </p>
-                    <p className={styles.price}><strong>23,000</strong> 원</p>
+                    <p className={styles.price}><strong>{prd.price}</strong> 원</p>
                 </div>
             </div>
 
             <section className={styles.store}>
                 <h3>가까운 편의점 보기</h3>
                 <div id="map">
-                    <Map chainName={"CU"} height="300px" />
+                    <Map chainName={mapName} height="300px" showAlert={false}/>
                 </div>
             </section>
             

@@ -17,6 +17,7 @@ function Store(props) {
     const filter = (e) => {
         setChainName(e.target.value);
     }
+    console.log(chainName);
 
     const search = () => {
         setSearchText(inputText);
