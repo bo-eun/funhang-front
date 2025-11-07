@@ -49,7 +49,6 @@ function AdminBanner(props) {
     });
 
     const rows = watch("rows"); // form 상태에서 직접 가져오기
-
     const { createBannerMutation } = useAdmin();
 
     // 드래그 끝나고 리스트 정렬 수정
@@ -68,12 +67,16 @@ function AdminBanner(props) {
     const makeFormData = () => {
         const formData = new FormData(); // 등록용 데이터
 
-        formData.append('data', JSON.stringify(rows));
+        // 백에서 List<BannerRequestDTO>로 받을 수 있도록 타입 변환
+        formData.append('data', new Blob([JSON.stringify(rows)], { type: "application/json" }));
 
-        rows.forEach((item) => {
-            console.log(item)
-            if (item.file) formData.append('files', item.file[0]);
-        }); 
+        let fileLength = 0;
+        rows.forEach((item, index) => {
+            formData.append('files',item.file[0]);
+            item.file[0] ? rows[index].fileIndex = fileLength++ : -1;
+        });
+
+        console.log(rows);
 
 
         return formData;
@@ -85,7 +88,8 @@ function AdminBanner(props) {
 
         try {
             createBannerMutation.mutate(formData); // 배너 등록
-            // alert("배너 수정이 완료되었습니다.");
+            replace(fields);
+            alert("배너 수정이 완료되었습니다.");
         } catch(e) {
             console.log(e);
             alert('요청 중 오류가 발생했습니다.');
