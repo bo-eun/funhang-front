@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { mypageApi } from "../api/mypage/mypageApi";
+import { wishApi } from "../api/mypage/wishApi";
 
 export const useWish =()=>{
     const queryClient = useQueryClient();
 
     const plusWishmutation = useMutation({
-    mutationFn: (crawlId) => mypageApi.add(crawlId),
+    mutationFn: (crawlId) => wishApi.add(crawlId),
     onSuccess: (data) => {
       if (data.resultMessage === '이미존재하는상품입니다.') {
         alert("이미 찜한 상품입니다.");

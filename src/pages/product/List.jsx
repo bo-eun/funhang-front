@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
 import Pagination from '../../components/pagination/Pagination';
+import { wishStore } from '../../store/wishStore';
 
 function List() {
     const location = useLocation();
@@ -19,7 +20,7 @@ function List() {
     const currentSort = queryParams.get('sort') ?? 'price,asc';
     const searchQuery = queryParams.get('q') ?? '';
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
-
+    
     // API 호출
     const { data} = useQuery({
         queryKey: ['crawl', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
@@ -85,9 +86,9 @@ function List() {
                 </div>
                 <ul className={styles.prd_list}>
                     {prdList?.map((product) => (
-                        <li key={product.crawlId}>
-                            <Item key={product.crawlId} product={product} />
-                        </li>
+                            <li key={product.crawlId}>
+                                <Item key={product.crawlId} product={product}/>
+                            </li>
                     ))}
                 </ul>
             </section>

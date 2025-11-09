@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../axiosApi';
 
-export const mypageApi= {
+export const wishApi= {
     list: async () => {
         const response = await api.get(`/api/v1/user/wish`);
         return response.data.response;

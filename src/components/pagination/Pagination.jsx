@@ -1,90 +1,77 @@
-import React, {useMemo } from 'react';
+import React, { useMemo } from 'react';
 import styles from '@/components/pagination/pagination.module.css';
 
 function Pagination({
   page,
   totalRows,
   movePage,
-  pagePerRows= 10,
+  pagePerRows = 10,
   blockPerCount = 10,
-  wrapperClass = styles['pagination-wrapper'],
-  listClass = styles['pagination-list'],
-  itemClass = styles['pagination-item'],
-  linkClass = styles['pagination-link'],
 }) {
 
-  const calculatePageData = useMemo(() => {
-    if (!totalRows || totalRows <= 0 || !pagePerRows || pagePerRows <= 0) {
-      return { totalPage: 0, nowBlock: 0, totalBlock: 0 };
-    }
+  const { totalPage, nowBlock, totalBlock } = useMemo(() => {
+    if (!totalRows || !pagePerRows) return { totalPage: 0, nowBlock: 0, totalBlock: 0 };
 
     const totalPage = Math.ceil(totalRows / pagePerRows);
     const nowBlock = Math.floor((page ?? 0) / blockPerCount);
     const totalBlock = Math.ceil(totalPage / blockPerCount);
-    console.log('Pagination → totalRows:', totalRows, 'pagePerRows:', pagePerRows, 'totalPage:', totalPage);
+
     return { totalPage, nowBlock, totalBlock };
   }, [totalRows, pagePerRows, page, blockPerCount]);
 
-  const renderPage = () => {
-    const { totalPage, nowBlock, totalBlock } = calculatePageData;
-    if (totalPage === 0) return null;
+  if (totalPage === 0) return null;
 
+  const renderPage = () => {
     const pageHTML = [];
 
-    // 처음으로 가기
-    let isDisabled = page === 0;
-    pageHTML.push(
-      <li key="first" className={`${itemClass} ${isDisabled ? 'disabled' : ''}`}>
-        <button className={linkClass} disabled={isDisabled} onClick={() => movePage(0)}>처음</button>
-      </li>
-    );
+    const pushItem = (key, label, targetPage, isDisabled = false, isActive = false) => {
+      const itemClass = [
+        styles.paginationItem,
+        isDisabled ? styles.paginationItemDisabled : '',
+        isActive ? styles.paginationItemActive : ''
+      ].join(' ');
 
-    // 이전 블럭 가기
-    isDisabled = nowBlock <= 0;
-    const prevBlockPage = (nowBlock * blockPerCount) - 1;
-    pageHTML.push(
-      <li key="prev" className={`${itemClass} ${isDisabled ? 'disabled' : ''}`}>
-        <button className={linkClass} disabled={isDisabled} onClick={() => movePage(prevBlockPage)}>이전</button>
-      </li>
-    );
-
-    // 페이지 번호 그리기
-    for (let i = 0; i < blockPerCount; i++) {
-      const pageNum = (nowBlock * blockPerCount) + i;
-      if (pageNum >= totalPage) break;
-
-      const isActive = page === pageNum ? 'active' : '';
       pageHTML.push(
-        <li key={pageNum} className={`${itemClass} ${isActive}`}>
-          <button className={linkClass} onClick={() => movePage(pageNum)}>{pageNum + 1}</button>
+        <li key={key} className={itemClass}>
+          <button
+            className={styles.paginationLink}
+            disabled={isDisabled}
+            onClick={() => movePage(targetPage)}
+          >
+            {label}
+          </button>
         </li>
       );
+    };
+
+    // 처음
+    pushItem('first', '처음', 0, page === 0);
+
+    // 이전 블록
+    const prevBlockPage = (nowBlock * blockPerCount) - 1;
+    pushItem('prev', '이전', prevBlockPage, nowBlock <= 0);
+
+    // 페이지 번호
+    for (let i = 0; i < blockPerCount; i++) {
+      const pageNum = nowBlock * blockPerCount + i;
+      if (pageNum >= totalPage) break;
+      pushItem(pageNum, pageNum + 1, pageNum, false, pageNum === page);
     }
 
-    // 다음 블럭 가기
-    isDisabled = (nowBlock + 1) >= totalBlock;
+    // 다음 블록
     const nextBlockPageNum = (nowBlock + 1) * blockPerCount;
-    pageHTML.push(
-      <li key="next" className={`${itemClass} ${isDisabled ? 'disabled' : ''}`}>
-        <button className={linkClass} disabled={isDisabled} onClick={() => movePage(nextBlockPageNum)}>다음</button>
-      </li>
-    );
+    pushItem('next', '다음', nextBlockPageNum, (nowBlock + 1) >= totalBlock);
 
-    // 마지막 페이지 가기
-    isDisabled = page >= totalPage - 1;
+    // 마지막 페이지
     const lastPageNum = totalPage - 1;
-    pageHTML.push(
-      <li key="last" className={`${itemClass} ${isDisabled ? 'disabled' : ''}`}>
-        <button className={linkClass} disabled={isDisabled} onClick={() => movePage(lastPageNum)}>마지막</button>
-      </li>
-    );
+    pushItem('last', '마지막', lastPageNum, page >= totalPage - 1);
 
     return pageHTML;
   };
 
   return (
-    <nav className={wrapperClass} aria-label="Page navigation">
-      <ul className={listClass}>
+    <nav className={styles.paginationWrapper} aria-label="Page navigation">
+      <ul className={styles.paginationList}>
         {renderPage()}
       </ul>
     </nav>
@@ -92,5 +79,3 @@ function Pagination({
 }
 
 export default Pagination;
-
-

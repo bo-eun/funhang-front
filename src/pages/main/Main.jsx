@@ -18,6 +18,8 @@ import SubLayoutPdc from '../../components/product/SubLayoutPdc';
 import { mockProducts } from '../../hooks/mockProducts';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
+import { wishStore } from '../../store/wishStore';
+import { authStore } from '../../store/authStore';
 
 const categoryList = [
     { name: '전체상품', img: allImg , url: '/product/ALL/ALL/ALL'},
@@ -50,9 +52,10 @@ function Main(props) {
     queryKey: ['crawl', 'TWO_PLUS_ONE'],
     queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
     });
+    
 
     useEffect(()=>{
-        if(onePlusOne,twoPlusOne){
+        if(onePlusOne?.items && twoPlusOne?.items){
             setPromoOne(onePlusOne.items)
             setPromoTwo(twoPlusOne.items)
         }
@@ -130,9 +133,9 @@ function Main(props) {
                 moreLink='/product/ALL/ONE_PLUS_ONE/ALL'
             >
                 <ul className={styles.prd_list}>
-                {promoOne?.map((product) => (
-                    <Item key={product.crawlId} product={product} />
-                ))}
+                    {promoOne?.map((product) => (
+                        <Item key={product.crawlId} product={product} />
+                    ))}
                 </ul>
             </SubLayoutPdc>
             <SubLayoutPdc

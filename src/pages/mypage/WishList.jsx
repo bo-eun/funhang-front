@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from "@/pages/mypage/mypage.module.css";
 import Item from '../../components/list/Item';
 import { mockProducts } from '../../hooks/mockProducts';
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { mypageApi } from '../../api/mypage/mypageApi';
+import { wishApi } from '../../api/mypage/wishApi';
+import { wishStore } from '../../store/wishStore';
+import Pagination from '../../components/pagination/Pagination';
+import { Navigate, useLocation, useNavigate, useOutletContext } from 'react-router';
 
 function WishList() {
-    const [wishList, setWishList]= useState([]);
-
-    const {data} = useQuery({
-        queryKey : ['crawl'],
-        queryFn: async()=> mypageApi.list(),
-        keepPreviousData: true,
-    })
-
-    useEffect(()=>{
-        if(data){
-            setWishList(data.content || []);
-        }
-    }, [data]);
-
-    console.log(wishList.length);
+    const list = wishStore(state => state.list);
+    const { movePage, currentPage } = useOutletContext();
+    // 현재 페이지 상품 slice
+    const pagedList = list.slice(currentPage * 12, (currentPage + 1) * 12);
 
     return (
         <div className={styles.wish_cont}>
@@ -31,13 +23,20 @@ function WishList() {
             </p>
 
             <ul className={styles.item_list}>
-                {wishList?.map((product)=>(
+                {pagedList.length > 0 ? (
+                    pagedList.map((product) => (
+                        <li key={product.crawlId}>
                         <Item
-                        key={product.crawlId} 
-                        product={product}
+                            key={product.crawlId}
+                            product={product}
                         />
-                    ))}
+                        </li>
+                    ))
+                    ) : (
+                    <p>찜한 상품이 없습니다.</p>
+                )}
             </ul>
+            <Pagination page={currentPage} totalRows={list.length} pagePerRows='12' movePage={movePage} />
         </div>
     );
 }
