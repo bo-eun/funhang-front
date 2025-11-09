@@ -10,39 +10,26 @@ export const useAdmin = () => {
   const token = authStore.getState().token;
 
   const createBannerMutation = useMutation({
-    mutationFn: async(formData) => {
-        try {
-            const response = await adminApi.create(formData);
-            return response;
-        } catch(error) {
-            throw error.response?.data || error;
-        }
-    }
-  });
-
-  const updateBannerMutation = useMutation({
-    mutationFn: async(formData) => {
-        try {
-            const response = await adminApi.update(formData);
-            return response;
-        } catch(error) {
-            throw error.response?.data || error;
-        }
-    }
+    mutationFn: async (formData) => {
+      try {
+        const response = await adminApi.create(formData);
+        return response;
+      } catch (error) {
+        throw error.response?.data || error;
+      }
+    },
   });
 
   const deleteBannerMutation = useMutation({
-    mutationFn: async(bannerId) => {
+    mutationFn: async (bannerId) => {
       try {
         const response = await adminApi.delete(bannerId);
         return response;
-      } catch(error) {
+      } catch (error) {
         throw error.response?.data || error;
       }
-    }
-  })
-  
+    },
+  });
 
-
-  return { createBannerMutation, deleteBannerMutation }
-}
+  return { createBannerMutation, deleteBannerMutation };
+};
