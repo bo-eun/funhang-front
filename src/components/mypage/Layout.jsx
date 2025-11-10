@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import styles from "@/pages/mypage/mypage.module.css";
-import { Link, NavLink, Outlet } from 'react-router';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
+import { wishStore } from '../../store/wishStore';
 
 
-function Layout(props) {
+function Layout() {
+    const list = wishStore(state => state.list);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
+
+
+    // -------------------------
+    // 페이지 이동 처리
+    // -------------------------
+    const movePage = (newPage) => {
+        const params = new URLSearchParams(location.search);
+        params.set('page', newPage);
+        navigate(`${location.pathname}?${params.toString()}`);
+    };
+    
     return (
         <Container className={styles.my_cont}>
             <h2 className={styles['page_title']}>마이페이지</h2>
@@ -17,7 +34,7 @@ function Layout(props) {
                     <li>
                         <Link to="/mypage/wish">
                             <span>찜한상품</span>
-                            <p><b>20</b> 개</p>
+                            <p><b>{list.length}</b> 개</p>
                         </Link>
                     </li>
                     <li>
@@ -39,7 +56,8 @@ function Layout(props) {
                 <Col xs={2}>
                     <ul className={styles.sub_category_list}>
                         <li>
-                            <NavLink to="/mypage/wish" className={({isActive}) => isActive? styles.active:""}>찜목록</NavLink>
+                            <NavLink to="/mypage/wish" className={({isActive}) => isActive? styles.active:""}
+                            >찜목록</NavLink>
                         </li>
                         <li>
                             <NavLink to="/mypage/point" className={({isActive}) => isActive? styles.active:""}>포인트 내역</NavLink>                    
@@ -59,7 +77,7 @@ function Layout(props) {
                     </ul>
                 </Col>
                 <Col xs={10} className={styles.right_contents}>
-                    <Outlet />
+                    <Outlet context={{movePage, currentPage}}/>
                 </Col>
             </Row>
         </Container>

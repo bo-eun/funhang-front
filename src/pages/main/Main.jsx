@@ -5,6 +5,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
 import styles from "@/pages/main/main.module.css";
+import mainBanner01 from "../../assets/img/main_banner01.svg"
+import allImg from '../../assets/img/all.png';
+import snackImg from '../../assets/img/snack.png';
+import drinkImg from '../../assets/img/drink.png';
+import foodImg from '../../assets/img/food.png';
+import dailyItemImg from '../../assets/img/dailyItem.png';
+import milk from '../../assets/img/item.png';
+import Item from '../../components/list/Item';
+import { Link, useNavigate } from 'react-router';
+import SubLayoutPdc from '../../components/product/SubLayoutPdc';
+import { mockProducts } from '../../hooks/mockProducts';
+import { useQuery } from '@tanstack/react-query';
+import { productApi } from '../../api/product/productApi';
+import { wishStore } from '../../store/wishStore';
+import { authStore } from '../../store/authStore';
 import mainBanner01 from "../../assets/img/main_banner01.svg";
 import allImg from "../../assets/img/all.png";
 import snackImg from "../../assets/img/snack.png";
@@ -44,17 +59,17 @@ function Main(props) {
     queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
   });
 
-  const { data: twoPlusOne } = useQuery({
-    queryKey: ["crawl", "TWO_PLUS_ONE"],
-    queryFn: async () => productApi.getPromo5List("TWO_PLUS_ONE"),
-  });
+    const { data: twoPlusOne } = useQuery({
+    queryKey: ['crawl', 'TWO_PLUS_ONE'],
+    queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
+    });
 
-  useEffect(() => {
-    if ((onePlusOne, twoPlusOne)) {
-      setPromoOne(onePlusOne.response.items);
-      setPromoTwo(twoPlusOne.response.items);
-    }
-  }, [onePlusOne, twoPlusOne]);
+    useEffect(()=>{
+        if(onePlusOne?.items && twoPlusOne?.items){
+            setPromoOne(onePlusOne.items)
+            setPromoTwo(twoPlusOne.items)
+        }
+    },[onePlusOne,twoPlusOne]);
 
   // 등록 배너 가져오기
   useEffect(() => {
@@ -140,43 +155,46 @@ function Main(props) {
                     ))}
                 </ul>
             </SubLayoutPdc> */}
-      <SubLayoutPdc
-        titleName="1 + 1 행사"
-        moreLink="/product/ALL/ONE_PLUS_ONE/ALL"
-      >
-        <ul className={styles.prd_list}>
-          {promoOne?.map((product) => (
-            <Item key={product.crawlId} product={product} />
-          ))}
-        </ul>
-      </SubLayoutPdc>
-      <SubLayoutPdc
-        titleName="2 + 1 행사"
-        moreLink="/product/ALL/TWO_PLUS_ONE/ALL"
-      >
-        <ul className={styles.prd_list}>
-          {promoTwo?.map((product) => (
-            <Item key={product.crawlId} product={product} />
-          ))}
-        </ul>
-      </SubLayoutPdc>
-
-      <SubLayoutPdc titleName="카테고리 별" moreLink="/category">
-        <ul className={styles.cat_list}>
-          {categoryList?.map((category, index) => (
-            <li key={index} className={styles.cat_item}>
-              <Link to={category.url}>
-                <div className={styles.cat_img_wrap}>
-                  <img src={category.img} alt={`${category.name} 이미지`} />
-                </div>
-                {category.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </SubLayoutPdc>
-    </Container>
-  );
+            <SubLayoutPdc
+                titleName='1 + 1 행사'
+                moreLink='/product/ALL/ONE_PLUS_ONE/ALL'
+            >
+                <ul className={styles.prd_list}>
+                {promoOne?.map((product) => (
+                    <Item key={product.crawlId} product={product} />
+                ))}
+                </ul>
+            </SubLayoutPdc>
+            <SubLayoutPdc
+                titleName='2 + 1 행사'
+                moreLink='/product/ALL/TWO_PLUS_ONE/ALL'
+            >
+                <ul className={styles.prd_list}>
+                {promoTwo?.map((product) => (
+                    <Item key={product.crawlId} product={product} />
+                ))}
+                </ul>
+            </SubLayoutPdc>
+            
+            <SubLayoutPdc
+                titleName='카테고리 별'
+                moreLink='/category'
+            >
+                <ul className={styles.cat_list}>
+                    {categoryList?.map((category,index)=>(
+                        <li key={index} className={styles.cat_item}>
+                            <Link to={category.url}>
+                                <div className={styles.cat_img_wrap}>
+                                    <img src={category.img} alt={`${category.name} 이미지`} />
+                                </div>
+                                {category.name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </SubLayoutPdc>           
+        </Container>
+    );
 }
 
 export default Main;

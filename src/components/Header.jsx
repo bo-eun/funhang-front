@@ -6,6 +6,7 @@ import { authStore } from '../store/authStore';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { NavDropdown } from 'react-bootstrap';
+import { wishStore } from '../store/wishStore';
 
 function Header(props) {
     const navigate = useNavigate();
@@ -17,7 +18,8 @@ function Header(props) {
 
     const handleLogout = () => {
         clearAuth(); 
-        navigate("/login", { replace: true }); 
+        wishStore.getState().reset();
+        navigate("/main", { replace: true }); 
     };
     const location = useLocation();
     

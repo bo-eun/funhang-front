@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from "@/pages/product/product.module.css";
-import itemImg from "../../assets/img/item.png";
+import wishiIcon from "../../assets/img/wish.svg";
+import wishiActiveIcon from "../../assets/img/wish_active.svg";
 import shareIcon from "../../assets/img/share_icon.svg";
 import Map from "../../components/map/Map";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
@@ -9,18 +10,24 @@ import EventIcon from '../../components/icon/EventIcon';
 import { productApi } from '../../api/product/productApi';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useParams } from 'react-router';
+import { authStore } from '../../store/authStore';
+import { wishStore } from '../../store/wishStore';
 
 function Detail() {
+    const {isAuthenticated, userRole} = authStore();
+    const { toggleWish } = wishStore();
     const {productId} = useParams();
     const [prd,setPrd] = useState([]);
     const [mapName, setMapName] = useState('');
-
+    const list = wishStore(state => state.list);
+    const wishActive = list.some(item => item.crawlId === Number(productId));
+    
     const CHAIN_MAP = {
         SEV: '7ELEVEN',
         GS25: 'GS25',
         CU: 'CU',
     };
-
+    
     const {data}= useQuery({
         queryKey:['crawl', productId],
         queryFn: async()=> productApi.getDetail({
@@ -28,11 +35,10 @@ function Detail() {
         }),
         keepPreviousData: true,
     });
-
     
     useEffect(()=>{
         if(data){
-            setPrd(data.response ||[]);
+            setPrd(data ||[]);
         }
     }, [data]);
 
@@ -55,13 +61,30 @@ function Detail() {
         copy(window.location);
         alert('주소가 클립보드에 복사되었습니다');
     }
-    
+
+    const handleWishClick = async (e) => {
+        if(!isAuthenticated){
+            alert('로그인 후 찜해주세요!');
+            return;
+        }else if(userRole==="ROLE_ADMIN"){
+            alert('관리자는 찜 기능을 이용할 수 없습니다.');
+            return;
+        }
+        await toggleWish(prd);
+    };
 
     return (
         <section className={styles.detail_section}>
             <div className={styles.prd_info}>
                 <div className={styles.img_box}>
                     <img src={prd.imageUrl} alt="" />
+                    <button
+                        type="button"
+                        className={styles.wish_btn}
+                        onClick={handleWishClick}
+                    >
+                        <img src={wishActive ? wishiActiveIcon : wishiIcon} alt="" />
+                    </button>
                 </div>
                 <div className={styles.info_box}>
                     <button type="button" className={styles.share_btn} onClick={copyUrl}>
