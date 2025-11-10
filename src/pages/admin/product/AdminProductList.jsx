@@ -130,7 +130,7 @@ function AdminProductList(props) {
 
             <div className='brd_list_info'>
                 <div className='total'>
-                    총 <strong></strong> 개
+                    총 <strong>{totalRows}</strong> 개
                 </div>
             </div>
             {prdList?.map((product,index)=>(
