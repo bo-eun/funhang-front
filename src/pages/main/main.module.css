@@ -37,13 +37,13 @@
     cursor: pointer;
 }
 
-:global(.swiper-pagination-bullet-active) {
-    background: var(--secondary-color);
-    color: #222 !important;
-}
-.swiper_cont .pagination .swiper-pagination-bullet-active {
+.swiper_cont .pagination :global(.active-bullet) {
     background: var(--secondary-color);
     color: #222;
+}
+.swiper_cont :global(.swiper-slide) img {
+    aspect-ratio: 412 / 165;
+    object-fit: cover;
 }
 
 .prd_section h2 {

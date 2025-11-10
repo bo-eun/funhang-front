@@ -5,24 +5,25 @@ import InputForm from "../../components/InputForm";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useLogin } from "../../hooks/useLogin";
 
 const findIdFields = [
-    { label: "이름", name: "username", type: "text", placeholder: "이름을 입력하세요" },
+    { label: "이름", name: "userName", type: "text", placeholder: "이름을 입력하세요" },
     { label: "이메일", name: "email", type: "text", placeholder: "이메일을 입력하세요" },
 ];
 
 
 function FindId(props) {
-    const [checkId, setCheckId] = useState(false);
+    const [checkId, setCheckId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [closeModal, setCloseModal] = useState(false);
     
-    
+    const { findIdMutation } = useLogin();
     
     
 
     const schema = yup.object().shape({
-        username: yup.string().required("이름을 입력하십시오"),
+        userName: yup.string().required("이름을 입력하십시오"),
         email: yup.string().required("이메일을 입력하십시오"),
     });
     const {
@@ -35,9 +36,10 @@ function FindId(props) {
     });
 
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log("폼 데이터:", data);
-        setCheckId(true);
+        const result = await findIdMutation.mutateAsync(data);
+        setCheckId(result.data);
         reset();
     };
 
@@ -63,7 +65,7 @@ function FindId(props) {
             {checkId &&(
                 <div className={styles.user_loginp_wrap}>
                     <p className={styles.result_id_txt}>
-                        회원님의 아이디는 user_99 입니다.
+                        회원님의 아이디는 {checkId} 입니다.
                     </p>
                     <div className='long_btn_bg'>
                         <Link to={"/login"} className='btn_50_b'>로그인</Link>

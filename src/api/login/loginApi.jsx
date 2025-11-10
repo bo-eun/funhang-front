@@ -7,10 +7,9 @@ export const loginApi = {
             const response = await api.post(`/api/v1/user/add`, formData, {
                 headers: {"Content-Type" : "multipart/form-data"},
             });
-            console.log(response);
-
+            return response;
         } catch(error) {
-            console.lor(error);
+            alert(error.response.data.message);
         }
 
     },
@@ -21,7 +20,7 @@ export const loginApi = {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
     
-            console.log(response); 
+            return response;
         } catch(error) {
             console.log(error);
         }

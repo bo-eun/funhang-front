@@ -26,13 +26,15 @@ const categoryList = [
 ];
 
 function Main(props) {
-  const paginationRef = useRef(null);
+
   const navigate = useNavigate();
   const [bannerList, setBannerList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [promoPop, setPromoPop] = useState([]);
   const [promoOne, setPromoOne] = useState([]);
   const [promoTwo, setPromoTwo] = useState([]);
+
+  const swiperRef = useRef(null);
 
   const [slideTexts, setSlideTexts] = useState([]);
 
@@ -76,13 +78,26 @@ function Main(props) {
     params.set("page", 0);
     navigate(`/product/ALL/ALL/ALL?${params.toString()}`);
   };
-
+  
   return (
     <Container className={styles.main_cont}>
       <SearchInput onChange={handleSearch} />
 
       <div className={styles.swiper_cont}>
-        <div className={`${styles.pagination}`} ref={paginationRef}></div>
+        {/* <div className={`${styles.pagination}`} ref={paginationRef}></div> */}
+        <div className={styles.pagination}>
+          {bannerList.map((_, index) => (
+            <p
+            key={index}
+            className={`swiper-pagination-bullet ${
+            index === activeIndex ? "active-bullet" : ""
+            }`}
+            onClick={() => swiperRef.current.slideTo(index)}
+            >
+              {slideTexts[index]}
+            </p>
+          ))} 
+        </div>
         {bannerList.length > 0 && (
           <Swiper
             slidesPerView={1}
@@ -93,12 +108,12 @@ function Main(props) {
               clickable: true,
               renderBullet: (index, className) => {
                 const isActive = index === activeIndex ? "active-bullet" : "";
+                console.log(index, activeIndex)
                 return `<p class="${className} ${isActive}">${slideTexts[index]}</p>`;
               },
             }}
             onSwiper={(swiper) => {
-              // Swiper가 생성된 이후, pagination DOM을 수동 연결
-              swiper.params.pagination.el = paginationRef.current;
+              swiperRef.current = swiper;
               swiper.pagination.init();
               swiper.pagination.render();
               swiper.pagination.update();

@@ -16,7 +16,7 @@ const loginFields = [
 ];
 function Login() {
     const [role, setRole] = useState("user");
-    const useMutation  = useLogin();
+    const { loginMutation }  = useLogin();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -38,23 +38,9 @@ function Login() {
     });
 
     const onSubmit = async (data) => {
-        try {
-            console.log("폼 데이터:", data);        
-            reset();
-
-            const result = await useMutation.mutateAsync(data);
-
-            // 로그인 후 즉시 권한별 페이지 이동
-            if (result.data.content.userRole === "ROLE_ADMIN") {
-            navigate("/admin"); // 관리자면 관리자 페이지
-            } else {
-            navigate("/"); // 일반 사용자면 메인 페이지
-            }
-        }
-        catch(error) {
-            console.log(error);
-        }
-
+        console.log("폼 데이터:", data);        
+        await loginMutation.mutateAsync(data);
+        reset();
     };
     return (
         <>

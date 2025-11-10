@@ -10,9 +10,9 @@ export const useLogin = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn :  async (credentials) => {
-            const response = await api.post(`/api/v1/user/login`, credentials, {
+    const loginMutation =  useMutation({
+        mutationFn :  async (formData) => {
+            const response = await api.post(`/api/v1/user/login`, formData, {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
 
@@ -24,12 +24,39 @@ export const useLogin = () => {
             
             //토큰 저장
             setLogin(data.data.content);
-            navigate('/');
+
+            // 로그인 후 즉시 권한별 페이지 이동
+            if (data.data.content.userRole === "ROLE_ADMIN") {
+                navigate("/admin"); // 관리자면 관리자 페이지
+            } else {
+                navigate("/"); // 일반 사용자면 메인 페이지
+            }
         },
         onError : (error) =>{
             console.error('Login 실패', error);
             alert('아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.')
         }
+    });
+
+    const findIdMutation = useMutation({
+        mutationFn: async(formData) => {
+            const params = new URLSearchParams(formData).toString();
+            const response = await api.get(`/api/v1/user/findId?${params}`, {
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            });
+
+            return response.data;
+        },
+
+        onSuccess: (data) => {
+            console.log("아이디 찾기 성공");
+            console.log(data);
+        },
+        onError: (error) => {
+            console.error("아이디 찾기 실패", error);
+            alert('아이디 찾기 실패');
+        }
     })
 
+    return { loginMutation, findIdMutation };
 }

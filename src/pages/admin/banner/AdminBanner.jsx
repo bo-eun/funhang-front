@@ -104,18 +104,11 @@ function AdminBanner(props) {
       return;
     }
 
-    try {
-      const result = await createBannerMutation.mutateAsync(formData); // 배너 등록
-      console.log(result);
-      if (result.resultCode == 200) {
-        replace(rows);
-        alert("배너 수정이 완료되었습니다.");
-      } else {
-        alert("요청 중 오류가 발생했습니다.");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("배너 등록 실패");
+    const result = await createBannerMutation.mutateAsync(formData); // 배너 등록
+    
+    if (result?.resultCode === 200) {
+      replace(rows);
+      alert("배너 수정이 완료되었습니다.");
     }
   };
 

@@ -11,12 +11,16 @@ export const useAdmin = () => {
 
   const createBannerMutation = useMutation({
     mutationFn: async (formData) => {
-      try {
         const response = await adminApi.create(formData);
         return response;
-      } catch (error) {
-        throw error.response?.data || error;
-      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
+      alert("배너가 성공적으로 등록되었습니다!");
+    },
+    onError: (error) => {
+      console.error("배너 등록 실패:", error);
+      alert(error?.message || "배너 등록 중 오류가 발생했습니다.");
     },
   });
 

@@ -17,10 +17,12 @@ function Store(props) {
     const filter = (e) => {
         setChainName(e.target.value);
     }
-    console.log(chainName);
 
-    const search = () => {
-        setSearchText(inputText);
+    const search = (e) => {
+        // 엔터 입력 시
+        if(e.keyCode == 13) {
+            setSearchText(inputText);
+        }
     }
 
     const listClick = (item) => {
@@ -36,8 +38,9 @@ function Store(props) {
                         <div className='search_box'>
                             <input type="text" name="search" id="search" className='search_input'
                                 onChange={(e) => setInputText(e.target.value)}
+                                onKeyDown={search}
                             />
-                            <button type="button" onClick={search}>
+                            <button type="button" onClick={() => setSearchText(inputText)}>
                                 <img src={searchbtn} alt="검색" />
                             </button>
                         </div>

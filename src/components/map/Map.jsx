@@ -17,6 +17,8 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
   const chainList = ["CU", "GS25", "세븐일레븐"];
   const chainIcon = [cuIcon, gs25Icon, sevenIcon];
 
+  // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
+  const options = /*searchText.trim() ? undefined : */{ location, radius: 1000 };
 
   const markers = [];
   
@@ -104,7 +106,6 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
         });
       },
       (err) => {
-        console.log(err.message);
         setMyLocation({
           latitude: 33.450701, 
           longitude: 126.570667 
@@ -168,7 +169,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
     if (!mapLoaded || !window.kakao || !mapInstance.current) return;
 
     const ps = new window.kakao.maps.services.Places();
-    const location = new window.kakao.maps.LatLng(myLocation.latitude, myLocation.longitude);
+    options.location = new window.kakao.maps.LatLng(myLocation.latitude, myLocation.longitude);
     const clusterer = clustererRef.current;
 
     // 이전 마커 초기화
@@ -176,13 +177,10 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
       clusterer.clear();
     }
 
-    // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
-    const options = searchText.trim() ? undefined : { location, radius: 1000 };
-
     setDataList([]);
-
     const search = (keyword, isLast = false) => {
-      ps.keywordSearch(keyword, (data, status) => {
+
+      const searchService = (data, status) => {
         if(isLast && status === window.kakao.maps.services.Status.ZERO_RESULT) {
           if(showAlert) alert('검색 결과가 없습니다.')
           return;
@@ -203,7 +201,25 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
         });
 
         clusterer.addMarkers(markers);
-      }, options);
+      }
+
+      ps.categorySearch("CS2", (data, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+            // 카테고리 결과 중 keyword가 포함된 항목만 필터링
+            const filtered = data.filter(place => 
+              place.place_name.includes(keyword)
+            );
+
+            // 검색 결과 처리
+            if (filtered.length > 0) {
+              searchService(filtered, status);
+            } else {
+              console.log("카테고리 내 keyword 없음 → 전국 검색");
+              ps.keywordSearch(keyword, searchService, {});
+            }
+          }
+      });
+      console.log(options)
     };
 
     // 검색 실행
@@ -226,20 +242,20 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
   useEffect(() => {
     if(dataList?.length > 0) {
 
-    // 거리순 + category_name 에 편의점 종류를 저장
-    const sortedList = dataList.map((data) => {
+      // 거리순 + category_name 에 편의점 종류를 저장
+      const sortedList = dataList.map((data) => {
 
-      const arr = data.category_name.split(' > ');
-      data.category_name = arr[arr?.length - 1];
-      if(data.category_name === '세븐일레븐') {
-        data.category_name = "7ELEVEN"
-      }
+        const arr = data.category_name.split(' > ');
+        data.category_name = arr[arr?.length - 1];
+        if(data.category_name === '세븐일레븐') {
+          data.category_name = "7ELEVEN"
+        }
 
-      return {...data, category_name: data.category_name}
+        return {...data, category_name: data.category_name}
 
-    }).sort((a, b) => (a.distance * 1) - (b.distance * 1));
+      }).sort((a, b) => (a.distance * 1) - (b.distance * 1));
 
-    setList && setList(sortedList);
+      setList(sortedList);
     }
   }, [dataList, setList])
 
@@ -251,14 +267,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
       // 클릭한 편의점 위치로 지도 이동
       const newCenter = new window.kakao.maps.LatLng(selectedItem.y, selectedItem.x);
       mapInstance.current.setCenter(newCenter);
-
-      let markerIcon = '';
-      chainList.forEach((chain, index) => {
-        if(selectedItem.category_name.includes(chain)) {
-          markerIcon = chainIcon[index]
-        }
-      }) 
-
+      options.location = newCenter;
 
       const marker = createMarker(selectedItem);
       window.kakao.maps.event.trigger(marker, 'click');
