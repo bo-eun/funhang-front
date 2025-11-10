@@ -23,7 +23,7 @@ function List() {
     
     // API 호출
     const { data} = useQuery({
-        queryKey: ['crawl', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
+        queryKey: ['product', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
         queryFn: async () => productApi.getChainListAll({
             sourceChain: chainId,
             promoType: promoId,

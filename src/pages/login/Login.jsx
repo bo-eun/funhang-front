@@ -35,6 +35,10 @@ function Login() {
         reset,
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+        username: "",
+        password: ""
+    }
     });
 
     const onSubmit = async (data) => {

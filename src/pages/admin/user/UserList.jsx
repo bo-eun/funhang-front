@@ -38,19 +38,19 @@ function UserList(props) {
             email: 'email@email.com',
             nickName: '닉네임99',
             birth: '1999-01-01',
-            point: point
+            point: 1000
         }
     
     return (
         <>
-            <form action="" method="" className='base_search_bg'>
+            <div className='base_search_bg'>
                 <select name="" id="" className="form-select">
                     <option value="">전체보기</option>
                     <option value="">회원</option>
                     <option value="">관리자</option>
                 </select>
                 <SearchInput />
-            </form>
+            </div>
             
             <ListBtnLayout
                 topBtn={{ 
@@ -128,8 +128,14 @@ function UserList(props) {
                         className={styles.info}
                         type='number'
                         label='보유 포인트'
-                        defaultValue={point}
-                        setValue={(e) => setPoint(e.target.value)}
+                        readOnly={true}
+                        defaultValue={userList.point}
+                    />
+                    <InputForm
+                        className={styles.info}
+                        type='number'
+                        label='포인트 지급'
+                        setValue={(e) => setPoint(Number(e.target.value))}
                     />
                 
                 

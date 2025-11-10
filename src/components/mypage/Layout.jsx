@@ -12,6 +12,8 @@ function Layout() {
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
 
+    const [totalPoint, setTotalPoint] = useState(0);
+
 
     // -------------------------
     // 페이지 이동 처리
@@ -40,7 +42,7 @@ function Layout() {
                     <li>
                         <Link to="/mypage/point">
                             <span>포인트</span>
-                            <p><b>0</b> P</p>
+                            <p><b>{totalPoint}</b> P</p>
                         </Link>
                     </li>
                     <li>
@@ -77,7 +79,7 @@ function Layout() {
                     </ul>
                 </Col>
                 <Col xs={10} className={styles.right_contents}>
-                    <Outlet context={{movePage, currentPage}}/>
+                    <Outlet context={{movePage, currentPage, totalPoint, setTotalPoint}}/>
                 </Col>
             </Row>
         </Container>

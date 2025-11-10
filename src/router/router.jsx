@@ -154,7 +154,7 @@ export const router = createBrowserRouter([
             element: <AdminProductList/>,
           },
           {
-            path: "product/update",
+            path: "product/update/:productId?",
             element: <AdminProductUpdate/>,
           },
           {

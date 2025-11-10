@@ -80,13 +80,13 @@ function BoardList(props) {
 
     return (
         <>
-            <form action="" method="" className='base_search_bg'>
+            <div className='base_search_bg'>
                 <select name="" id="" className="form-select">
                     <option value="">제목</option>
                     <option value="">제목+내용</option>
                 </select>
                 <SearchInput />
-            </form>
+            </div>
             <div className={styles.brd_info_wrap}>
                 <div className={styles.brd_list_info}>
                     <div className="total">
