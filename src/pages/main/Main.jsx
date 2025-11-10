@@ -5,34 +5,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
 import styles from "@/pages/main/main.module.css";
-import mainBanner01 from "../../assets/img/main_banner01.svg"
 import allImg from '../../assets/img/all.png';
 import snackImg from '../../assets/img/snack.png';
 import drinkImg from '../../assets/img/drink.png';
 import foodImg from '../../assets/img/food.png';
 import dailyItemImg from '../../assets/img/dailyItem.png';
-import milk from '../../assets/img/item.png';
 import Item from '../../components/list/Item';
 import { Link, useNavigate } from 'react-router';
 import SubLayoutPdc from '../../components/product/SubLayoutPdc';
-import { mockProducts } from '../../hooks/mockProducts';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
-import { wishStore } from '../../store/wishStore';
-import { authStore } from '../../store/authStore';
-import mainBanner01 from "../../assets/img/main_banner01.svg";
-import allImg from "../../assets/img/all.png";
-import snackImg from "../../assets/img/snack.png";
-import drinkImg from "../../assets/img/drink.png";
-import foodImg from "../../assets/img/food.png";
-import dailyItemImg from "../../assets/img/dailyItem.png";
-import milk from "../../assets/img/item.png";
-import Item from "../../components/list/Item";
-import { Link, useNavigate } from "react-router";
-import SubLayoutPdc from "../../components/product/SubLayoutPdc";
-import { mockProducts } from "../../hooks/mockProducts";
-import { useQuery } from "@tanstack/react-query";
-import { productApi } from "../../api/product/productApi";
 import { adminApi } from "../../api/banner/bannerAdminApi";
 
 const categoryList = [
