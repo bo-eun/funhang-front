@@ -1,42 +1,144 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import SearchInput from '../../../components/SearchInput';
 import styles from '@/pages/admin/product/adminProduct.module.css';
 import EventIcon from '../../../components/icon/EventIcon';
 import StoreIcon from '../../../components/icon/StoreIcon';
 import ListBtnLayout from '../../../components/btn/ListBtnLayout';
 import { mockProducts } from '../../../hooks/mockProducts';
+import { useQuery } from '@tanstack/react-query';
+import { productApi } from '../../../api/product/productApi';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import Pagination from '../../../components/pagination/Pagination';
 
 function AdminProductList(props) {
-    const products = mockProducts;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [prdList, setPrdList] = useState([]);
+
+    //페이징
+    const queryParams = new URLSearchParams(location.search);
+    const [totalRows, setTotalRows] = useState(0);
+    const [currentPage, setCurrentPage] = useState(parseInt(queryParams.get('page') ?? '0', 10));
+    const [currentSort, setCurrentSort] = useState(queryParams.get('sort') ?? 'price,asc');
+    //검색
+    const searchQuery = queryParams.get('q') ?? '';
+
+    //편의점명, 행사, 카테고리
+    const { sourceChain, promoType, productType } = useParams();
+    const [chainId, setChainId] = useState(sourceChain?.toUpperCase() || 'ALL');
+    const [promoId, setPromoId] = useState(promoType?.toUpperCase() || 'ALL');
+    const [categoryId, setCategoryId] = useState(productType?.toUpperCase() || 'ALL');
+  
+    // 필터 변경 시 URL 업데이트
+    const updateUrl = useCallback((newParams) => {
+        const params = new URLSearchParams(location.search);
+        Object.entries(newParams).forEach(([key, value]) => {
+            if (value != null) params.set(key, value);
+            else params.delete(key);
+        });
+        navigate(`${location.pathname}?${params.toString()}`);
+    }, [location.pathname, location.search, navigate]);
+
+    // 셀렉트박스 핸들러
+    const handleFilterChange = (type, value) => {
+        switch(type) {
+        case 'chain':
+            setChainId(value || 'ALL');
+            updateUrl({ sourceChain: value, page: 0 });
+            setCurrentPage(0);
+            break;
+        case 'promo':
+            setPromoId(value || 'ALL');
+            updateUrl({ promoType: value, page: 0 });
+            setCurrentPage(0);
+            break;
+        case 'category':
+            setCategoryId(value || 'ALL');
+            updateUrl({ productType: value, page: 0 });
+            setCurrentPage(0);
+            break;
+        default: break;
+        }
+    };
+
+    // -------------------------
+    // 페이지 이동 처리
+    // -------------------------
+    const movePage = (newPage) => {
+        setCurrentPage(newPage);
+        updateUrl({ page: newPage });
+    };
+    // -------------------------
+    // 검색
+    // -------------------------
+    const handleSearch=(newQuery)=>{
+        const params = new URLSearchParams(location.search);
+        params.set('q', newQuery);
+        params.set('page', 0);
+        navigate(`${location.pathname}?${params.toString()}`);
+    }
+
+    // React Query fetch
+    const { data} = useQuery({
+        queryKey: ['product', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
+        queryFn: async () => productApi.getChainListAll({
+            sourceChain:chainId,
+            promoType:promoId,
+            productType:categoryId,
+            q : searchQuery,
+            page: currentPage,
+            sort: currentSort,
+        }),
+        keepPreviousData: true,
+    });
+
+    useEffect(()=>{
+        if(data){
+            setPrdList(data.items || []);
+            setTotalRows(data.totalElements || 0);
+        }
+    },[data]);
+
+    console.log(prdList);
+    
 
     return (
         <>
-            <form action="" method="" className='base_search_bg'>
-                <select name="" id="" className="form-select">
-                    <option value="">편의점 별</option>
-                    <option value="">CU</option>
-                    <option value="">7ELEVEN</option>
-                    <option value="">GS25</option>
+            <div className='base_search_bg'>
+                <select value={chainId === 'ALL' ? '' : chainId} onChange={(e) => handleFilterChange('chain', e.target.value)} className="form-select">
+                    <option value="ALL">편의점 별</option>
+                    <option value="CU">CU</option>
+                    <option value="SEV">7ELEVEN</option>
+                    <option value="GS25">GS25</option>
                 </select>
-                <select name="" id="" className="form-select">
-                    <option value="">카테고리 별</option>
-                    <option value="">과자</option>
-                    <option value="">아이스크림</option>
-                    <option value="">신선식품</option>
+                <select value={promoId === 'ALL' ? '' : promoId} onChange={(e) => handleFilterChange('promo', e.target.value)} className="form-select">
+                    <option value="ALL">행사 별</option>
+                    <option value="ONE_PLUS_ONE"> 1 + 1 </option>
+                    <option value="TWO_PLUS_ONE"> 2 + 1 </option>
+                    <option value="GIFT">덤 증정</option>
+                    <option value="NONE">할인 행사</option>
                 </select>
-                <SearchInput />
-            </form>
+                <select value={categoryId === 'ALL' ? '' : categoryId} onChange={(e) => handleFilterChange('category', e.target.value)} className="form-select">
+                    <option value="ALL">카테고리 별</option>
+                    <option value="SNACK">과자</option>
+                    <option value="DRINK">음료</option>
+                    <option value="FOOD">식품</option>
+                    <option value="LIFE">생활용품</option>
+                </select>
+                <SearchInput onChange={handleSearch} value={searchQuery}/>
+            </div>
 
             <div className='brd_list_info'>
                 <div className='total'>
-                    총 <strong>30</strong> 개
+                    총 <strong>{totalRows}</strong> 개
                 </div>
             </div>
-            {products?.map((product)=>(
+            {prdList?.map((product,index)=>(
                 <ListBtnLayout
+                    key={index}
                     topBtn={{ 
                         type: 'link',
-                        to:'/admin/product/update',
+                        to:`/admin/product/update/${product.crawlId}`,
                         name: '수정',
                     }}
                     bottomBtn={{ 
@@ -58,7 +160,7 @@ function AdminProductList(props) {
                     <span className={styles.price}>{product.price.toLocaleString()}원</span>
                 </ListBtnLayout>
             ))}
-            
+            <Pagination page={currentPage} totalRows={totalRows} pagePerRows={20} movePage={movePage} />
             
         </>
     );

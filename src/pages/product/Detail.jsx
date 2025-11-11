@@ -29,7 +29,7 @@ function Detail() {
     };
     
     const {data}= useQuery({
-        queryKey:['crawl', productId],
+        queryKey:['product', productId],
         queryFn: async()=> productApi.getDetail({
             crawlId: productId
         }),

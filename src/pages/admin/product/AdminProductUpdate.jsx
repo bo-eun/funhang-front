@@ -1,101 +1,151 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@/pages/admin/product/adminProduct.module.css';
-import EventIcon from '../../../components/icon/EventIcon';
-import { Link } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import errorImg from '../../../assets/img/errorImg.png';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
+import { productApi } from '../../../api/product/productApi';
+import { useProduct } from '../../../hooks/useProduct';
 
-const Fields = [
-  { label: "상품명", name: "productName", type: "text", placeholder: "상품명을 입력하세요" },
-  { label: "가격", name: "price", type: "text", placeholder: "가격을 입력하세요" },
-];
-function AdminProductUpdate(props) {
-    const [viewImg, setViewImg]= useState('');
-    const [inputURL,setInputURL]=useState('');
+const schema = yup.object().shape({
+    productName: yup.string().required("상품명을 입력하십시오"),
+    price: yup.string().required("가격을 입력하십시오"),
+    sourceChain: yup.string().required(),
+    productType: yup.string().required(),
+    promoType: yup.string().nullable(),
+    imageUrl: yup.string().url("올바른 URL 형식이 아닙니다.").nullable(),
+});
 
-    const mockProduct ={
-        crawlId: 1,
-        sourceChain: "GS25",
-        productName: "서울우유 강릉커피",
-        price: 2500,
-        imageUrl: "https://image.woodongs.com/imgsvr/item/GD_8801155745004_001.jpg",
-        promoType: "TWO_PLUS_ONE",  // 2+1 행사
-        productType: "DRINK",
-        likeCount: 120,
-        crawledAt: "2025-11-04T10:30:00",
-    }
+function AdminProductUpdate() {
+    const navigate = useNavigate();
+    const { productId } = useParams();
+    const { prdUpdateMutation } = useProduct(productId);
 
-    const handleChange =(e)=>{
-        setInputURL(e.target.value);
-    }
-    const imgSubmit=()=>{
+    const [viewImg, setViewImg] = useState('');
+    const [inputURL, setInputURL] = useState('');
+    const [chain, setChain] = useState('');
+
+    const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const { data } = useQuery({
+        queryKey: ['product', productId],
+        queryFn: () => productApi.getDetail({ crawlId: productId }),
+        keepPreviousData: true,
+    });
+
+    useEffect(() => {
+        if(data) {
+            reset({
+                productName : data.productName,
+                price : data.price,
+                sourceChain : data.sourceChain,
+                productType : data.productType,
+                promoType : data.promoType,
+                imageUrl : data.imageUrl,
+            });
+            setViewImg(data.imageUrl); // ★ 초기 이미지 설정
+            setInputURL(data.imageUrl); // input에도 초기값 넣기
+            setChain(data.sourceChain);
+        }
+    }, [data, reset]);
+
+
+    const handleChange = (e) => setInputURL(e.target.value);
+
+    const imgSubmit = () => {
+        setValue("imageUrl", inputURL);
         setViewImg(inputURL);
-    }
-    const schema = yup.object().shape({
-            productName: yup.string().required("상품명을 입력하십시오"),
-            price: yup.string().required("가격을 입력하십시오"),
-        });
+    };
 
-    const {
-            register,
-            handleSubmit,
-            formState: { errors },
-            reset,
-        } = useForm({
-            resolver: yupResolver(schema),
-        });
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-        e.preventDefault();
-        imgSubmit(); 
+            e.preventDefault();
+            imgSubmit();
         }
     };
 
+    const onSubmit = (data) => {
+        prdUpdateMutation.mutate(data);
+    }
+
+    const watchedPromoType = watch("promoType");
+
+    // 체인에 따라 선택 가능한 promoType 옵션
+    const getPromoOptions = () => {
+        const options = [
+            { value: "ONE_PLUS_ONE", label: "1 + 1" },
+            { value: "TWO_PLUS_ONE", label: "2 + 1" }
+        ];
+        if (chain === 'GS25' || chain === 'SEV') options.push({ value: "GIFT", label: "덤 증정" });
+        if (chain === 'SEV') options.push({ value: "NONE", label: "할인행사" });
+        return options;
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.content_bg}>
                 <div className={styles.view_img_wrap}>
-                    {viewImg && 
-                        <img src={mockProduct.imageUrl} 
-                            alt={mockProduct.productName}
-                            onError={(e) => e.currentTarget.src = errorImg}
-                        />
-                    }
+                    <img
+                        src={viewImg || errorImg}
+                        alt={watch("productName")}
+                        onError={(e) => e.currentTarget.src = errorImg}
+                    />
                 </div>
+
                 <div className={styles.r_content}>
-                    
                     <label htmlFor="store">편의점</label>
-                    <select name="store" id="store" className="form-select">
+                    <select
+                        id="store"
+                        {...register("sourceChain")}
+                        value={chain}
+                        className="form-select"
+                        onChange={(e) => {
+                            setChain(e.target.value);
+                            setValue("sourceChain", e.target.value);
+                        }}
+                    >
                         <option value="CU">CU</option>
-                        <option value="7ELEVEN">7ELEVEN</option>
+                        <option value="SEV">7ELEVEN</option>
                         <option value="GS25">GS25</option>
                     </select>
 
                     <label htmlFor="category">카테고리</label>
-                    <select name="category" id="category" className="form-select">
-                        <option value="snack">과자</option>
-                        <option value="drink">음료수</option>
-                        <option value="food">식품</option>
-                        <option value="dailyItem">생활용품</option>
+                    <select
+                        id="category"
+                        {...register("productType")}
+                        className="form-select"
+                    >
+                        <option value="SNACK">과자</option>
+                        <option value="DRINK">음료수</option>
+                        <option value="FOOD">식품</option>
+                        <option value="LIFE">생활용품</option>
                     </select>
-                    
+
                     <label htmlFor="productName">상품명</label>
-                    <input 
-                        type="text" 
-                        name='productName' 
-                        id='productName' 
+                    <input
+                        type="text"
+                        id="productName"
                         className='form-control'
-                        value={mockProduct.productName}
+                        {...register("productName")}
                     />
 
                     <label htmlFor="price">가격</label>
-                    <input type="text" name='price' id='price' className='form-control'/>
+                    <input
+                        type="text"
+                        id="price"
+                        className='form-control'
+                        {...register("price")}
+                    />
 
                     <label htmlFor="imgURL">이미지 URL</label>
                     <div className={styles.btn_input}>
-                        <input type="text" name='imgURL' id='imgURL' 
+                        <input
+                            type="text"
+                            id="imgURL"
                             placeholder="이미지 URL 입력"
                             onChange={handleChange}
                             onKeyDown={handleKeyPress}
@@ -105,23 +155,22 @@ function AdminProductUpdate(props) {
                         <button type='button' onClick={imgSubmit}>확인</button>
                     </div>
 
-                    <label htmlFor="">행사정보</label>
-                    <div className={styles.event_btn_wrap}>
-                        <button type='button'>
-                            <EventIcon
-                                name='1 + 1'
-                                bgColor="one"
-                            />
-                        </button>
-                        <button type='button'>
-                            <EventIcon
-                                name='2 + 1'
-                                bgColor="two"
-                            />
-                        </button>
-                    </div>
+                    <label htmlFor="promoType">행사정보</label>
+                    <select
+                        id="promoType"
+                        {...register("promoType")}
+                        className="form-select"
+                        value={watchedPromoType || ""}
+                        onChange={(e) => setValue("promoType", e.target.value)}
+                    >
+                        
+                        {getPromoOptions().map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
+
             <div className='short_btn_bg'>
                 <button type='submit' className='min_btn_b'>수정</button>
                 <Link to='/admin/product' className='min_btn_w'>목록</Link>

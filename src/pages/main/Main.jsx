@@ -39,12 +39,12 @@ function Main(props) {
   const [slideTexts, setSlideTexts] = useState([]);
 
   const { data: onePlusOne } = useQuery({
-    queryKey: ["crawl", "ONE_PLUS_ONE"],
+    queryKey: ["product", "ONE_PLUS_ONE"],
     queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
   });
 
     const { data: twoPlusOne } = useQuery({
-    queryKey: ['crawl', 'TWO_PLUS_ONE'],
+    queryKey: ['product', 'TWO_PLUS_ONE'],
     queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
     });
 
