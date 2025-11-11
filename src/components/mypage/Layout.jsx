@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import styles from "@/pages/mypage/mypage.module.css";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { wishStore } from '../../store/wishStore';
+import { useMypage } from '../../hooks/useMypage';
 
 
 function Layout() {
@@ -14,6 +15,7 @@ function Layout() {
 
     const [totalPoint, setTotalPoint] = useState(0);
 
+    const { deleteUserMutation } = useMypage();
 
     // -------------------------
     // 페이지 이동 처리
@@ -23,6 +25,10 @@ function Layout() {
         params.set('page', newPage);
         navigate(`${location.pathname}?${params.toString()}`);
     };
+
+    const deleteUser = async () => {
+        await deleteUserMutation.mutateAsync();
+    }
     
     return (
         <Container className={styles.my_cont}>
@@ -74,7 +80,7 @@ function Layout() {
                             <NavLink to="/mypage/profile" className={({isActive}) => isActive? styles.active:""}>내 정보 수정</NavLink>
                         </li>
                         <li>
-                            <NavLink to="">회원탈퇴</NavLink>
+                            <NavLink to="" onClick={deleteUser}>회원탈퇴</NavLink>
                         </li>
                     </ul>
                 </Col>

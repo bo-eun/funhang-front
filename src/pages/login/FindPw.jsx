@@ -4,18 +4,17 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
-import BtnLinkForm from "../../components/btn/BtnLinkForm";
-import BtnForm from "../../components/btn/BtnForm";
 import ShowModal from "../../components/modal/ShowModal";
 import styles from '@/pages/login/login.module.css';
+import { useLogin } from "../../hooks/useLogin";
 
 const findPwFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
     { label: "이메일", name: "email", type: "text", placeholder: "이메일을 입력하세요" },
 ];
 const chgPwFields = [
-  { label: "새 비밀번호", name: "password", type: "password", placeholder: "비밀번호를 입력하세요" },
-  { label: "새 비밀번호 확인", name: "passwordCk", type: "password", placeholder: "비밀번호를 입력하세요" },
+  { label: "새 비밀번호", name: "newPassword", type: "password", placeholder: "비밀번호를 입력하세요" },
+  { label: "새 비밀번호 확인", name: "confirmNewPassword", type: "password", placeholder: "비밀번호를 입력하세요" },
 ];
 
 function FindPw(props) {
@@ -24,11 +23,12 @@ function FindPw(props) {
     
     const [show, setShow] = useState(false);
 
+    const { findPwMutation, newPwMutation } = useLogin();
+
     const handleClose = () => {
         setShow(false)
         navigate('/login')
     };
-    const handleShow = () => setShow(true);
 
     const findSchema = yup.object().shape({
         userId: yup.string().required("아이디를 입력하십시오"),
@@ -36,39 +36,53 @@ function FindPw(props) {
     });
 
     const changePwSchema = yup.object().shape({
-        password: yup
+        newPassword: yup
         .string()
         .required("비밀번호를 입력하십시오")
         .min(6, "비밀번호는 최소 6자리 이상이어야 합니다"),
-        passwordCk: yup
+        confirmNewPassword: yup
         .string()
         .required("비밀번호를 확인하십시오")
-        .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다"),
-    });
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-    } = useForm({
-        resolver: yupResolver(checkPw ? changePwSchema : findSchema),
+        .oneOf([yup.ref("newPassword")], "비밀번호가 일치하지 않습니다"),
     });
 
-    const onSubmit = (data) => {
-        console.log("폼 데이터:", data);
-        setCheckPw(true);
-        reset();
+    const findPwForm = useForm({
+        resolver: yupResolver(findSchema),
+    });
+    const changePwForm = useForm({
+        resolver: yupResolver(changePwSchema),
+    });
+
+    const onFindPwSubmit = async (formData) => {
+        try {
+            await findPwMutation.mutateAsync(formData);
+            setCheckPw(true);
+            findPwForm.reset();
+        } catch(error) {
+            console.log(error);
+        }
     };
+
+    const onPwChangeSubmit = async(formData) => {
+        try {
+            console.log('dd')
+            await newPwMutation.mutateAsync(formData);
+            setShow(true);
+            changePwForm.reset();
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <>
             {!checkPw && (
-                <form className={styles.user_loginp_wrap} onSubmit={handleSubmit(onSubmit)}>
+                <form className={styles.user_loginp_wrap} onSubmit={findPwForm.handleSubmit(onFindPwSubmit)}>
                 {findPwFields.map((field) => (
                     <InputForm
                     key={field.name}
                     {...field}
-                    register={register}
-                    error={errors[field.name]}
+                    register={findPwForm.register}
+                    error={findPwForm.formState.errors[field.name]}
                     />
                 ))}
 
@@ -82,19 +96,21 @@ function FindPw(props) {
             </form>
             )}
             {checkPw && (
-                <div className={styles.user_loginp_wrap}>
-                {chgPwFields.map((field) => (
-                    <InputForm
-                    key={field.name}
-                    {...field}
-                    register={register}
-                    error={errors[field.name]}
-                    />
-                ))}
-                <div className='long_btn_bg'>
-                    <button type="button" onClick={handleShow} className='btn_50_b'>비밀번호 변경</button>
-                </div>
-            </div>
+                <form className={styles.user_loginp_wrap} onSubmit={changePwForm.handleSubmit(onPwChangeSubmit)} autoComplete="off">
+                    <div className={styles.user_loginp_wrap}>
+                        {chgPwFields.map((field) => (
+                            <InputForm
+                            key={field.name}
+                            {...field}
+                            register={changePwForm.register}
+                            error={changePwForm.formState.errors[field.name]}
+                            />
+                        ))}
+                    </div>
+                    <div className='long_btn_bg'>
+                        <button type="submit" className='btn_50_b'>비밀번호 변경</button>
+                    </div>
+                </form>
             )}
                 {/* 모달 */}
                 <ShowModal

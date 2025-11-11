@@ -16,6 +16,7 @@ function InputForm({
   // 내부 상태는 RHF가 없을 때만 사용
   const [internalValue, setInternalValue] = useState(defaultValue || "");
 
+    console.log(defaultValue)
   useEffect(() => {
     if (!register) {
       setInternalValue(defaultValue || "");
@@ -30,7 +31,6 @@ function InputForm({
 
   // RHF 사용 여부 확인
   const isRHF = !!(register && name);
-
   return (
     <div className={`${styles.user_loginp} ${className}`}>
       <label>{label}</label>

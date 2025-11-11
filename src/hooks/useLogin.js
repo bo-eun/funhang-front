@@ -45,7 +45,7 @@ export const useLogin = () => {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
 
-            return response.data;
+            return response.data.response;
         },
 
         onSuccess: (data) => {
@@ -54,9 +54,47 @@ export const useLogin = () => {
         },
         onError: (error) => {
             console.error("아이디 찾기 실패", error);
-            alert('아이디 찾기 실패');
+            alert(error.response.data.response);
         }
     })
 
-    return { loginMutation, findIdMutation };
+    const findPwMutation = useMutation({
+        mutationFn: async(formData) => {
+            const response = await api.post(`/api/v1/user/password/verify`, formData, {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                credentials: 'include'// 세션 쿠키 보내기
+            });
+            return response.data.response;
+        },
+
+        onSuccess: (data) => {
+            console.log("비밀번호 찾기 성공");
+            console.log(data);
+        },
+        onError: (error) => {
+            console.error("비밀번호 찾기 실패", error);
+            alert(error.response.data.response);
+        }
+    })
+
+    const newPwMutation = useMutation({
+        mutationFn: async(formData) => {
+            const response = await api.post(`/api/v1/user/password/reset`, formData, {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                credentials: 'include'// 세션 쿠키 보내기
+            });
+            return response.data.response;
+        },
+
+        onSuccess: (data) => {
+            console.log("비밀번호 변경 성공");
+            console.log(data);
+        },
+        onError: (error) => {
+            console.error("비밀번호 변경 실패", error);
+            alert(error.response.data.response);
+        }
+    })    
+
+    return { loginMutation, findIdMutation, findPwMutation, newPwMutation };
 }
