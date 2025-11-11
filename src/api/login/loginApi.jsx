@@ -3,26 +3,40 @@ import api from '../axiosApi';
 
 export const loginApi = {
     create: async(formData) => {
-        try {
-            const response = await api.post(`/api/v1/user/add`, formData, {
-                headers: {"Content-Type" : "multipart/form-data"},
-            });
-            return response;
-        } catch(error) {
-            alert(error.response.data.message);
-        }
+        const response = await api.post(`/api/v1/user/add`, formData, {
+            headers: {"Content-Type" : "multipart/form-data"},
+        });
+        return response;
 
     },
 
     login: async(formData) => {
-        try {
-            const response = await api.post(`/api/v1/user/login`, formData, {
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            });
-    
-            return response;
-        } catch(error) {
-            console.log(error);
-        }
+        const response = await api.post(`/api/v1/user/login`, formData, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        });
+        return response;
+    },
+
+    findId: async(params) => {
+        const response = await api.get(`/api/v1/user/findId?${params}`, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        });
+        return response;
+    },
+
+    findPw: async(formData) => {
+        const response = api.post(`/api/v1/user/password/verify`, formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            credentials: 'include'// 세션 쿠키 보내기
+        });
+        return response;
+    },
+
+    newPw: async(formData) => {
+        const response = api.post(`/api/v1/user/password/reset`, formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            credentials: 'include'// 세션 쿠키 보내기
+        });
+        return response;
     }
 };

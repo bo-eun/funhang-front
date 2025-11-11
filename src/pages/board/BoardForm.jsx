@@ -3,6 +3,8 @@ import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
+import { useBoard } from '../../hooks/useBoard';
+import { useNavigate } from 'react-router';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -12,13 +14,17 @@ Quill.register(Size, true);
 function BoardForm({ type }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  const { createMutate } = useBoard();
+
+  const navigate = useNavigate();
   
   const quillRef = useRef(null);
   const quillInstanceRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
 
-  const goSubmit=()=>{
-    location.href='/board';
+  const goSubmit= async()=>{
+    navigate('/board');
   }
 
   // 설정값
@@ -554,19 +560,22 @@ function BoardForm({ type }) {
     []
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('제목:', title);
     console.log('내용:', content);
+
+    // await createMutate.mutateAsync();
+    navigate('/board');
     
-    if (USE_MOCK) {
-      console.log('📝 Mock 제출 데이터:', {
-        title,
-        content,
-        contentLength: content.length
-      });
-      alert('Mock 모드: 게시글이 제출되었습니다! (콘솔 확인)');
-    }
+    // if (USE_MOCK) {
+    //   console.log('📝 Mock 제출 데이터:', {
+    //     title,
+    //     content,
+    //     contentLength: content.length
+    //   });
+    //   alert('Mock 모드: 게시글이 제출되었습니다! (콘솔 확인)');
+    // }
   };
 
   return (

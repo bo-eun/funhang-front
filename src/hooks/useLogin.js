@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authStore } from "../store/authStore"
-import api from '../api/axiosApi';
 import { useNavigate } from "react-router";
+import { loginApi } from "../api/login/loginApi";
 
 
 
@@ -12,10 +12,7 @@ export const useLogin = () => {
 
     const loginMutation =  useMutation({
         mutationFn :  async (formData) => {
-            const response = await api.post(`/api/v1/user/login`, formData, {
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            });
-
+            const response = await loginApi.login(formData);
             return response;
         },
         onSuccess : (data) =>{
@@ -41,9 +38,7 @@ export const useLogin = () => {
     const findIdMutation = useMutation({
         mutationFn: async(formData) => {
             const params = new URLSearchParams(formData).toString();
-            const response = await api.get(`/api/v1/user/findId?${params}`, {
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            });
+            const response = await loginApi.findId(params);
 
             return response.data.response;
         },
@@ -60,10 +55,7 @@ export const useLogin = () => {
 
     const findPwMutation = useMutation({
         mutationFn: async(formData) => {
-            const response = await api.post(`/api/v1/user/password/verify`, formData, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                credentials: 'include'// 세션 쿠키 보내기
-            });
+            const response = await loginApi.findPw(formData);
             return response.data.response;
         },
 
@@ -79,10 +71,7 @@ export const useLogin = () => {
 
     const newPwMutation = useMutation({
         mutationFn: async(formData) => {
-            const response = await api.post(`/api/v1/user/password/reset`, formData, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                credentials: 'include'// 세션 쿠키 보내기
-            });
+            const response = await loginApi.newPw(formData);
             return response.data.response;
         },
 

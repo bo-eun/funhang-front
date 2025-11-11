@@ -5,45 +5,32 @@ import SearchInput from "../../components/SearchInput";
 import Pagination from "@/components/pagination/Pagination";
 import { authStore } from "../../store/authStore";
 import Table from "../../components/table/Table";
+import { useBoard } from "../../hooks/useBoard";
 
 const colWidth = ['50px', '', '160px', '80px', '130px'];
 const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
 
 
 function BoardList(props) {
-    const {userRole} = authStore();
+    const { userRole } = authStore();
+    const { listMutate } = useBoard();
     const isAdmin = userRole === "ADMIN";
     const [chkOn,setChkOn] = useState([]);
     const [selected, setSelected]= useState([]);
-
     const [columns, setColumns] = useState([]);
 
-    const [boardList, setBoardList] = useState([
-        {
-        id: 1,
-        title: "맛나다 맛나",
-        name: "김땡땡",
-        likeCount: "5",
-        date: new Date().toISOString().slice(0, 10),
-        adminPick: false,
-        },
-        {
-        id: 2,
-        title: "맛나다 맛나",
-        name: "김땡땡",
-        likeCount: "5",
-        date: new Date().toISOString().slice(0, 10),
-        adminPick: false,
-        },
-        {
-        id: 3,
-        title: "맛나다 맛나",
-        name: "김땡땡",
-        likeCount: "5",
-        date: new Date().toISOString().slice(0, 10),
-        adminPick: false,
-        },
-    ]);
+    // const [boardList, setBoardList] = useState([
+    //     {
+    //     id: 1,
+    //     title: "맛나다 맛나@",
+    //     name: "김땡땡",
+    //     likeCount: "5",
+    //     date: new Date().toISOString().slice(0, 10),
+    //     adminPick: false,
+    //     },
+    // ]);
+
+    const [boardList, setBoardList] = useState(null);
 
     // 채택
     const selectBrd=()=>{
@@ -67,13 +54,23 @@ function BoardList(props) {
         setChkOn([]);
     }
 
+    useEffect(() => {
+        const fetchList = async() => {
+            const list = await listMutate.mutateAsync();
+            setBoardList(list);
+            // board테이블에 adminPick 들어가야함...
+        };
+        fetchList();
+    }, [])
 
     useEffect(() => {
-        const tableList = boardList.map((list) => {
-            const { adminPick, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
-            return rest; // 새로운 객체 반환
-        });
-        setColumns(tableList); // 새로운 배열로 setColumns 호출
+        if(boardList) {
+            const tableList = boardList?.map((list) => {
+                const { adminPick, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
+                return rest; // 새로운 객체 반환
+            });
+            setColumns(tableList); // 새로운 배열로 setColumns 호출
+        }
     }, [boardList]);
 
     console.log(columns)
@@ -90,7 +87,7 @@ function BoardList(props) {
             <div className={styles.brd_info_wrap}>
                 <div className={styles.brd_list_info}>
                     <div className="total">
-                        총 <strong>{boardList.length}</strong> 개
+                        총 <strong>{boardList?.length}</strong> 개
                     </div>
                     <select name="" id="" className="form-select">
                         <option value="price">등록순</option>
