@@ -47,7 +47,7 @@ function AdminProductUpdate() {
                 promoType : data.promoType,
                 imageUrl : data.imageUrl,
             });
-            setViewImg(data.imageUrl); // ★ 초기 이미지 설정
+            setViewImg(data.imageUrl); // 초기 이미지 설정
             setInputURL(data.imageUrl); // input에도 초기값 넣기
             setChain(data.sourceChain);
         }
@@ -70,6 +70,7 @@ function AdminProductUpdate() {
 
     const onSubmit = (data) => {
         prdUpdateMutation.mutate(data);
+        navigate("/admin/product");
     }
 
     const watchedPromoType = watch("promoType");

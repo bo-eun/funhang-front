@@ -6,9 +6,10 @@ import activeIcon from "../../assets/img/sub_cate_active.svg";
 import { pageInfo } from '../../hooks/pageTitle';
 
 function Layout() {
-    const { sourceChain, promoType, productType } = useParams();
     const location = useLocation();
     const [title, setTitle] = useState("");
+    const { sourceChain, promoType, productType } = useParams();
+
     // Detail 페이지 여부
     const isDetail = useMemo(() => location.pathname.split('/').length > 4, [location.pathname]);
     
@@ -16,6 +17,8 @@ function Layout() {
     const chainId = sourceChain?.toUpperCase() || 'ALL';
     const promoId = promoType?.toUpperCase() || 'ALL';
     const categoryId = productType?.toUpperCase() || 'ALL';
+    
+    //outlet에 넘겨줄 값
     const outletContext = { chainId, promoId, categoryId };
 
     // 페이지 title (리다이렉트 중에도 안정적)

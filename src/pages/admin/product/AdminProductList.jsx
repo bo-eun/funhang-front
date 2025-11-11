@@ -9,14 +9,16 @@ import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../../api/product/productApi';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import Pagination from '../../../components/pagination/Pagination';
+import { useProduct } from '../../../hooks/useProduct';
 
 function AdminProductList(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const [prdList, setPrdList] = useState([]);
+    const { prdDeleteMutation } = useProduct();
+    const queryParams = new URLSearchParams(location.search);
 
     //페이징
-    const queryParams = new URLSearchParams(location.search);
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(parseInt(queryParams.get('page') ?? '0', 10));
     const [currentSort, setCurrentSort] = useState(queryParams.get('sort') ?? 'price,asc');
@@ -31,12 +33,11 @@ function AdminProductList(props) {
   
     // 필터 변경 시 URL 업데이트
     const updateUrl = useCallback((newParams) => {
-        const params = new URLSearchParams(location.search);
         Object.entries(newParams).forEach(([key, value]) => {
-            if (value != null) params.set(key, value);
-            else params.delete(key);
+            if (value != null) queryParams.set(key, value);
+            else queryParams.delete(key);
         });
-        navigate(`${location.pathname}?${params.toString()}`);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
     }, [location.pathname, location.search, navigate]);
 
     // 셀렉트박스 핸들러
@@ -61,33 +62,34 @@ function AdminProductList(props) {
         }
     };
 
-    // -------------------------
     // 페이지 이동 처리
-    // -------------------------
     const movePage = (newPage) => {
         setCurrentPage(newPage);
         updateUrl({ page: newPage });
     };
-    // -------------------------
     // 검색
-    // -------------------------
     const handleSearch=(newQuery)=>{
-        const params = new URLSearchParams(location.search);
-        params.set('q', newQuery);
-        params.set('page', 0);
-        navigate(`${location.pathname}?${params.toString()}`);
+        // const params = new URLSearchParams(location.search);
+        queryParams.set('q', newQuery);
+        queryParams.set('page', 0);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
+    }
+    // 삭제
+    const handleDelete=(productId)=>{
+        if(window.confirm("정말 삭제하시겠습니까?")) {
+            prdDeleteMutation.mutate(productId);
+        }
     }
 
     // React Query fetch
     const { data} = useQuery({
-        queryKey: ['product', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
+        queryKey: ['product', chainId, promoId, categoryId, currentPage,searchQuery],
         queryFn: async () => productApi.getChainListAll({
             sourceChain:chainId,
             promoType:promoId,
             productType:categoryId,
             q : searchQuery,
             page: currentPage,
-            sort: currentSort,
         }),
         keepPreviousData: true,
     });
@@ -100,7 +102,6 @@ function AdminProductList(props) {
     },[data]);
 
     console.log(prdList);
-    
 
     return (
         <>
@@ -144,6 +145,7 @@ function AdminProductList(props) {
                     bottomBtn={{ 
                         type: 'button', 
                         name: '삭제',
+                        onClick: ()=>handleDelete(product.crawlId)
                     }}
                 >
                     <div className={styles.item_box}>
