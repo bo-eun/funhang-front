@@ -5,9 +5,13 @@ export const adminUserApi = {
 
     list: async({
         searchText,
-        delYn
+        delYn,
+        page,
+        size
     })=>{
         const params = new URLSearchParams();
+        params.set('page', page);
+        params.set('size', size);
         if(searchText) params.set('searchText',searchText);
         if(delYn) params.set('delYn',delYn);
         const response = await api.get(
