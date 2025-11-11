@@ -104,7 +104,7 @@ function Detail() {
             <section className={styles.store}>
                 <h3>가까운 편의점 보기</h3>
                 <div id="map">
-                    <Map chainName={mapName} height="300px" showAlert={false}/>
+                    <Map chainName={mapName} height="400px" showAlert={false}/>
                 </div>
             </section>
             

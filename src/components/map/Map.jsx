@@ -148,7 +148,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
     const container = document.getElementById("map");
     const options = {
       center: new window.kakao.maps.LatLng(myLocation.latitude, myLocation.longitude),
-      level: 3,
+      level: 6,
     };
 
     const map = new window.kakao.maps.Map(container, options);
@@ -240,7 +240,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
 
 
   useEffect(() => {
-    if(dataList?.length > 0) {
+    if(dataList?.length > 0 && setList) {
 
       // 거리순 + category_name 에 편의점 종류를 저장
       const sortedList = dataList.map((data) => {
