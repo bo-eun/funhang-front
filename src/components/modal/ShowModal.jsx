@@ -27,7 +27,7 @@ function ShowModal({show, handleClose, handleEvent=false,
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
           {handleEvent && 
-            <Button className='min_btn_b' onClick={handleEvent}>
+            <Button className='min_btn_b' onClick={()=>{handleEvent()}}>
               {eventBtnName}
             </Button>
           }

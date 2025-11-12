@@ -8,6 +8,8 @@ export const couponAdminApi = {
     },
 
     create: async(formData) => {
+         console.log('-11---')
+        console.log(formData)
         const response = await api.post(`/api/v1/admin/coupon`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
         });
@@ -15,6 +17,8 @@ export const couponAdminApi = {
     },
 
     update: async(couponId, formData) => {
+        console.log('----')
+        console.log(formData)
         const response = await api.put(`/api/v1/admin/coupon/${couponId}`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
         });

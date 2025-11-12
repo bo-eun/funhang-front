@@ -57,19 +57,27 @@ function List(props) {
 
     // 쿠폰 등록
     const handleCouponSubmit = handleSubmit(async (formData)=>{
-        await createCouponMutation.mutateAsync(formData);
+        if(currentCoupon){
+            formData.couponId = currentCoupon.couponId;
+            await updateCouponMutation.mutateAsync(formData);
+            
+        }else{
+            await createCouponMutation.mutateAsync(formData);
+        }
+       
         reset(); // 입력 초기화
         setShowModal(false);
     });
 
-    // 쿠폰 수정
-    const handleCouponUpdate = handleSubmit(async (formData)=>{
-        const couponId = currentCoupon.couponId;
-        //await updateCouponMutation.mutateAsync(couponId, formData);
-        //reset(); // 입력 초기화
-        //setShowModal(false);
-        console.log(formData);
-    });
+    // // 쿠폰 수정
+    // const handleCouponUpdate = handleSubmit(async (formData)=>{
+    //     const couponId = currentCoupon.couponId;
+    //     console.log(formData)
+    //     await updateCouponMutation.mutateAsync(couponId, formData);
+    //     reset(); // 입력 초기화
+    //     setShowModal(false);
+    //     console.log(formData);
+    // });
 
 
     // 쿠폰 리스트 가져오기
@@ -128,7 +136,7 @@ function List(props) {
             </div>
             <ShowModal show={showModal} handleClose={closeModal} 
                     title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} 
-                    handleEvent={currentCoupon ? handleCouponUpdate : handleCouponSubmit}
+                    handleEvent={handleCouponSubmit}
                     eventBtnName={currentCoupon ? "수정" : "등록"}
                     closeBtnName='닫기'>
                 <form action="" id="" name="">

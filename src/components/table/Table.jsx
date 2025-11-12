@@ -15,7 +15,7 @@ function Table({ headers, data, colWidth, columns=data, isCheckbox=false, setChe
             {colWidth && 
                 <colgroup>
                     { isCheckbox && <col width="40px" /> }
-                    { colWidth.map((col) => <col width={col} />) }
+                    { colWidth.map((col, index) => <col key={index} width={col} />) }
                     { clickColumnBtn && <col width="80px" /> }
                 </colgroup>
             }
@@ -27,7 +27,7 @@ function Table({ headers, data, colWidth, columns=data, isCheckbox=false, setChe
             </thead>
             <tbody>
                 {columns?.map((obj, index) => 
-                    <tr>
+                    <tr key={index}>
                         { isCheckbox && 
                             <td>
                                 <input 

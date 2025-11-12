@@ -67,8 +67,9 @@ export const useAdmin = () => {
   });
 
   const updateCouponMutation = useMutation({
-    mutationFn: async (couponId, formData) => {
-      const response = await couponAdminApi.update(couponId, formData);
+    mutationFn: async (formData) => {
+      console.log(formData)
+      const response = await couponAdminApi.update(formData.couponId, formData);
       console.log(response);
       return response;
     },
