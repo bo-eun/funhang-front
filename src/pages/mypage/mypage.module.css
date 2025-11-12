@@ -76,6 +76,11 @@
     gap: 12px;
 }
 
+.none_list{
+    font-size: 20px;
+    margin-top: 50px;
+}
+
 /* 포인트 내역 */
 .point_cont h3 {
     display: flex;
@@ -151,6 +156,8 @@
 :global(.modal) .coupon_box input:checked + label {
     border-color: #222;
 }
+
+
 
 
 /* 쿠폰 페이지 */

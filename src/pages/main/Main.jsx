@@ -38,10 +38,12 @@ function Main(props) {
 
   const [slideTexts, setSlideTexts] = useState([]);
 
-  const { data: onePlusOne } = useQuery({
-    queryKey: ["product", "ONE_PLUS_ONE"],
-    queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
-  });
+    
+
+    const { data: onePlusOne } = useQuery({
+      queryKey: ["product", "ONE_PLUS_ONE"],
+      queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
+    });
 
     const { data: twoPlusOne } = useQuery({
     queryKey: ['product', 'TWO_PLUS_ONE'],
@@ -78,6 +80,8 @@ function Main(props) {
     params.set("page", 0);
     navigate(`/product/ALL/ALL/ALL?${params.toString()}`);
   };
+
+
   
   return (
     <Container className={styles.main_cont}>

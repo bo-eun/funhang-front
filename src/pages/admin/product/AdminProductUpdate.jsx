@@ -53,7 +53,7 @@ function AdminProductUpdate() {
         }
     }, [data, reset]);
 
-    console.log(data.product);
+    console.log(data);
 
 
     const handleChange = (e) => setInputURL(e.target.value);

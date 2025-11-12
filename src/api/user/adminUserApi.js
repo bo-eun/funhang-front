@@ -20,17 +20,14 @@ export const adminUserApi = {
         return response.data.response;
     },
     
-    givePoint: async(userId,amount,reason)=>{
-        const queryParams = new URLSearchParams({
-            amount,
-            reason
-        })
+    givePoint: async (userId, amount, reason) => {
         const response = await api.patch(
-            `/api/v1/admin/${userId}/points?${queryParams.toString()}`,
+            `/api/v1/admin/${userId}/points`,
+            null,
             {
-                 headers: { "Content-Type": "multipart/form-data" },
+            params: { amount, reason },
             }
-        )
+        );
         return response.data;
     },
     

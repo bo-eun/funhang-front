@@ -6,28 +6,34 @@ import { Link } from "react-router";
 import EventIcon from "../icon/EventIcon";
 import StoreIcon from "../icon/StoreIcon";
 import { authStore } from "../../store/authStore";
-import { wishStore } from "../../store/wishStore";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useWish } from "../../hooks/useWish";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Item({ product }) {
-  // const toggleWish = wishStore(state => state.toggleWish);
-  // const list = wishStore(state => state.list);
-  const { list, toggleWish } = wishStore();
   const {isAuthenticated, userRole} = authStore();
-  const wishActive = wishStore(state => state.isWish(product.crawlId));
+  const isAuth = authStore().isAuthenticated();  // boolean
+  const role = authStore().userRole;
+  const queryClient = useQueryClient();
+  const { toggleWishMutation, isWish } = useWish();
   
   if (!product) return null;
 
-  const handleWishClick = async (e) => {
-    e.preventDefault();
-    if(!isAuthenticated){
-      alert('로그인 후 찜해주세요!');
-      return;
-    }else if(userRole==="ROLE_ADMIN"){
-      alert('관리자는 찜 기능을 이용할 수 없습니다.');
-      return;
-    }
-    await toggleWish(product);
-  };
+    const handleWishClick = (e) => {
+      e.preventDefault();
+      if (!isAuth) {
+        toast.info("로그인 후 찜해주세요!");
+        return;
+      }
+      else if (role === "ROLE_ADMIN") {
+        toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
+        return;
+      }
+      if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
+      toggleWishMutation.mutate(product);
+    };
+  
 
   return (
     <Link
@@ -53,7 +59,7 @@ function Item({ product }) {
             className={styles.wish_btn}
             onClick={handleWishClick}
           >
-            <img src={wishActive ? wishiActiveIcon : wishiIcon} alt="" />
+            <img src={isWish(product.crawlId) ? wishiActiveIcon : wishiIcon} alt="" />
           </button>
         </div>
         <div className={styles.info_box}>

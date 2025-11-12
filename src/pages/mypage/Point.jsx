@@ -7,8 +7,12 @@ import { useOutletContext } from 'react-router';
 
 function Point(props) {
     const [show, setShow] = useState(false);
-    const [pointList, setPointList] = useState([]);
-    const { setTotalPoint } = useOutletContext();
+    // const [pointList, setPointList] = useState([]);
+    const { movePage, currentPage } = useOutletContext();
+
+    // 현재 페이지 slice
+    const pagePerRow = 10;
+    // const pagedList = list.slice(currentPage * pagePerRow, (currentPage + 1) * pagePerRow);
 
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -22,18 +26,20 @@ function Point(props) {
     const coupon10 = 10000;
 
 
-    const {data} = useQuery({
-        queryKey:['point'],
-        queryFn: async()=>pointApi.list(),
-        keepPreviousData: true,
-    })
+    // const {data} = useQuery({
+    //     queryKey:['point'],
+    //     queryFn: async()=>pointApi.list(),
+    //     keepPreviousData: true,
+    // })
 
-    useEffect(()=>{
-        if(data){
-            setPointList(data.items || []);
-            setTotalPoint(data.balance || 0);
-        }
-    }, [data]);
+    // useEffect(()=>{
+    //     if(data){
+    //         setPointList(data.items || []);
+    //         setTotalPoint(data.balance || 0);
+    //     }
+    // }, [data]);
+
+
 
     const handleClose = () => {
         setShow(false);
@@ -44,7 +50,6 @@ function Point(props) {
 
 
 
-    console.log(pointList);
 
     return (
         <>
@@ -62,7 +67,7 @@ function Point(props) {
                         <th>내역</th>
                     </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                     {pointList?.map((item)=>(
                         <tr key={item.id}>
                             <td>{formatDate(item.createDate)}</td>
@@ -70,7 +75,7 @@ function Point(props) {
                             <td className={styles.plus}>{item.amount}</td>
                         </tr>
                     ))}
-                </tbody>
+                </tbody> */}
             </table>
         </div>
 

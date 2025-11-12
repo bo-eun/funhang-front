@@ -6,19 +6,20 @@ import { authStore } from '../store/authStore';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { NavDropdown } from 'react-bootstrap';
-import { wishStore } from '../store/wishStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 function Header(props) {
     const navigate = useNavigate();
     const { token, userRole, userName, clearAuth } = authStore();
     const isLoggedIn = !!token;
     const isAdmin = userRole === "ROLE_ADMIN";
+    const queryClient = useQueryClient();
     
     const [isAdminPage, setIsAdminPage] = useState(false);
 
     const handleLogout = () => {
         clearAuth(); 
-        wishStore.getState().reset();
+        queryClient.invalidateQueries(["wish"]);
         navigate("/main", { replace: true }); 
     };
     const location = useLocation();
