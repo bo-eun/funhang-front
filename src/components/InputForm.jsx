@@ -3,6 +3,7 @@ import styles from '@/pages/login/login.module.css';
 
 function InputForm({
   label,
+  id='',
   type = "text",
   placeholder,
   register,
@@ -11,12 +12,11 @@ function InputForm({
   readOnly = false,
   defaultValue,
   setValue,
-  className = ""
+  className = "",
 }) {
   // 내부 상태는 useForm이 없을 때만 사용
   const [internalValue, setInternalValue] = useState(defaultValue || "");
 
-    console.log(defaultValue)
   useEffect(() => {
     if (!register) {
       setInternalValue(defaultValue || "");
@@ -36,6 +36,7 @@ function InputForm({
     <div className={`${styles.user_loginp} ${className}`}>
       <label>{label}</label>
       <input
+        id={id}
         type={type}
         readOnly={readOnly}
         placeholder={placeholder}

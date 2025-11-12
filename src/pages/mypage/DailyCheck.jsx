@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import styles from "@/pages/mypage/mypage.module.css";
 import Calendar from 'react-calendar';
 import arrowLeft from "../../assets/img/calendar_arr_l.png"
 import arrowRight from "../../assets/img/calendar_arr_r.png"
+import { useMypage } from '../../hooks/useMypage';
 
 
-function DailyCheck(props) {
+function DailyCheck() {
     const [value, onChange] = useState(new Date());
 
-    const checkedDate = ['2025-10-11' ,'2025-10-26', '2025-10-27', '2025-10-28', '2025-10-29'];
+    const { dailyCheckListMutation } = useMypage();
+    const [checkedDate, sestCheckedDate] = useState(null);
 
     const getDateOnly = (date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
+
+    useEffect(() => {
+        const fetchCheckList = async () => {
+            const result = await dailyCheckListMutation.mutateAsync();
+            sestCheckedDate(result.dates);
+            console.log(result.dates)
+        }
+        fetchCheckList();
+    }, [])
     return (
         <div className={styles.daliy_cont}>
             <h3>출석 체크 현황</h3>
@@ -35,7 +46,7 @@ function DailyCheck(props) {
                     const dateStr = getDateOnly(date); 
 
                     // 특정 날짜에 클래스 추가
-                    if (checkedDate.includes(dateStr)) {
+                    if (checkedDate?.includes(dateStr)) {
                         return 'checked'
                     }
                 }}

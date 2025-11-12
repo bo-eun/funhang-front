@@ -65,7 +65,6 @@ function FindPw(props) {
 
     const onPwChangeSubmit = async(formData) => {
         try {
-            console.log('dd')
             await newPwMutation.mutateAsync(formData);
             setShow(true);
             changePwForm.reset();

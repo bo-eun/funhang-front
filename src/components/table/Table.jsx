@@ -39,14 +39,14 @@ function Table({ headers, data, colWidth, columns=data, isCheckbox=false, setChe
                         }
                         {Object.entries(obj)?.map(([key, item]) => {
                             return (
-                                <td key={index} className={`${key} ${data?.[index]?.adminPick ? 'pick' : ''}`}>
+                                <td key={`${key}${index}`} className={`${key} ${data?.[index]?.adminPick ? 'pick' : ''}`}>
                                     {item}
                                 </td>
                             )
                         }
                         )}
                         { clickColumnBtn && 
-                            <td><button type="button" className='btn btn-outline-dark' onClick={clickColumnBtn}>수정</button></td>
+                            <td><button type="button" className='btn btn-outline-dark' onClick={() => clickColumnBtn('update', obj.couponId)}>수정</button></td>
                         }
                     </tr>
                 )}

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from 'react-router';
 import Table from '../../../components/table/Table';
+import { useAdmin } from '../../../hooks/useAdmin';
 
 const colWidth = ['60px', '70%'];
 const headers = ['NO' ,'쿠폰 이름', '관리'];
@@ -17,10 +18,12 @@ function List(props) {
     const [columns, setColumns] = useState([]);
     const [currentCoupon, setCurrentCoupon] = useState(null);
 
+    const { getCouponListMutation, createCouponMutation, updateCouponMutation } = useAdmin();
+
     const schema = yup.object().shape({
         couponName: yup.string().required("쿠폰 이름을 입력하십시오"),
         requiredPoint: yup.string().required("차감 포인트를 입력하십시오"),
-        couponFile: yup.mixed().required("파일을 선택해주세요")
+        file: yup.mixed().required("파일을 선택해주세요")
                     .test(
                         "fileSelected",
                         "파일을 선택해주세요",
@@ -37,11 +40,11 @@ function List(props) {
     });
 
 
-    const openCouponModal = (type, coupon) => {
+    const openCouponModal = (type, currentId) => {
+        // 쿠폰 수정 시 현재 쿠폰정보 가져오기
         if(type == 'update') {
             setShowModal(true)
-            setCurrentCoupon(coupon)
-            console.log(coupon)
+            setCurrentCoupon(couponList.filter((coupon) => currentId == coupon.couponId)[0])
             return;    
         }
         setCurrentCoupon(null);
@@ -52,28 +55,41 @@ function List(props) {
         setShowModal(false);
     }
 
+    // 쿠폰 등록
+    const handleCouponSubmit = handleSubmit(async (formData)=>{
+        await createCouponMutation.mutateAsync(formData);
+        reset(); // 입력 초기화
+        setShowModal(false);
+    });
+
+    // 쿠폰 수정
+    const handleCouponUpdate = handleSubmit(async (formData)=>{
+        const couponId = currentCoupon.couponId;
+        //await updateCouponMutation.mutateAsync(couponId, formData);
+        //reset(); // 입력 초기화
+        //setShowModal(false);
+        console.log(formData);
+    });
+
+
+    // 쿠폰 리스트 가져오기
     useEffect(() => {
-        setCouponList([
-            {
-                couponId: 1,
-                couponName: '5,000원 쿠폰',
-            },
-            {
-                couponId: 2,
-                couponName: '10,000원 쿠폰',
-            }
-        ]);
-        setColumns([
-            {
-                couponId: 1,
-                couponName: '5,000원 쿠폰',
-            },
-            {
-                couponId: 2,
-                couponName: '10,000원 쿠폰',
-            }
-        ])
+        const fetchList = async () => {
+            const result = await getCouponListMutation.mutateAsync();
+            const data = result.data.response.content;
+            setCouponList(data);
+            
+            const columns = data.map((el) => {
+                const {couponId, couponName, ...rest} = el;
+                return {couponId, couponName};
+            });
+            setColumns(columns);
+        }
+
+        fetchList();
     }, [])
+
+
 
     useEffect(() => {
         if(currentCoupon) {
@@ -107,11 +123,12 @@ function List(props) {
                     headers={headers} 
                     isCheckbox={true} 
                     setCheckedList={""} 
-                    clickColumnBtn={() => openCouponModal('update', currentCoupon)} 
+                    clickColumnBtn={openCouponModal} 
                 />
             </div>
             <ShowModal show={showModal} handleClose={closeModal} 
-                    title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} handleEvent={true}
+                    title={currentCoupon ? "쿠폰 수정" : "쿠폰 등록"} 
+                    handleEvent={currentCoupon ? handleCouponUpdate : handleCouponSubmit}
                     eventBtnName={currentCoupon ? "수정" : "등록"}
                     closeBtnName='닫기'>
                 <form action="" id="" name="">
@@ -120,14 +137,13 @@ function List(props) {
                         label={"쿠폰명"} 
                         placeholder={"쿠폰명을 입력해주세요"}
                         name={"couponName"} 
-                        defaultValue={currentCoupon ? currentCoupon.couponName : ''}
+
                      />
                     <InputForm 
                         register={register} 
                         label={"쿠폰 설명"} 
                         placeholder={"쿠폰 설명을 입력해주세요"} 
                         name={"description"} 
-                        defaultValue={currentCoupon ? currentCoupon.description : ''}
                         className='mt-4' 
                     />
                     <InputForm 
@@ -135,15 +151,24 @@ function List(props) {
                         label={"쿠폰 금액"} 
                         placeholder={"쿠폰 발급 시 차감 될 포인트를 입력해주세요"} 
                         name={"requiredPoint"} 
-                        defaultValue={currentCoupon ? currentCoupon.requiredPoint : ''}
                         className='mt-4' 
                     />
+                    <label className='file_box' htmlFor='file' style={{
+                        display:'flex', 
+                        alignItems:'center',
+                        justifyContent: 'center',
+                        background:'#f7f7f7', 
+                        height: '100px',
+                        cursor: 'pointer'
+                        }}>
+                        +
+                    </label>
                     <InputForm 
                         register={register} 
                         type={'file'} 
+                        id={'file'}
                         label={"쿠폰 이미지"} 
-                        name={"couponFile"} 
-                        defaultValue={currentCoupon ? currentCoupon.couponFile : ''}
+                        name={"file"} 
                         className='mt-4' 
                     />
                 </form>

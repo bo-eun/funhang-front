@@ -121,21 +121,11 @@ function AdminBanner(props) {
 
     if (!confirm("배너를 삭제하시겠습니까?")) return;
 
-    try {
-      const result = await deleteBannerMutation.mutateAsync(
-        rows[index].bannerId
-      );
-      console.log(result);
-      if (result.status == 200) {
-        alert("배너 삭제가 완료되었습니다.");
-        remove(index);
-      } else {
-        console.log("삭제 오류");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("배너 삭제 실패");
-    }
+    const result = await deleteBannerMutation.mutateAsync(
+      rows[index].bannerId
+    );
+    console.log(result);
+    remove(index);
   };
 
   // 배너 이미지 미리보기
@@ -158,14 +148,9 @@ function AdminBanner(props) {
   // 서버에서 배너 리스트 받아오기
   useEffect(() => {
     const fetchBannerList = async () => {
-      try {
         const result = await adminApi.allList();
-        const list = result.data.response.data;
-        console.log(result.data.response.data);
+        const list = result.data;
         replace(list);
-      } catch (error) {
-        console.log(error);
-      }
     };
 
     fetchBannerList();

@@ -237,7 +237,7 @@
     color: #B5B5B5 !important;
 }
 .calendar_cont .calendar :global(.react-calendar__tile.checked) {
-    background: url(../img/daliy_check.png) no-repeat 50% 50%;
+    background: url(../../assets/img/daliy_check.png) no-repeat 50% 50%;
 }
 .calendar_cont .calendar .checked {
     background: #C80000;

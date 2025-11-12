@@ -6,12 +6,12 @@ const token = authStore.getState().token;
 export const adminApi = {
   allList: async () => {
     const response = await api.get(`/api/v1/admin/Allbanner`);
-    return response;
+    return response.data.response;
   },
 
   useList: async () => {
     const response = await api.get(`/api/v1/admin/useBanner`);
-    return response.data;
+    return response.data.response;
   },
 
   // 등록, 수정 모두 create로 요청
@@ -24,6 +24,6 @@ export const adminApi = {
   },
   delete: async (bannerId) => {
     const response = await api.delete(`/api/v1/admin/banner/${bannerId}`);
-    return response;
+    return response.data.response;
   },
 };

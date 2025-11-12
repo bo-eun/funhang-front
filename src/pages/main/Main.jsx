@@ -59,11 +59,9 @@ function Main(props) {
   useEffect(() => {
     const fetchBannerList = async () => {
       const result = await adminApi.useList();
-      if (result.status == 200) {
-        const bannerTitle = result.response.data.map((banner) => banner.title);
-        setBannerList(result.response.data);
-        setSlideTexts(bannerTitle);
-      }
+      const bannerTitle = result.data.map((banner) => banner.title);
+      setBannerList(result.data);
+      setSlideTexts(bannerTitle);
     };
 
     fetchBannerList();

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../../components/table/Table';
 import { Link } from 'react-router';
+import { couponAdminApi } from '../../../api/coupon/couponAdminApi';
+import { useAdmin } from '../../../hooks/useAdmin';
 
 
 const colWidth = ['60px', '', '300px', '150px'];
@@ -13,26 +15,6 @@ function GrantList(props) {
     const [checkedList, setCheckedList] = useState([]); // 선택한 게시글 리스트 저장
 
     useEffect(() => {
-        setBoardList([
-            {
-                couponId: 1,
-                couponName: '5,000원 쿠폰',
-                userId: 'user00', 
-                requriedPoint: 5000,
-            },
-            {
-                couponId: 2,
-                couponName: '10,000원 쿠폰',
-                userId: 'user00', 
-                requriedPoint: 10000,
-            },
-            {
-                couponId: 3,
-                couponName: '5,000원 쿠폰',
-                userId: 'user00', 
-                requriedPoint: 5000,
-            }
-        ])
         setColumns([
             {
                 couponId: 1,

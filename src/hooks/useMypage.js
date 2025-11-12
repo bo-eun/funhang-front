@@ -2,22 +2,24 @@ import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { authStore } from "../store/authStore"
 import api from '../api/axiosApi';
 import { useNavigate } from "react-router";
+import { myInfoApi } from "../api/mypage/myInfoApi";
+import { dailyCheckApi } from "../api/mypage/dailyCheckApi";
 
 
 export const useMypage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
+    const { clearAuth } = authStore();
+
     const getMyInfoMutation = useMutation({
         mutationFn: async() => {
-            const response = await api.get('/api/v1/user/info');
-
-            return response.data.response;
+            const response = await myInfoApi.get();
+            return response;
         },
 
         onSuccess: (data) => {
             console.log("내 정보 가져오기 완료");
-            console.log(data);
         },
         onError: (error) => {
             alert(error.response.data.response);
@@ -26,16 +28,13 @@ export const useMypage = () => {
 
     const setMyInfoMutation = useMutation({
         mutationFn: async(formData) => {
-            const response = await api.put(`/api/v1/user/info`, formData, {
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            });
+            const response = await myInfoApi.set(formData);
 
-            return response.data.response;
+            return response;
         },
 
         onSuccess: (data) => {
             console.log("내 정보가 수정되었습니다.");
-            console.log(data);
         },
         onError: (error) => {
             alert(error.response.data.response);
@@ -44,16 +43,13 @@ export const useMypage = () => {
 
     const newMypwMutation = useMutation({
         mutationFn: async(formData) => {
-            const response = await api.put(`/api/v1/user/password/change`, formData, {
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            });
+            const response = await myInfoApi.put(formData);
 
-            return response.data.response;
+            return response;
         },
 
         onSuccess: (data) => {
             console.log("비밀번호 변경이 완료되었습니다.");
-            console.log(data);
         },
         onError: (error) => {
             alert(error.response.data.response);
@@ -62,17 +58,31 @@ export const useMypage = () => {
 
     const deleteUserMutation = useMutation({
         mutationFn: async() => {
-            const response = await api.delete(`/api/v1/user/`);
-
+            const response = await myInfoApi.delete();
             return response;
         },
         onSuccess: (data) => {
-            console.log(data);
+            alert(data.data.response);
+            clearAuth();
+            navigate('/');
         },
         onError: (error) => {
             alert(error.response.data.response);
         }
     })
 
-    return { getMyInfoMutation, setMyInfoMutation, newMypwMutation, deleteUserMutation }
+    const dailyCheckListMutation = useMutation({
+        mutationFn: async() => {
+            const response = await dailyCheckApi.list();
+            return response;
+        },
+        onSuccess: (data) => {
+
+        },
+        onError: (error) => {
+            alert(error.response.data.response);
+        }        
+    })
+
+    return { getMyInfoMutation, setMyInfoMutation, newMypwMutation, deleteUserMutation, dailyCheckListMutation }
 }
