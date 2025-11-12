@@ -91,15 +91,20 @@ function BoardForm({ type }) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       
+      reader.readAsDataURL(file);
+
+      //읽은 결과 성공
       reader.onload = (e) => {
+        console.log(e.target.result)
         resolve(e.target.result);
       };
       
+      //읽은 결과 실패 
       reader.onerror = () => {
         reject(new Error('파일 읽기 실패'));
       };
       
-      reader.readAsDataURL(file);
+      
     });
   }, []);
 
@@ -175,7 +180,7 @@ function BoardForm({ type }) {
       // Canvas를 blob으로 변환
       const resizedBlob = await new Promise((resolve) => {
         canvas.toBlob(resolve, outMime, quality);
-      });
+      });``
 
       const file = new File([resizedBlob], 'resized.jpg', { type: outMime });
 
@@ -566,7 +571,7 @@ function BoardForm({ type }) {
     console.log('내용:', content);
 
     // await createMutate.mutateAsync();
-    navigate('/board');
+    // navigate('/board');
     
     // if (USE_MOCK) {
     //   console.log('📝 Mock 제출 데이터:', {
