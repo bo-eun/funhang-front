@@ -6,8 +6,4 @@ export const pointApi= {
         const response = await api.get(`/api/v1/user/points`);
         return response.data.response;
     },
-    balance :  async () => {
-        const response = await api.get(`/api/v1/user/points`);
-        return response.data.response.balance;
-    },
 }

@@ -10,7 +10,8 @@ import { pointApi } from '../../api/mypage/pointApi';
 
 
 function Layout() {
-    const token = authStore(state => state.token);
+    const {userName, nickname} = authStore();
+    const isAuth = authStore().isAuthenticated(); 
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -18,10 +19,16 @@ function Layout() {
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
 
     const { deleteUserMutation } = useMypage();
-    const [wishList,setWishList] = useState(0);
     const [wishTotal,setWishTotal] = useState(0);
+
+    const [pointList,setPointList] = useState([]);
     const [totalPoint,setTotalPoint] = useState(0);
+
+    const [couponList,setCouponList] = useState([]);
     const [couponCount,setCouponCount] = useState(0);
+
+    console.log(nickname);
+
 
     // -------------------------
     // 페이지 이동 처리
@@ -35,21 +42,13 @@ function Layout() {
      // useQueries로 여러 API 동시 호출
     const results = useQueries({
         queries: [
-            // {
-            //     queryKey: ['wish', 'count'],
-            //     queryFn: async () => {
-            //         const res = await wishApi.list();
-            //         return res;
-            //     },
-            //     enabled: !!token,
-            // },
             {
                 queryKey: ['point'],
                 queryFn: async () => {
                     const res = await pointApi.list();
                     return res;
                 },
-                enabled: !!token,
+                enabled: isAuth,
             },
             // 쿠폰 API가 있다면 추가
             // {
@@ -65,26 +64,17 @@ function Layout() {
 
     // 결과값을 state에 반영
     useEffect(() => {
-        const [pointRes] = results;
-        
-        // wishCount 업데이트
-        // if (wishCountRes.isSuccess && wishCountRes.data !== undefined) {
-        //     setWishTotal(wishCountRes.data);
-        // }
-        
+        const [pointRes] = results;        
         // totalPoint 업데이트
-        if (pointRes) {
-
-            setTotalPoint(pointRes.data);
+        if (pointRes.data) {
+            setPointList(pointRes.data.items  || []);
+            setTotalPoint(pointRes.data.balance  || 0);
         }
-        
         // couponCount 업데이트 (필요시)
         // if (couponRes.isSuccess && couponRes.data !== undefined) {
         //     setCouponCount(couponRes.data);
         // }
     }, [results]);
-
-    console.log(totalPoint);
 
     const deleteUser = async () => {
         await deleteUserMutation.mutateAsync();
@@ -95,7 +85,7 @@ function Layout() {
             <h2 className={styles['page_title']}>마이페이지</h2>
             <div className={styles.top_box}>
                 <div className={styles.text_box}>
-                    <strong>이름</strong> 님<br />
+                    <strong>{userName}</strong> 님<br />
                     안녕하세요
                 </div>
                 <ul className={styles.card_box}>
@@ -145,7 +135,7 @@ function Layout() {
                     </ul>
                 </Col>
                 <Col xs={10} className={styles.right_contents}>
-                    <Outlet context={{movePage, currentPage,setWishTotal}}/>
+                    <Outlet context={{movePage, currentPage,setWishTotal,pointList}}/>
                 </Col>
             </Row>
         </Container>

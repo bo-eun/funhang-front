@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Item({ product }) {
-  const {isAuthenticated, userRole} = authStore();
   const isAuth = authStore().isAuthenticated();  // boolean
   const role = authStore().userRole;
   const queryClient = useQueryClient();

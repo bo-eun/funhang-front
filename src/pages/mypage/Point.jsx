@@ -4,15 +4,11 @@ import ShowModal from '../../components/modal/ShowModal';
 import { useQuery } from '@tanstack/react-query';
 import { pointApi } from '../../api/mypage/pointApi';
 import { useOutletContext } from 'react-router';
+import Pagination from '../../components/pagination/Pagination';
 
 function Point(props) {
     const [show, setShow] = useState(false);
-    // const [pointList, setPointList] = useState([]);
-    const { movePage, currentPage } = useOutletContext();
-
-    // 현재 페이지 slice
-    const pagePerRow = 10;
-    // const pagedList = list.slice(currentPage * pagePerRow, (currentPage + 1) * pagePerRow);
+    const { movePage, currentPage, pointList } = useOutletContext();
 
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -24,23 +20,6 @@ function Point(props) {
 
     const coupon5 = 5000;
     const coupon10 = 10000;
-
-
-    // const {data} = useQuery({
-    //     queryKey:['point'],
-    //     queryFn: async()=>pointApi.list(),
-    //     keepPreviousData: true,
-    // })
-
-    // useEffect(()=>{
-    //     if(data){
-    //         setPointList(data.items || []);
-    //         setTotalPoint(data.balance || 0);
-    //     }
-    // }, [data]);
-
-
-
     const handleClose = () => {
         setShow(false);
     }
@@ -48,15 +27,14 @@ function Point(props) {
         setShow(true);
     }
 
-
-
-
     return (
         <>
         <div className={styles.point_cont}>
             <h3>
                 포인트 내역
-                <button type="button" className={styles.coupon_btn} onClick={openCouponLayer}>쿠폰 교환</button>
+                <button type="button" 
+                className={styles.coupon_btn} 
+                onClick={openCouponLayer}>쿠폰 교환</button>
             </h3>
 
             <table>
@@ -67,7 +45,7 @@ function Point(props) {
                         <th>내역</th>
                     </tr>
                 </thead>
-                {/* <tbody>
+                <tbody>
                     {pointList?.map((item)=>(
                         <tr key={item.id}>
                             <td>{formatDate(item.createDate)}</td>
@@ -75,7 +53,7 @@ function Point(props) {
                             <td className={styles.plus}>{item.amount}</td>
                         </tr>
                     ))}
-                </tbody> */}
+                </tbody>
             </table>
         </div>
 
@@ -103,6 +81,7 @@ function Point(props) {
                 </div>
             </div>
         </ShowModal>
+        <Pagination page={currentPage} totalRows={pointList.length} pagePerRows={10} movePage={movePage} />
         </>
     );
 }

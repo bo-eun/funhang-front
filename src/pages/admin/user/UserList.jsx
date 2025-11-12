@@ -5,7 +5,7 @@ import ShowModal from '../../../components/modal/ShowModal';
 import InputForm from '../../../components/InputForm';
 import ListBtnLayout from '../../../components/btn/ListBtnLayout';
 import Pagination from '../../../components/pagination/Pagination';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminUserApi } from '../../../api/user/adminUserApi';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,6 +22,7 @@ function UserList() {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const {grantPointMutation} = usePoint();
+    const queryClient = useQueryClient();
 
     // 상태
     const [showModal, setShowModal] = useState(false);
@@ -97,7 +98,6 @@ function UserList() {
 
     const handleClose = () => setShowModal(false);
 
-
     const handlePoint = handleSubmit((formData)=>{
         if(!selectedUser) return;
         
@@ -107,10 +107,19 @@ function UserList() {
             reason: formData.pointReason,
         },{ 
             onSuccess: () => {
-            reset(); // 입력 초기화
+            queryClient.invalidateQueries(['user']);
             setShowModal(false);
         }});
     })
+    //input창 모달 창 열면 초기화
+    useEffect(() => {
+    if (showModal && selectedUser) {
+        reset({
+        givePoint: '',
+        pointReason: '',
+        });
+    }
+    }, [showModal, selectedUser, reset]);
 
 
     // 페이징

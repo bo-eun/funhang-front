@@ -23,7 +23,7 @@ function Layout() {
         <div className='layout-root'>
             <Header/>            
             <section className='layout-content'>
-                <Outlet/>
+                <Outlet />
             </section>
             <Footer/>
         </div>

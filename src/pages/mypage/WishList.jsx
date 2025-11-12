@@ -10,9 +10,7 @@ import { useWish } from '../../hooks/useWish';
 
 function WishList() {
     const { movePage, currentPage, setWishTotal } = useOutletContext();
-    const pagePerRow = 12;
     const [wish, setWish]=useState([]);
-    // 현재 페이지 상품 slice
     const { wishList } = useWish();
 
     useEffect(()=>{
@@ -44,7 +42,7 @@ function WishList() {
                     <p className={styles.none_list}>찜한 상품이 없습니다.</p>
                 )}
             </ul>
-            {/* <Pagination page={currentPage} totalRows={0} pagePerRows={pagePerRow} movePage={movePage} /> */}
+            <Pagination page={currentPage} totalRows={wish.length} pagePerRows={12} movePage={movePage} />
         </div>
     );
 }

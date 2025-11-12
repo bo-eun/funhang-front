@@ -22,7 +22,7 @@ function Detail() {
     const [prd,setPrd] = useState([]);
     const [prdComment,setPrdComment] = useState([]);
     const [mapName, setMapName] = useState('');
-    const {isWish,toggleWishMutation} = useWish();
+    const { toggleWishMutation, isWish } = useWish();
     
     const CHAIN_MAP = {
         SEV: '7ELEVEN',
@@ -65,18 +65,19 @@ function Detail() {
         alert('주소가 클립보드에 복사되었습니다');
     }
 
-    const handleWishClick =async(e)=>{
+    const handleWishClick = (e) => {
         e.preventDefault();
         if (!isAuth) {
-            alert("로그인 후 찜해주세요!");
+            toast.info("로그인 후 찜해주세요!");
             return;
         }
         else if (role === "ROLE_ADMIN") {
             toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
             return;
         }
+        if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
         toggleWishMutation.mutate(prd);
-    }
+    };
 
     return (
         <section className={styles.detail_section}>
@@ -88,7 +89,7 @@ function Detail() {
                         className={styles.wish_btn}
                         onClick={handleWishClick}
                     >
-                        <img src={isWish(productId) ? wishiActiveIcon : wishiIcon} alt="" />
+                        <img src={isWish(prd.crawlId) ? wishiActiveIcon : wishiIcon} alt="" />
                     </button>
                 </div>
                 <div className={styles.info_box}>

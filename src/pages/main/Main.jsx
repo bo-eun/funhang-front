@@ -178,8 +178,8 @@ function Main(props) {
             </SubLayoutPdc>
             
             <SubLayoutPdc
-                titleName='카테고리 별'
-                moreLink='/category'
+                titleName='카테고리'
+                moreLink='/product/ALL/ALL/ALL'
             >
                 <ul className={styles.cat_list}>
                     {categoryList?.map((category,index)=>(
