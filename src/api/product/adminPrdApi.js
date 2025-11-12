@@ -11,6 +11,11 @@ export const adminPrdApi = {
             }
         )
         return response.data;
-    },    
+    },
+    
+    delete: async(crawlId)=>{
+        const response = await api.delete(`/api/v1/crawl/${crawlId}`);
+        return response.data;
+    }
 }
 

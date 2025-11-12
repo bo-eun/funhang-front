@@ -1,145 +1,172 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router';
 import SearchInput from '../../../components/SearchInput';
-import { Link } from 'react-router';
-import styles from '@/pages/admin/user/user.module.css';
 import ShowModal from '../../../components/modal/ShowModal';
 import InputForm from '../../../components/InputForm';
 import ListBtnLayout from '../../../components/btn/ListBtnLayout';
+import Pagination from '../../../components/pagination/Pagination';
+import { useQuery } from '@tanstack/react-query';
+import { adminUserApi } from '../../../api/user/adminUserApi';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import styles from '@/pages/admin/user/user.module.css';
 
-function UserList(props) {
-    const [showModal, setshowModal] =useState(false);
-    const [useYn, setUseYn] = useState(true);
-    const [point, setPoint] = useState(0);
-    
-    const deleteBtn=()=>{
-        const result = confirm('정말 탈퇴로 변경하시겠습니까?');
-        if(result){
-            setUseYn(false)
-            alert('탈퇴에 성공하였습니다.');
-        }else{
-            return;
+const schema = yup.object().shape({
+    givePoint: yup.number().required("지급 할 포인트를 입력해주세요"),
+    pointReason: yup.string().required("포인트 지급 사유를 입력해주세요"),
+});
+
+function UserList() {
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+
+    // 상태
+    const [showModal, setShowModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [userList, setUserList] = useState([]);
+    const [totalRows, setTotalRows] = useState(0);
+
+    const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
+    const [delYnQuery, setDelYnQuery] = useState(queryParams.get('delYn') ?? '');
+    const searchQuery = queryParams.get('searchText') ?? '';
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)
+    });
+
+    // URL 업데이트
+    const updateUrl = useCallback((newParams) => {
+        const params = new URLSearchParams(location.search);
+        Object.entries(newParams).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && value !== '') {
+                params.set(key, value);
+            } else {
+                params.delete(key);
+            }
+        });
+        navigate(`${location.pathname}?${params.toString()}`);
+    }, [navigate]);
+
+    const { data } = useQuery({
+        queryKey: ['user', searchQuery, delYnQuery, currentPage],
+        queryFn: () => adminUserApi.list({
+            searchText: searchQuery,
+            delYn: delYnQuery || null,
+            page: currentPage,
+            size: 10
+        }),
+        keepPreviousData: true
+    });
+
+    useEffect(() => {
+        if (data) {
+            setUserList(data.content || []);
+            setTotalRows(data.total || 0);
         }
-        
-    }
+    }, [data]);
 
-    const goUpdate=()=>{
-        setshowModal(true);
-    }
-    const handleClose=()=>{
-        setshowModal(false);
-    }
+    // 검색
+    const handleSearch = (newQuery) => {
+        updateUrl({ searchText: newQuery, page: 0 });
+    };
 
-    const userList =
-        { userRole: '관리자', 
-            userId: 'userId99', 
-            useYn: useYn, 
-            userName: '김땡땡', 
-            createAt: '2025-10-30',
-            email: 'email@email.com',
-            nickName: '닉네임99',
-            birth: '1999-01-01',
-            point: 1000
+    // delYn 필터 변경
+    const handleDelYnChange = (e) => {
+        const value = e.target.value;
+        setDelYnQuery(value);
+        updateUrl({ delYn: value || null, page: 0 });
+    };
+
+    // 모달
+    const goUpdate = (user) => {
+        setSelectedUser(user);
+        setShowModal(true);
+    };
+    const handleClose = () => setShowModal(false);
+
+    // 페이징
+    const movePage = (newPage) => updateUrl({ page: newPage });
+
+    // 회원 비활성화 버튼
+    const deleteBtn = () => {
+        if (confirm('정말 탈퇴로 변경하시겠습니까?')) {
+            alert('탈퇴 처리 완료');
         }
-    
+    };
+
     return (
         <>
             <div className='base_search_bg'>
-                <select name="" id="" className="form-select">
+                <select className="form-select">
                     <option value="">전체보기</option>
                     <option value="">회원</option>
                     <option value="">관리자</option>
                 </select>
-                <SearchInput />
+
+                <select className="form-select" value={delYnQuery} onChange={handleDelYnChange}>
+                    <option value="">전체보기</option>
+                    <option value="N">활성</option>
+                    <option value="Y">탈퇴</option>
+                </select>
+
+                <SearchInput onChange={handleSearch} value={searchQuery} />
             </div>
-            
-            <ListBtnLayout
-                topBtn={{ 
-                    type: 'button', 
-                    onClick: goUpdate, 
-                    name: '수정',
-                }}
-                bottomBtn={{ 
-                    type: 'button', 
-                    onClick: deleteBtn,
-                    name: '탈퇴',
-                    style: {backgroundColor: userList.useYn ? '' : '#c9c9c9',},
-                    disabled: !userList.useYn
-                }}
-            >  
-                <div className={styles.user_info}>
-                    <p className={styles.userRole}>{userList.userRole}</p>
-                    <p className={styles.userId}>
-                        {userList.userId}
-                        {userList.useYn?
-                        '':<span className={styles.deleteAcc}>탈퇴</span>
-                    }
-                    </p>
-                    <p className={styles.userName}>{userList.userName}</p>
-                    <p className={styles.createAt}>{userList.createAt}</p>
-                </div>
-            </ListBtnLayout>
-            
+
+            {userList.map((user) => (
+                <ListBtnLayout
+                    key={user.userId}
+                    topBtn={{
+                        type: 'button',
+                        onClick: () => goUpdate(user),
+                        name: '정보 보기',
+                    }}
+                    bottomBtn={{
+                        type: 'button',
+                        onClick: deleteBtn,
+                        name: '비활성',
+                        style: { backgroundColor: user.useYn ? '' : '#c9c9c9' },
+                        disabled: !user.useYn
+                    }}
+                >
+                    <div className={styles.user_info}>
+                        <p className={styles.userRole}>{user.userRole}</p>
+                        <p className={styles.userId}>
+                            {user.userId}
+                            {!user.useYn && <span className={styles.deleteAcc}>탈퇴</span>}
+                        </p>
+                        <p className={styles.userName}>{user.userName}</p>
+                        <p className={styles.createAt}>{user.createAt}</p>
+                    </div>
+                </ListBtnLayout>
+            ))}
+
             <ShowModal
                 show={showModal}
                 title='회원정보 수정'
-                handleClose={handleClose}
                 handleEvent={handleClose}
-                eventBtnName='수정'
+                handleClose={handleClose}
+                eventBtnName='지급'
                 closeBtnName='닫기'
                 className={styles.user_info_form}
-            >   
-                    <InputForm
-                        className={styles.info}
-                        label='가입일'
-                        readOnly={true}
-                        defaultValue={userList.createAt}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        label='아이디'
-                        readOnly={true}
-                        defaultValue={userList.userId}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        label='이름'
-                        readOnly={true}
-                        defaultValue={userList.userName}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        label='이메일'
-                        readOnly={true}
-                        defaultValue={userList.email}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        label='닉네임'
-                        readOnly={true}
-                        defaultValue={userList.nickName}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        label='생년월일'
-                        readOnly={true}
-                        defaultValue={userList.birth}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        type='number'
-                        label='보유 포인트'
-                        readOnly={true}
-                        defaultValue={userList.point}
-                    />
-                    <InputForm
-                        className={styles.info}
-                        type='number'
-                        label='포인트 지급'
-                        setValue={(e) => setPoint(Number(e.target.value))}
-                    />
-                
-                
+            >
+                {selectedUser && (
+                    <>
+                        <InputForm className={styles.info} label='가입일' readOnly defaultValue={selectedUser.createDate} />
+                        <InputForm className={styles.info} label='아이디' readOnly defaultValue={selectedUser.userId} />
+                        <InputForm className={styles.info} label='이름' readOnly defaultValue={selectedUser.userName} />
+                        <InputForm className={styles.info} label='이메일' readOnly defaultValue={selectedUser.email} />
+                        <InputForm className={styles.info} label='닉네임' readOnly defaultValue={selectedUser.nickname} />
+                        <InputForm className={styles.info} label='생년월일' readOnly defaultValue={selectedUser.birth} />
+                        <InputForm className={styles.info} label='핸드폰 번호' readOnly defaultValue={selectedUser.phone} />
+                        <InputForm className={styles.info} type='number' label='보유 포인트' readOnly defaultValue={selectedUser.pointBalance} />
+                        <InputForm className={styles.info} type='number' label='포인트 지급' name='givePoint' register={register} error={errors.givePoint} />
+                        <InputForm className={styles.info} type='text' label='포인트 지급 사유' name='pointReason' register={register} error={errors.pointReason} />
+                    </>
+                )}
             </ShowModal>
+
+            <Pagination page={currentPage} totalRows={totalRows} pagePerRows={10} movePage={movePage} />
         </>
     );
 }

@@ -39,9 +39,8 @@ function List() {
     // 페이지 이동 처리
     // -------------------------
     const movePage = (newPage) => {
-        const params = new URLSearchParams(location.search);
-        params.set('page', newPage);
-        navigate(`${location.pathname}?${params.toString()}`);
+        queryParams.set('page', newPage);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
     };
 
     // -------------------------
@@ -49,19 +48,17 @@ function List() {
     // -------------------------
     const sortChange = (e) => {
         const newSort = e.target.value;
-        const params = new URLSearchParams(location.search);
-        params.set('sort', newSort);
-        params.set('page', 0);
-        navigate(`${location.pathname}?${params.toString()}`);
+        queryParams.set('sort', newSort);
+        queryParams.set('page', 0);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
     };
     // -------------------------
     // 검색
     // -------------------------
     const handleSearch=(newQuery)=>{
-        const params = new URLSearchParams(location.search);
-        params.set('q', newQuery);
-        params.set('page', 0);
-        navigate(`${location.pathname}?${params.toString()}`);
+        queryParams.set('q', newQuery);
+        queryParams.set('page', 0);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
     }
 
 

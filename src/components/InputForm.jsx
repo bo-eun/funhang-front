@@ -13,7 +13,7 @@ function InputForm({
   setValue,
   className = ""
 }) {
-  // 내부 상태는 RHF가 없을 때만 사용
+  // 내부 상태는 useForm이 없을 때만 사용
   const [internalValue, setInternalValue] = useState(defaultValue || "");
 
     console.log(defaultValue)
@@ -29,8 +29,9 @@ function InputForm({
     if (setValue) setValue(e);
   };
 
-  // RHF 사용 여부 확인
-  const isRHF = !!(register && name);
+  // useForm 사용 여부 확인
+  const isUseForm = !!(register && name);
+
   return (
     <div className={`${styles.user_loginp} ${className}`}>
       <label>{label}</label>
@@ -38,10 +39,10 @@ function InputForm({
         type={type}
         readOnly={readOnly}
         placeholder={placeholder}
-        {...(isRHF ? register(name) : {})} // RHF 연결
+        {...(isUseForm ? register(name) : {})} // useForm 연결
         className="form-control"
-        value={isRHF ? undefined : internalValue} // RHF는 value 직접 설정하지 않음
-        onChange={isRHF ? undefined : handleChange} // RHF는 자체 onChange 사용
+        value={isUseForm ? undefined : internalValue} // useForm은 value 직접 설정하지 않음
+        onChange={isUseForm ? undefined : handleChange} // useForm은 자체 onChange 사용
       />
       {error && <p className="error-msg">{error.message}</p>}
     </div>

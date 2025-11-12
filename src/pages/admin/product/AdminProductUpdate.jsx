@@ -40,18 +40,20 @@ function AdminProductUpdate() {
     useEffect(() => {
         if(data) {
             reset({
-                productName : data.productName,
-                price : data.price,
-                sourceChain : data.sourceChain,
-                productType : data.productType,
-                promoType : data.promoType,
-                imageUrl : data.imageUrl,
+                productName : data.product.productName,
+                price : data.product.price,
+                sourceChain : data.product.sourceChain,
+                productType : data.product.productType,
+                promoType : data.product.promoType,
+                imageUrl : data.product.imageUrl,
             });
-            setViewImg(data.imageUrl); // ★ 초기 이미지 설정
-            setInputURL(data.imageUrl); // input에도 초기값 넣기
-            setChain(data.sourceChain);
+            setViewImg(data.product.imageUrl); // 초기 이미지 설정
+            setInputURL(data.product.imageUrl); // input에도 초기값 넣기
+            setChain(data.product.sourceChain);
         }
     }, [data, reset]);
+
+    console.log(data.product);
 
 
     const handleChange = (e) => setInputURL(e.target.value);
@@ -70,6 +72,7 @@ function AdminProductUpdate() {
 
     const onSubmit = (data) => {
         prdUpdateMutation.mutate(data);
+        navigate("/admin/product");
     }
 
     const watchedPromoType = watch("promoType");
