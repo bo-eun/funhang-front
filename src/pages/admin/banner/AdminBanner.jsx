@@ -62,12 +62,13 @@ function AdminBanner(props) {
   const checkBannerCount = () => {
     let useBannerCount = 0;
     rows.forEach((row) => {
-      row.useYn.checked ? ++useBannerCount : useBannerCount;
+      console.log(row)
+      row.useYn == 'Y' ? ++useBannerCount : useBannerCount;
     });
 
     console.log(useBannerCount);
 
-    useBannerCount > 5 ? true : false;
+    return useBannerCount;
   };
 
   // 폼데이터 만들기
@@ -76,7 +77,7 @@ function AdminBanner(props) {
 
     let fileLength = 0;
     rows.forEach((item, index) => {
-      if (item.file[0]) {
+      if (item.file && item.file[0]) {
         formData.append("files", item.file[0]);
         rows[index].fileIndex = fileLength++;
       } else {
@@ -99,8 +100,10 @@ function AdminBanner(props) {
   const updateBanners = async () => {
     const formData = makeFormData();
 
-    if (checkBannerCount()) {
-      alert("배너 노출 개수는 최대 5개 입니다.");
+    const useBannerCount = checkBannerCount();
+
+    if (useBannerCount > 5) {
+      alert(`배너 노출 개수는 최대 5개 입니다.\n현재 노출 개수 : ${useBannerCount}개`);
       return;
     }
 
@@ -114,6 +117,7 @@ function AdminBanner(props) {
 
   // 배너 삭제
   const deleteBanner = async (index) => {
+    // 배너 추가 삭제할 경우 요청 보내지 않고 리스트에서만 삭제
     if (!rows[index].bannerId) {
       remove(index);
       return;
@@ -150,7 +154,11 @@ function AdminBanner(props) {
     const fetchBannerList = async () => {
         const result = await adminApi.allList();
         const list = result.data;
-        replace(list);
+        if(list.length > 0) {
+          replace(list);
+        } else {
+          replace({ imgUrl: "", title: "", linkUrl: "", useYn: "Y" });
+        }
     };
 
     fetchBannerList();
@@ -178,7 +186,7 @@ function AdminBanner(props) {
       <form action="" autoComplete="off" onSubmit={handleSubmit(updateBanners)}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="table-body">
-            {(provided, snapshot) => {
+            {(provided) => {
               return (
                 <div
                   className="text-center"
@@ -257,8 +265,13 @@ function AdminBanner(props) {
                             <input
                               type="checkbox"
                               name="useYn"
-                              value="Y"
-                              {...register(`rows[${index}].useYn`)}
+                              value={"Y"}
+                              checked={rows[index].useYn === "Y"}
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? "Y" : "N";
+                                console.log(e.target.checked)
+                                setValue(`rows.${index}.useYn`, newValue, { shouldValidate: true, shouldDirty: true });
+                              }}
                             />
                           </div>
                           <div className="col-1">

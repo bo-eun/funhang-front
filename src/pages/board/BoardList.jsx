@@ -56,8 +56,8 @@ function BoardList(props) {
 
     useEffect(() => {
         const fetchList = async() => {
-            const list = await listMutate.mutateAsync();
-            setBoardList(list);
+            //const list = await listMutate.mutateAsync();
+            //setBoardList(list);
             // board테이블에 adminPick 들어가야함...
         };
         fetchList();
