@@ -43,6 +43,7 @@ export const useAdmin = () => {
       const response = await couponAdminApi.list();
       return response;
     },
+    mutationKey: ['coupon', 'list'], // 중복 요청 막음
     onSuccess: () => {
       console.log('쿠폰 리스트 불러오기 완료')
     },
@@ -57,6 +58,7 @@ export const useAdmin = () => {
       const response = await couponAdminApi.create(formData);
       return response;
     },
+    mutationKey: ['coupon', 'create'], // 중복 요청 막음
     onSuccess: () => {
       console.log('쿠폰 등록 성공')
     },
@@ -73,6 +75,7 @@ export const useAdmin = () => {
       console.log(response);
       return response;
     },
+    mutationKey: ['coupon', 'update'], // 중복 요청 막음
     onSuccess: () => {
       console.log('쿠폰 수정 성공')
     },
@@ -82,5 +85,21 @@ export const useAdmin = () => {
     },
   })  
 
-  return { createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation };
+  const deleteCouponMutation = useMutation({
+    mutationFn: async(couponIds) => {
+      const response = await couponAdminApi.delete(couponIds);
+      console.log(response);
+      return response;
+    },
+    mutationKey: ['coupon', 'delete'], // 중복 요청 막음
+    onSuccess: () => {
+      console.log('쿠폰 삭제 성공')
+    },
+    onError: (error) => {
+      console.error("쿠폰 삭제 실패:", error);
+      //alert(error.response?.data);
+    },
+  })
+
+  return { createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation };
 };
