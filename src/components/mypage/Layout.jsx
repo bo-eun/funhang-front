@@ -7,6 +7,7 @@ import { authStore } from '../../store/authStore';
 import { useQueries } from '@tanstack/react-query';
 import { wishApi } from '../../api/mypage/wishApi';
 import { pointApi } from '../../api/mypage/pointApi';
+import { couponApi } from '../../api/mypage/couponApi';
 
 
 function Layout() {
@@ -27,7 +28,6 @@ function Layout() {
     const [couponList,setCouponList] = useState([]);
     const [couponCount,setCouponCount] = useState(0);
 
-    console.log(nickname);
 
 
     // -------------------------
@@ -50,30 +50,30 @@ function Layout() {
                 },
                 enabled: isAuth,
             },
-            // 쿠폰 API가 있다면 추가
-            // {
-            //     queryKey: ['coupon', 'count'],
-            //     queryFn: async () => {
-            //         const res = await couponApi.count();
-            //         return res;
-            //     },
-            //     enabled: !!token,
-            // },
+            {
+                queryKey: ['coupon'],
+                queryFn: async () => {
+                    const res = await couponApi.list();
+                    return res;
+                },
+                enabled: isAuth,
+            },
         ],
     });
 
     // 결과값을 state에 반영
     useEffect(() => {
-        const [pointRes] = results;        
+        const [pointRes,couponRes] = results;
         // totalPoint 업데이트
         if (pointRes.data) {
             setPointList(pointRes.data.items  || []);
             setTotalPoint(pointRes.data.balance  || 0);
         }
-        // couponCount 업데이트 (필요시)
-        // if (couponRes.isSuccess && couponRes.data !== undefined) {
-        //     setCouponCount(couponRes.data);
-        // }
+        // couponCount 업데이트
+        if (couponRes.data) {
+            setCouponCount(couponRes.data.count || 0);
+            setCouponList(couponRes.data.items || []);
+        }
     }, [results]);
 
     const deleteUser = async () => {
@@ -104,7 +104,7 @@ function Layout() {
                     <li>
                         <Link to="/mypage/coupon">
                             <span>쿠폰</span>
-                            <p><b>1</b> 장</p>
+                            <p><b>{couponCount}</b> 장</p>
                         </Link>
                     </li>
                 </ul>
@@ -135,7 +135,7 @@ function Layout() {
                     </ul>
                 </Col>
                 <Col xs={10} className={styles.right_contents}>
-                    <Outlet context={{movePage, currentPage,setWishTotal,pointList}}/>
+                    <Outlet context={{movePage, currentPage,setWishTotal,pointList,totalPoint,couponList}}/>
                 </Col>
             </Row>
         </Container>

@@ -5,10 +5,17 @@ import { useQuery } from '@tanstack/react-query';
 import { pointApi } from '../../api/mypage/pointApi';
 import { useOutletContext } from 'react-router';
 import Pagination from '../../components/pagination/Pagination';
+import { couponAdminApi } from '../../api/coupon/couponAdminApi';
+import { usePoint } from '../../hooks/usePoint';
 
 function Point(props) {
     const [show, setShow] = useState(false);
-    const { movePage, currentPage, pointList } = useOutletContext();
+    const { movePage, currentPage, pointList, totalPoint,couponList } = useOutletContext();
+    const [admincouponList, setAdminCouponList]=useState([]);
+    const [couponId, setCouponId]=useState(0);
+    const [couponPoint, setCouponPoint]=useState(0);
+
+    const {changePoint}=usePoint();
 
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -18,9 +25,40 @@ function Point(props) {
         return `${yyyy}-${mm}-${dd}`;
     };
 
-    const coupon5 = 5000;
-    const coupon10 = 10000;
-    const handleClose = () => {
+    const pagedList = pointList.slice(currentPage * 10, (currentPage + 1) * 10);
+
+
+    const {data:couponData} = useQuery({
+        queryKey:['adminCouponList'],
+        queryFn:async()=>couponAdminApi.list(),
+    });
+
+    useEffect(()=>{
+        if(couponData){
+            console.log(couponData)
+            setAdminCouponList(couponData?.data.response.content || []);
+        }
+    },[couponData]);
+
+    console.log(admincouponList);
+
+
+    const handleChange=(e)=>{
+        setCouponId(Number(e.target.id));
+        setCouponPoint(Number(e.target.value));
+    }
+    
+    const changePointHandle = () => {
+
+        if(totalPoint<couponPoint){
+            alert('보유한 포인트를 확인해주세요.');
+            return;
+        }
+
+        changePoint.mutate(couponId);
+        setShow(false);
+    }
+    const handleClose=()=>{
         setShow(false);
     }
     const openCouponLayer = () => {
@@ -46,7 +84,7 @@ function Point(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {pointList?.map((item)=>(
+                    {pagedList?.map((item)=>(
                         <tr key={item.id}>
                             <td>{formatDate(item.createDate)}</td>
                             <td>{item.reason}</td>
@@ -57,9 +95,14 @@ function Point(props) {
             </table>
         </div>
 
-        <ShowModal show={show} handleClose={handleClose} title="쿠폰 교환"
+        <ShowModal 
+        show={show} 
+        handleEvent={changePointHandle}
+        handleClose={handleClose}
+        title="쿠폰 교환"
         className={styles.coupon_modal}
-        closeBtnName='교환'
+        eventBtnName='교환'
+        closeBtnName='닫기'
         >
             <div className={styles.notice_box}>
                 <p>※ 포인트 교환으로 받으신 상품권은 취소가 불가합니다.</p>
@@ -67,18 +110,19 @@ function Point(props) {
                 <p>※ 교환 후 마이페이지 보유 쿠폰 메뉴에서 확인해주세요.</p>
             </div>
             <div className={styles.coupon_list}>
-                <div className={styles.coupon_box}>
-                    <input type="radio" name="couponType" id="coupon5000" className='form-check' value={coupon5}/>
-                    <label htmlFor="coupon5000">
-                        {coupon5}원 쿠폰
-                    </label>
-                </div>
-                <div className={styles.coupon_box}>
-                    <input type="radio" name="couponType" id="coupon10000" className='form-check' value={coupon10}/>
-                    <label htmlFor="coupon10000">
-                        {coupon10}원 쿠폰
-                    </label>
-                </div>
+                {admincouponList?.map((coupon)=>(
+                    <div key={coupon.couponId} className={styles.coupon_box}>
+                        <input type="radio" 
+                            name="coupon"
+                            id={coupon.couponId} 
+                            className='form-check' 
+                            value={coupon.requiredPoint} 
+                            onChange={handleChange}/>
+                        <label htmlFor={coupon.couponId}>
+                            {coupon.couponName}
+                        </label>
+                    </div>
+                ))}
             </div>
         </ShowModal>
         <Pagination page={currentPage} totalRows={pointList.length} pagePerRows={10} movePage={movePage} />

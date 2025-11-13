@@ -5,6 +5,7 @@ export const adminUserApi = {
 
     list: async({
         searchText,
+        roleFilter,
         delYn,
         page,
         size
@@ -13,6 +14,7 @@ export const adminUserApi = {
         params.set('page', page);
         params.set('size', size);
         if(searchText) params.set('searchText',searchText);
+        if(roleFilter) params.set('roleFilter',roleFilter);
         if(delYn) params.set('delYn',delYn);
         const response = await api.get(
             `/api/v1/admin/user?${params.toString()}`
@@ -31,8 +33,8 @@ export const adminUserApi = {
         return response.data;
     },
     
-    disabledUser: async(userId,request)=>{
-        const response = await api.patch(`/api/v1/admin/${userId}/status`,request,
+    disabledUser: async(userId)=>{
+        const response = await api.put(`/api/v1/admin/${userId}`,null,
             {
                  headers: { "Content-Type": "application/json" },
             }

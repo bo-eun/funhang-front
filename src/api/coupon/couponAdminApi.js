@@ -24,4 +24,9 @@ export const couponAdminApi = {
         });
         return response;
     },
+    
+    requestList: async()=>{
+        const response = await api.get(`/api/v1/admin/user/coupon`);
+        return response.data.response;
+    }
 };

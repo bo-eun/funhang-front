@@ -32,6 +32,9 @@ function InputForm({
   // useForm 사용 여부 확인
   const isUseForm = !!(register && name);
 
+  // useForm 사용 시 register의 반환값을 가져옴
+  const registerProps = isUseForm ? register(name) : {};
+
   return (
     <div className={`${styles.user_loginp} ${className}`}>
       <label>{label}</label>
@@ -40,10 +43,12 @@ function InputForm({
         type={type}
         readOnly={readOnly}
         placeholder={placeholder}
-        {...(isUseForm ? register(name) : {})} // useForm 연결
+        {...registerProps} // register 값 자체를 넣어줌
         className="form-control"
-        value={isUseForm ? undefined : internalValue} // useForm은 value 직접 설정하지 않음
-        onChange={isUseForm ? undefined : handleChange} // useForm은 자체 onChange 사용
+        {...(!isUseForm && {
+          value: internalValue,
+          onChange: handleChange
+        })} //value,onChange에 조건문으로 걸러서 useForm의 값과 덮어씌워지지 않게 하기
         onWheel={(e) => e.target.blur()} //numberInput으로 설정 시 휠로 값이 설정되는거 막음
       />
       {error && <p className="error-msg">{error.message}</p>}
