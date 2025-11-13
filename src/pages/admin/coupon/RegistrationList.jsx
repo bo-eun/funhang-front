@@ -35,6 +35,8 @@ function List(props) {
         handleSubmit,
         formState: { errors },
         reset,
+        setValue,
+        getValues,
     } = useForm({
         resolver: yupResolver(schema),
     });
@@ -69,15 +71,23 @@ function List(props) {
         setShowModal(false);
     });
 
-    // // 쿠폰 수정
-    // const handleCouponUpdate = handleSubmit(async (formData)=>{
-    //     const couponId = currentCoupon.couponId;
-    //     console.log(formData)
-    //     await updateCouponMutation.mutateAsync(couponId, formData);
-    //     reset(); // 입력 초기화
-    //     setShowModal(false);
-    //     console.log(formData);
-    // });
+    // 쿠폰 이미지 미리보기
+    const handleFileChange = (e, index) => {
+        const file = e.target.files[0];
+        if (file) {
+        // 이미지 미리보기 URL 생성
+        const newUrl = URL.createObjectURL(file);
+        const currentRows = getValues("rows");
+        const newRows = [...currentRows];
+        newRows[index] = {
+            ...newRows[index],
+            file: [file],
+            imgUrl: newUrl,
+        };
+        setValue("rows", newRows);
+        }
+    };
+
 
 
     // 쿠폰 리스트 가져오기
@@ -93,12 +103,12 @@ function List(props) {
             });
             setColumns(columns);
         }
-
         fetchList();
+        setValue();
     }, [])
 
 
-
+    // 현재 쿠폰 정보 가져오기
     useEffect(() => {
         if(currentCoupon) {
             reset({
@@ -145,6 +155,7 @@ function List(props) {
                         label={"쿠폰명"} 
                         placeholder={"쿠폰명을 입력해주세요"}
                         name={"couponName"} 
+                        error={errors}
 
                      />
                     <InputForm 
@@ -152,6 +163,7 @@ function List(props) {
                         label={"쿠폰 설명"} 
                         placeholder={"쿠폰 설명을 입력해주세요"} 
                         name={"description"} 
+                        error={errors}
                         className='mt-4' 
                     />
                     <InputForm 
@@ -159,6 +171,7 @@ function List(props) {
                         label={"쿠폰 금액"} 
                         placeholder={"쿠폰 발급 시 차감 될 포인트를 입력해주세요"} 
                         name={"requiredPoint"} 
+                        error={errors}
                         className='mt-4' 
                     />
                     <label className='file_box' htmlFor='file' style={{
@@ -177,6 +190,7 @@ function List(props) {
                         id={'file'}
                         label={"쿠폰 이미지"} 
                         name={"file"} 
+                        error={errors}
                         className='mt-4' 
                     />
                 </form>
