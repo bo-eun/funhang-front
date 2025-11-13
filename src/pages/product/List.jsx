@@ -6,7 +6,6 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
 import Pagination from '../../components/pagination/Pagination';
-import { wishStore } from '../../store/wishStore';
 
 function List() {
     const location = useLocation();

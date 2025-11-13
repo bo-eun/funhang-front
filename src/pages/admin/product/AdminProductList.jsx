@@ -101,7 +101,7 @@ function AdminProductList(props) {
         }
     },[data]);
 
-    console.log(prdList);
+    console.log(data);
 
     return (
         <>

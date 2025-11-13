@@ -40,6 +40,7 @@ export const productApi = {
         const response = await api.get(`${url}?${params.toString()}`);
         return response.data.response;
     },
+    
     //상품 디테일 
     getDetail : async({
         crawlId,

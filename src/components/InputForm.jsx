@@ -44,6 +44,7 @@ function InputForm({
         className="form-control"
         value={isUseForm ? undefined : internalValue} // useForm은 value 직접 설정하지 않음
         onChange={isUseForm ? undefined : handleChange} // useForm은 자체 onChange 사용
+        onWheel={(e) => e.target.blur()} //numberInput으로 설정 시 휠로 값이 설정되는거 막음
       />
       {error && <p className="error-msg">{error.message}</p>}
     </div>

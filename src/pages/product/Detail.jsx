@@ -11,16 +11,18 @@ import { productApi } from '../../api/product/productApi';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useParams } from 'react-router';
 import { authStore } from '../../store/authStore';
-import { wishStore } from '../../store/wishStore';
+import { useWish } from '../../hooks/useWish';
+import { toast } from 'react-toastify';
 
 function Detail() {
     const {isAuthenticated, userRole} = authStore();
-    const { toggleWish } = wishStore();
+    const isAuth = authStore().isAuthenticated();  // boolean
+    const role = authStore().userRole;
     const {productId} = useParams();
     const [prd,setPrd] = useState([]);
+    const [prdComment,setPrdComment] = useState([]);
     const [mapName, setMapName] = useState('');
-    const list = wishStore(state => state.list);
-    const wishActive = list.some(item => item.crawlId === Number(productId));
+    const { toggleWishMutation, isWish } = useWish();
     
     const CHAIN_MAP = {
         SEV: '7ELEVEN',
@@ -38,7 +40,8 @@ function Detail() {
     
     useEffect(()=>{
         if(data){
-            setPrd(data ||[]);
+            setPrd(data.product ||[]);
+            setPrdComment(data.comments ||[])
         }
     }, [data]);
 
@@ -62,15 +65,18 @@ function Detail() {
         alert('주소가 클립보드에 복사되었습니다');
     }
 
-    const handleWishClick = async (e) => {
-        if(!isAuthenticated){
-            alert('로그인 후 찜해주세요!');
-            return;
-        }else if(userRole==="ROLE_ADMIN"){
-            alert('관리자는 찜 기능을 이용할 수 없습니다.');
+    const handleWishClick = (e) => {
+        e.preventDefault();
+        if (!isAuth) {
+            toast.info("로그인 후 찜해주세요!");
             return;
         }
-        await toggleWish(prd);
+        else if (role === "ROLE_ADMIN") {
+            toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
+            return;
+        }
+        if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
+        toggleWishMutation.mutate(prd);
     };
 
     return (
@@ -83,7 +89,7 @@ function Detail() {
                         className={styles.wish_btn}
                         onClick={handleWishClick}
                     >
-                        <img src={wishActive ? wishiActiveIcon : wishiIcon} alt="" />
+                        <img src={isWish(prd.crawlId) ? wishiActiveIcon : wishiIcon} alt="" />
                     </button>
                 </div>
                 <div className={styles.info_box}>
@@ -108,7 +114,9 @@ function Detail() {
                 </div>
             </section>
             
-            <CommentLayout />
+            <CommentLayout 
+                comments={prdComment}
+            />
             
         </section>
     );

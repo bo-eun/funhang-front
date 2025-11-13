@@ -12,6 +12,7 @@ export const authStore = create(
             userId : null,
             userName : null,
             userRole : null,
+            nickname : null,
 
             //로그인 여부 판단 함수 
             isAuthenticated : () => !!get().token,
@@ -20,13 +21,14 @@ export const authStore = create(
             getUserRole : () => get().userRole,
 
             //로그인 후 정보를 저장하는 함수 
-            setLogin: ({token, userId, userName, userRole}) => {
+            setLogin: ({token, userId, userName, userRole, nickname}) => {
                     set((state)=>{
                         
                         state.token = token;
                         state.userId = userId;
                         state.userName = userName;
-                        state.userRole = userRole
+                        state.userRole = userRole;
+                        state.nickname = nickname;
                 })
             },
 
@@ -44,7 +46,8 @@ export const authStore = create(
                     state.token = null;
                     state.userId = null;
                     state.suerName = null;
-                    state.userRole = null
+                    state.userRole = null;
+                    state.nickname = null;
             }),
 
     })),
@@ -55,7 +58,8 @@ export const authStore = create(
             token : state.token,
             userId: state.userId,
             userName : state.userName,
-            userRole : state.userRole
+            userRole : state.userRole,
+            nickname : state.nickname,
         }),
     })
 );

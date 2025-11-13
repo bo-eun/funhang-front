@@ -7,7 +7,7 @@ export const usePoint = () => {
     const navigate = useNavigate();
 
     const grantPointMutation = useMutation({
-        mutationFn:(formData)=>adminUserApi.givePoint(formData),
+        mutationFn:({ userId, amount, reason })=>adminUserApi.givePoint(userId, amount, reason),
         onSuccess : ()=>{
             alert("포인트 지급 완료");
             queryClient.invalidateQueries({queryKey:['user']});
@@ -20,5 +20,5 @@ export const usePoint = () => {
     })
 
 
-    return{};
+    return{grantPointMutation};
 }
