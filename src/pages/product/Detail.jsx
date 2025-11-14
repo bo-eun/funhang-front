@@ -15,8 +15,7 @@ import { useWish } from '../../hooks/useWish';
 import { toast } from 'react-toastify';
 
 function Detail() {
-    const {isAuthenticated, userRole} = authStore();
-    const isAuth = authStore().isAuthenticated();  // boolean
+    const isAuth = authStore().isAuthenticated();
     const role = authStore().userRole;
     const {productId} = useParams();
     const [prd,setPrd] = useState([]);
@@ -116,6 +115,7 @@ function Detail() {
             
             <CommentLayout 
                 comments={prdComment}
+                productId={productId}
             />
             
         </section>

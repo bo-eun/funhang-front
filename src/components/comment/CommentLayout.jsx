@@ -2,16 +2,32 @@ import React, { useState } from 'react';
 import CommentItem from './CommentItem';
 import styles from '@/components/comment/comment.module.css';
 import BtnForm from '../btn/BtnForm';
+import { useQuery } from '@tanstack/react-query';
+import { commentApi } from '../../api/comment/commentApi';
+import { useComment } from '../../hooks/useComment';
 
-function CommentLayout({ comments, onAddComment, onDeleteComment }) {
+function CommentLayout({ comments , productId }) {
     const [text, setText] = useState('');
+    const {addCommentMutation} = useComment();
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!text.trim()) return;
-
-        onAddComment(text);
+        if (!text.trim()) return alert('댓글을 입력해주세요');
+        onAddComment();
         setText('');
     };
+
+    console.log(text);
+    const onAddComment=()=>{
+        addCommentMutation.mutate({crawlId:productId,content:text});
+    }
+
+    const handleDelete = ()=>{
+        alert('')
+    }
+    const handleUpdate = ()=>{
+        alert('')
+    }
     return (
         
             <section className={styles.comment}>
@@ -19,9 +35,10 @@ function CommentLayout({ comments, onAddComment, onDeleteComment }) {
                 <ul className={styles.comment_list}>
                     {comments?.map((comment) => (
                         <CommentItem
-                            key={comment.id}
+                            key={comment.commentId}
                             comment={comment}
-                            onDelete={() => onDeleteComment(comment?.id)}
+                            onDelete={() => handleDelete(comment?.commentId)}
+                            onUpdate={() => handleUpdate(comment?.commentId)}
                         />
                     ))}
                 </ul>

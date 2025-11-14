@@ -7,11 +7,6 @@ export const wishApi= {
         return response.data.response;
     },
 
-    count: async () => {
-        const response = await api.get(`/api/v1/user/wish`);
-        return response.data.response.count;
-    },
-
     add: async(crawlId)=>{
 
         const response = await api.post(`/api/v1/user/wish?crawlId=${crawlId}`);

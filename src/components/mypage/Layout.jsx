@@ -8,10 +8,12 @@ import { useQueries } from '@tanstack/react-query';
 import { wishApi } from '../../api/mypage/wishApi';
 import { pointApi } from '../../api/mypage/pointApi';
 import { couponApi } from '../../api/mypage/couponApi';
+import { useWish } from '../../hooks/useWish';
 
 
 function Layout() {
-    const {userName, nickname} = authStore();
+    const {userName} = authStore();
+    const { wishCount } = useWish();
     const isAuth = authStore().isAuthenticated(); 
     const location = useLocation();
     const navigate = useNavigate();
@@ -20,7 +22,6 @@ function Layout() {
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
 
     const { deleteUserMutation } = useMypage();
-    const [wishTotal,setWishTotal] = useState(0);
 
     const [pointList,setPointList] = useState([]);
     const [totalPoint,setTotalPoint] = useState(0);
@@ -92,7 +93,7 @@ function Layout() {
                     <li>
                         <Link to="/mypage/wish">
                             <span>찜한상품</span>
-                            <p><b>{wishTotal}</b> 개</p>
+                            <p><b>{wishCount}</b> 개</p>
                         </Link>
                     </li>
                     <li>
@@ -135,7 +136,7 @@ function Layout() {
                     </ul>
                 </Col>
                 <Col xs={10} className={styles.right_contents}>
-                    <Outlet context={{movePage, currentPage,setWishTotal,pointList,totalPoint,couponList}}/>
+                    <Outlet context={{movePage, currentPage,pointList,totalPoint,couponList}}/>
                 </Col>
             </Row>
         </Container>

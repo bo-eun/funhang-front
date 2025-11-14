@@ -7,6 +7,7 @@ import { useOutletContext } from 'react-router';
 import Pagination from '../../components/pagination/Pagination';
 import { couponAdminApi } from '../../api/coupon/couponAdminApi';
 import { usePoint } from '../../hooks/usePoint';
+import { formatDate } from '../../hooks/utils';
 
 function Point(props) {
     const [show, setShow] = useState(false);
@@ -16,14 +17,6 @@ function Point(props) {
     const [couponPoint, setCouponPoint]=useState(0);
 
     const {changePoint}=usePoint();
-
-    const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
-        const dd = String(date.getDate()).padStart(2, '0');
-        return `${yyyy}-${mm}-${dd}`;
-    };
 
     const pagedList = pointList.slice(currentPage * 10, (currentPage + 1) * 10);
 
@@ -35,12 +28,10 @@ function Point(props) {
 
     useEffect(()=>{
         if(couponData){
-            console.log(couponData)
             setAdminCouponList(couponData?.data.response.content || []);
         }
     },[couponData]);
 
-    console.log(admincouponList);
 
 
     const handleChange=(e)=>{
