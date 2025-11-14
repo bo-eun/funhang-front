@@ -29,6 +29,7 @@ import AdminCategory from "../pages/admin/category/AdminCategory";
 import AdminCouponRegistList from "../pages/admin/coupon/RegistrationList";
 import AdminCouponGrantList from "../pages/admin/coupon/GrantList";
 import AdminBanner from "../pages/admin/banner/AdminBanner";
+import UserProtectedRoute from "../components/mypage/UserProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -108,7 +109,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "mypage",
-        element: <MypageLayout />,
+        element: (
+          <UserProtectedRoute>
+            <MypageLayout />
+          </UserProtectedRoute>
+        ),
         children: [
           {
             index: true,
@@ -183,7 +188,7 @@ export const router = createBrowserRouter([
           },  
         ],
       },
-      // ✅ 접근 차단 페이지 등록
+      // 접근 차단 페이지 등록
       {
         path: "not-authorized",
         element: <NotAuthorized />,

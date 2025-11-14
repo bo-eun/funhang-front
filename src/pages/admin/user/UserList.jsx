@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styles from '@/pages/admin/user/user.module.css';
 import { usePoint } from '../../../hooks/usePoint';
+import { useUser } from '../../../hooks/useUser';
 
 const schema = yup.object().shape({
     givePoint: yup.number().required("지급 할 포인트를 입력해주세요"),
@@ -22,13 +23,15 @@ function UserList() {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const {grantPointMutation} = usePoint();
+    const {disabledUserMutation} = useUser();
     const queryClient = useQueryClient();
 
     // 상태
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [userList, setUserList] = useState([]);
-    //필터
+    //필터 및 검색
+    const [roleFilterQuery, setRoleFilterQuery] = useState(queryParams.get('roleFilter') ?? '');
     const [delYnQuery, setDelYnQuery] = useState(queryParams.get('delYn') ?? '');
     const searchQuery = queryParams.get('searchText') ?? '';
     //페이징
@@ -53,9 +56,10 @@ function UserList() {
     }, [navigate]);
 
     const { data:user } = useQuery({
-        queryKey: ['user', searchQuery, delYnQuery, currentPage],
+        queryKey: ['user', searchQuery, roleFilterQuery,delYnQuery, currentPage],
         queryFn: () => adminUserApi.list({
             searchText: searchQuery,
+            roleFilter: roleFilterQuery || null,
             delYn: delYnQuery || null,
             page: currentPage,
             size: 10
@@ -75,6 +79,12 @@ function UserList() {
         updateUrl({ searchText: newQuery, page: 0 });
     };
 
+    // role 필터 변경
+    const handleRoleChange = (e) => {
+        const value = e.target.value;
+        setRoleFilterQuery(value);
+        updateUrl({ roleFilter: value || null, page: 0 });
+    };
     // delYn 필터 변경
     const handleDelYnChange = (e) => {
         const value = e.target.value;
@@ -107,11 +117,10 @@ function UserList() {
             reason: formData.pointReason,
         },{ 
             onSuccess: () => {
-            queryClient.invalidateQueries(['user']);
             setShowModal(false);
         }});
     })
-    //input창 모달 창 열면 초기화
+    //input 모달 창 열면 초기화
     useEffect(() => {
     if (showModal && selectedUser) {
         reset({
@@ -126,19 +135,23 @@ function UserList() {
     const movePage = (newPage) => updateUrl({ page: newPage });
 
     // 회원 비활성화 버튼
-    const deleteBtn = () => {
-        if (confirm('정말 탈퇴로 변경하시겠습니까?')) {
-            alert('탈퇴 처리 완료');
+    const deleteBtn = (userId) => {
+        if (confirm('비활성화시 되돌릴 수 없습니다 진행하시겠습니까?')) {
+            disabledUserMutation.mutate({userId})
+        }else{
+            return;
         }
     };
+
+    console.log(userList);
 
     return (
         <>
             <div className='base_search_bg'>
-                <select className="form-select">
+                <select className="form-select" value={roleFilterQuery} onChange={handleRoleChange}>
                     <option value="">전체보기</option>
-                    <option value="">회원</option>
-                    <option value="">관리자</option>
+                    <option value="USER">회원</option>
+                    <option value="ADMIN">관리자</option>
                 </select>
 
                 <select className="form-select" value={delYnQuery} onChange={handleDelYnChange}>
@@ -160,17 +173,17 @@ function UserList() {
                     }}
                     bottomBtn={{
                         type: 'button',
-                        onClick: deleteBtn,
+                        onClick: ()=>deleteBtn(user.userId),
                         name: '비활성',
-                        style: { backgroundColor: user.delYn ? '' : '#c9c9c9' },
-                        disabled: !user.delYn
+                        style: { backgroundColor: user.delYn === 'N' ? '' : '#c9c9c9' },
+                        disabled: user.delYn === 'Y'
                     }}
                 >
                     <div className={styles.user_info}>
                         <p className={styles.userRole}>{user.userRole}</p>
                         <p className={styles.userId}>
                             {user.userId}
-                            {!user.delYn && <span className={styles.deleteAcc}>탈퇴</span>}
+                            {user.delYn === 'Y' && <span className={styles.deleteAcc}>탈퇴</span>}
                         </p>
                         <p className={styles.userName}>{user.userName}</p>
                         <p className={styles.createAt}>{user.createAt}</p>
@@ -197,8 +210,12 @@ function UserList() {
                     <InputForm className={styles.info} label='생년월일' readOnly defaultValue={selectedUser?.birth|| ''} />
                     <InputForm className={styles.info} label='핸드폰 번호' readOnly defaultValue={selectedUser?.phone|| ''} />
                     <InputForm className={styles.info} type='number' label='보유 포인트' readOnly defaultValue={selectedUser?.pointBalance|| ''} />
-                    <InputForm className={styles.info} type='number' label='포인트 지급' name='givePoint' register={register} error={errors.givePoint} />
-                    <InputForm className={styles.info} type='text' label='포인트 지급 사유' name='pointReason' register={register} error={errors.pointReason} />
+                    {selectedUser.delYn === 'N' &&
+                    <>
+                        <InputForm className={styles.info} type='number' label='포인트 지급' name='givePoint' register={register} error={errors.givePoint} />
+                        <InputForm className={styles.info} type='text' label='포인트 지급 사유' name='pointReason' register={register} error={errors.pointReason} />
+                    </>
+                    }
                 
                 </ShowModal>
             )}

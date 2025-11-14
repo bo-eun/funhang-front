@@ -60,7 +60,8 @@ export const useAdmin = () => {
     },
     mutationKey: ['coupon', 'create'], // 중복 요청 막음
     onSuccess: () => {
-      console.log('쿠폰 등록 성공')
+      console.log('쿠폰 등록 성공');
+      queryClient.invalidateQueries(["adminCouponList"]);
     },
     onError: (error) => {
       console.error("쿠폰 등록 실패:", error);

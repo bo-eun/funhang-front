@@ -12,6 +12,8 @@ function WishList() {
     const { movePage, currentPage, setWishTotal } = useOutletContext();
     const [wish, setWish]=useState([]);
     const { wishList } = useWish();
+    const pagedList = wish.slice(currentPage * 12, (currentPage + 1) * 12);
+
 
     useEffect(()=>{
         if(wishList){
@@ -29,8 +31,8 @@ function WishList() {
             </p>
 
             <ul className={styles.item_list}>
-                {wish && wish.length > 0 ?(
-                    wish.map((product) => (
+                {pagedList && pagedList.length > 0 ?(
+                    pagedList.map((product) => (
                         <li key={product.crawlId}>
                         <Item
                             key={product.crawlId}
