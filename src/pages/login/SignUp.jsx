@@ -7,6 +7,7 @@ import InputForm from "../../components/InputForm";
 import BtnForm from "../../components/btn/BtnForm";
 import styles from '@/pages/login/login.module.css';
 import { loginApi } from "../../api/login/loginApi";
+import { useLogin } from "../../hooks/useLogin";
 
 const signUpFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
@@ -20,6 +21,8 @@ const signUpFields = [
 ];
 
 function SignUp(props) {
+
+    const { joinMutation } = useLogin();
     
     const schema = yup.object().shape({
         userId: yup.string().required("아이디를 입력하십시오"),
@@ -28,12 +31,11 @@ function SignUp(props) {
         passwdCk: yup.string().required("비밀번호를 입력하십시오")
             .oneOf([yup.ref("passwd")], "비밀번호가 일치하지 않습니다"),
         userName: yup.string().required("이름을 입력하십시오"),
-        email: yup.string().required("이메일을 입력하십시오"),
+        email: yup.string().email("올바른 이메일 형식이 아닙니다.").required("이메일을 입력하십시오."),
         phone: yup.string().required("휴대폰 번호를 입력하십시오")
             .matches(/^[0-9]+$/, "숫자만 입력 가능합니다")
             .min(10, "10자리 이상 입력해주세요")
             .max(11, "11자리 이하로 입력해주세요"),
-        nickname: yup.string().required("닉네임을 입력하십시오"),
         birth: yup.string().required("생년월일을 입력하십시오"),
         
     });
@@ -46,20 +48,15 @@ function SignUp(props) {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
-        try {
-            console.log("폼 데이터:", data);
-            loginApi.create(data);
-            reset();
-            alert('회원가입이 완료되었습니다. 로그인 후 시작해보세요.')
-            location.href = '/login';
-        } catch(error) {
-            console.log(error);
-        }
+    const onSubmit = async (data) => {
+        await joinMutation.mutateAsync(data);
+        reset();
+        alert('회원가입이 완료되었습니다. 로그인 후 시작해보세요.')
+        location.href = '/login';
+
     };
 
     return (
-        
             <form onSubmit={handleSubmit(onSubmit)}>
                 
                 <section className={styles.user_loginp_wrap}>

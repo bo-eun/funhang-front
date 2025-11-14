@@ -1,27 +1,45 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
 import { adminApi } from "../api/banner/bannerAdminApi";
-import { authStore } from "../store/authStore";
 import { couponAdminApi } from "../api/coupon/couponAdminApi";
+import { loadingStore } from "../store/loadingStore";
 
 export const useAdmin = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
-  const token = authStore.getState().token;
+  const setLoading = loadingStore.getState().setLoading; // 로딩 상태 변경 메서드
+
+
+  const getBannerListMutation = useMutation({
+    mutationFn: async () => {
+        setLoading(true);
+        const response = await adminApi.allList();
+        return response;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
+    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+    }
+  });
 
   const createBannerMutation = useMutation({
     mutationFn: async (formData) => {
+        setLoading(true);
         const response = await adminApi.create(formData);
         return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
     },
-    onError: (error) => {
-      console.error("배너 등록 실패:", error);
-      alert(error?.message || "배너 등록 중 오류가 발생했습니다.");
-    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }
   });
 
   const deleteBannerMutation = useMutation({
@@ -29,13 +47,12 @@ export const useAdmin = () => {
       const response = await adminApi.delete(bannerId);
       return response;
     },
-    onSuccess: () => {
-      alert("배너가 삭제되었습니다!");
-    },
-    onError: (error) => {
-      console.error("배너 삭제 실패:", error);
-      alert(error.response?.data);
-    },    
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }    
   });
 
   const getCouponListMutation = useMutation({
@@ -44,13 +61,12 @@ export const useAdmin = () => {
       return response;
     },
     mutationKey: ['coupon', 'list'], // 중복 요청 막음
-    onSuccess: () => {
-      console.log('쿠폰 리스트 불러오기 완료')
-    },
-    onError: (error) => {
-      console.error("쿠폰 리스트 불러오기 실패:", error);
-      alert(error.response?.data);
-    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }     
   });
 
   const createCouponMutation = useMutation({
@@ -59,14 +75,12 @@ export const useAdmin = () => {
       return response;
     },
     mutationKey: ['coupon', 'create'], // 중복 요청 막음
-    onSuccess: () => {
-      console.log('쿠폰 등록 성공');
-      queryClient.invalidateQueries(["adminCouponList"]);
-    },
-    onError: (error) => {
-      console.error("쿠폰 등록 실패:", error);
-      //alert(error.response?.data);
-    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }    
   });
 
   const updateCouponMutation = useMutation({
@@ -77,13 +91,12 @@ export const useAdmin = () => {
       return response;
     },
     mutationKey: ['coupon', 'update'], // 중복 요청 막음
-    onSuccess: () => {
-      console.log('쿠폰 수정 성공')
-    },
-    onError: (error) => {
-      console.error("쿠폰 수정 실패:", error);
-      //alert(error.response?.data);
-    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }    
   })  
 
   const deleteCouponMutation = useMutation({
@@ -93,14 +106,13 @@ export const useAdmin = () => {
       return response;
     },
     mutationKey: ['coupon', 'delete'], // 중복 요청 막음
-    onSuccess: () => {
-      console.log('쿠폰 삭제 성공')
-    },
-    onError: (error) => {
-      console.error("쿠폰 삭제 실패:", error);
-      //alert(error.response?.data);
-    },
+    onSettled: (data, error) => {
+      console.log(data);
+      console.log(error);
+      setLoading(false);
+      data && !error ? alert(data.resultMessage) : alert(error.response);
+    }      
   })
 
-  return { createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation };
+  return { getBannerListMutation, createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation };
 };

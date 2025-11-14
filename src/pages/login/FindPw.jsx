@@ -7,6 +7,8 @@ import InputForm from "../../components/InputForm";
 import ShowModal from "../../components/modal/ShowModal";
 import styles from '@/pages/login/login.module.css';
 import { useLogin } from "../../hooks/useLogin";
+import Loading from "../../components/Loading";
+
 
 const findPwFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
@@ -19,11 +21,12 @@ const chgPwFields = [
 
 function FindPw(props) {
     const [checkPw, setCheckPw] = useState(false);
+    const [checkCode, setCheckCode] = useState(false);
     const navigate = useNavigate();
     
     const [show, setShow] = useState(false);
 
-    const { findPwMutation, newPwMutation } = useLogin();
+    const { findPwMutation, confirmEmailCodeMutation, newPwMutation } = useLogin();
 
     const handleClose = () => {
         setShow(false)
@@ -34,6 +37,10 @@ function FindPw(props) {
         userId: yup.string().required("아이디를 입력하십시오"),
         email: yup.string().required("이메일을 입력하십시오"),
     });
+
+    const sendEmailSchema = yup.object().shape({
+        code: yup.string().required("인증 코드를 입력하십시오"),
+    })
 
     const changePwSchema = yup.object().shape({
         newPassword: yup
@@ -49,28 +56,31 @@ function FindPw(props) {
     const findPwForm = useForm({
         resolver: yupResolver(findSchema),
     });
+    const checkEmailForm = useForm({
+        resolver: yupResolver(sendEmailSchema),
+    })
     const changePwForm = useForm({
         resolver: yupResolver(changePwSchema),
     });
 
+    // 이름, 이메일 확인, 이메일로 인증번호 전송
     const onFindPwSubmit = async (formData) => {
-        try {
-            await findPwMutation.mutateAsync(formData);
-            setCheckPw(true);
-            findPwForm.reset();
-        } catch(error) {
-            console.log(error);
-        }
+        await findPwMutation.mutateAsync(formData);
+        setCheckPw(true);
+        findPwForm.reset();
     };
 
+    // 인증번호 확인
+    const onConfirmEmailCodeSubmit = async(formData) => {
+        await confirmEmailCodeMutation.mutateAsync(formData);
+        setCheckCode(true);
+    }
+
+    // 비밀번호 변경
     const onPwChangeSubmit = async(formData) => {
-        try {
-            await newPwMutation.mutateAsync(formData);
-            setShow(true);
-            changePwForm.reset();
-        } catch (error) {
-            console.log(error);
-        }
+        await newPwMutation.mutateAsync(formData);
+        setShow(true);
+        changePwForm.reset();
     }
     return (
         <>
@@ -94,7 +104,24 @@ function FindPw(props) {
                 </div>
             </form>
             )}
-            {checkPw && (
+            {(checkPw && !checkCode) &&
+            <form onSubmit={checkEmailForm.handleSubmit(onConfirmEmailCodeSubmit)}>
+                <InputForm
+                key={"email_01"}
+                name={"code"}
+                id={"code"}
+                type={"text"}
+                placeholder={"인증 코드를 입력하세요"}
+                register={checkEmailForm.register}
+                error={checkEmailForm.formState.errors["code"]}
+                 />
+                 <div className='long_btn_bg mt-4'>
+                    <button type="submit" className="btn_50_b">이메일 인증</button>
+                 </div>
+            </form>
+            }
+
+            {(checkPw && checkCode) && (
                 <form className={styles.user_loginp_wrap} onSubmit={changePwForm.handleSubmit(onPwChangeSubmit)} autoComplete="off">
                     <div className={styles.user_loginp_wrap}>
                         {chgPwFields.map((field) => (
@@ -111,16 +138,19 @@ function FindPw(props) {
                     </div>
                 </form>
             )}
-                {/* 모달 */}
-                <ShowModal
-                    show={show}
-                    handleClose={handleClose}
-                    closeBtnName='닫기'
-                >
-                    비밀번호가 변경되었습니다.<br />
-                    새 비밀번호로 로그인해 주세요.
-                </ShowModal>
-            </>
+            {/* 모달 */}
+            <ShowModal
+                show={show}
+                handleClose={handleClose}
+                closeBtnName='닫기'
+            >
+                비밀번호가 변경되었습니다.<br />
+                새 비밀번호로 로그인해 주세요.
+            </ShowModal>
+            {(findPwMutation.isLoading || confirmEmailCodeMutation.isLoading || newPwMutation.isLoading) &&
+                <Loading />
+            }
+        </>
     );
 }
 

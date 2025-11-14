@@ -25,9 +25,17 @@ export const loginApi = {
     },
 
     findPw: async(formData) => {
-        const response = api.post(`/api/v1/user/password/verify`, formData, {
+        const response = api.post(`/api/v1/user/password/findPw`, formData, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            credentials: 'include'// 세션 쿠키 보내기
+            withCredentials: true // 세션 쿠키 보내기
+        });
+        return response;
+    },
+
+    confirmEmailCode: async(formData) => {
+        const response = api.post(`/api/v1/user/password/confirmCode`, formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            withCredentials: true // 세션 쿠키 보내기
         });
         return response;
     },
@@ -35,7 +43,7 @@ export const loginApi = {
     newPw: async(formData) => {
         const response = api.post(`/api/v1/user/password/reset`, formData, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            credentials: 'include'// 세션 쿠키 보내기
+            withCredentials: true // 세션 쿠키 보내기
         });
         return response;
     }

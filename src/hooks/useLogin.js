@@ -10,6 +10,20 @@ export const useLogin = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
+    const joinMutation = useMutation({
+        mutationFn: async(formData) => {
+            const response = await loginApi.create(formData);
+            return response;
+        },
+        onSuccess : (data) =>{
+            console.log(data);
+        },
+        onError : (error) =>{
+            console.error('회원가입 실패', error);
+            alert(error.response.data.response);
+        }
+    })
+
     const loginMutation =  useMutation({
         mutationFn :  async (formData) => {
             const response = await loginApi.login(formData);
@@ -60,14 +74,20 @@ export const useLogin = () => {
         },
 
         onSuccess: (data) => {
-            console.log("비밀번호 찾기 성공");
-            console.log(data);
+            alert(data);
         },
         onError: (error) => {
             console.error("비밀번호 찾기 실패", error);
             alert(error.response.data.response);
         }
-    })
+    });
+
+    const confirmEmailCodeMutation = useMutation({
+        mutationFn: async(formData) => {
+            const response = await loginApi.confirmEmailCode(formData);
+            return response.data.response;
+        }
+    });
 
     const newPwMutation = useMutation({
         mutationFn: async(formData) => {
@@ -85,5 +105,5 @@ export const useLogin = () => {
         }
     })    
 
-    return { loginMutation, findIdMutation, findPwMutation, newPwMutation };
+    return { joinMutation, loginMutation, findIdMutation, findPwMutation, newPwMutation, confirmEmailCodeMutation };
 }

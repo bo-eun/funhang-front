@@ -34,7 +34,7 @@ export const useMypage = () => {
         },
 
         onSuccess: (data) => {
-            console.log("내 정보가 수정되었습니다.");
+            alert("내 정보가 수정되었습니다.");
         },
         onError: (error) => {
             alert(error.response.data.response);

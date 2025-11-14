@@ -9,6 +9,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAdmin } from "../../../hooks/useAdmin";
 import { adminApi } from "../../../api/banner/bannerAdminApi";
+import Loading from "../../../components/Loading";
+import { loadingStore } from "../../../store/loadingStore";
 function AdminBanner(props) {
   const schema = yup.object().shape({
     rows: yup.array().of(
@@ -31,7 +33,6 @@ function AdminBanner(props) {
     getValues,
     watch,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -45,7 +46,22 @@ function AdminBanner(props) {
   });
 
   const rows = watch("rows"); // form 상태에서 직접 가져오기
-  const { createBannerMutation, deleteBannerMutation } = useAdmin();
+
+  const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+
+  const { getBannerListMutation, createBannerMutation, deleteBannerMutation } = useAdmin();
+
+  // 배너 등록
+  const fetchBannerList = async () => {
+      const result = await getBannerListMutation.mutateAsync();
+      const list = result.data;
+      if(list.length > 0) {
+        replace(list);
+      } else {
+        replace({ imgUrl: "", title: "", linkUrl: "", useYn: "Y" });
+      }
+  };
+
 
   // 드래그 끝나고 리스트 정렬 수정
   const handleDragEnd = (result) => {
@@ -107,12 +123,8 @@ function AdminBanner(props) {
       return;
     }
 
-    const result = await createBannerMutation.mutateAsync(formData); // 배너 등록
-    
-    if (result?.resultCode === 200) {
-      replace(rows);
-      alert("배너 수정이 완료되었습니다.");
-    }
+    await createBannerMutation.mutateAsync(formData); // 배너 등록
+    fetchBannerList();
   };
 
   // 배너 삭제
@@ -128,7 +140,6 @@ function AdminBanner(props) {
     const result = await deleteBannerMutation.mutateAsync(
       rows[index].bannerId
     );
-    console.log(result);
     remove(index);
   };
 
@@ -151,20 +162,11 @@ function AdminBanner(props) {
 
   // 서버에서 배너 리스트 받아오기
   useEffect(() => {
-    const fetchBannerList = async () => {
-        const result = await adminApi.allList();
-        const list = result.data;
-        if(list.length > 0) {
-          replace(list);
-        } else {
-          replace({ imgUrl: "", title: "", linkUrl: "", useYn: "Y" });
-        }
-    };
-
     fetchBannerList();
   }, [replace]);
 
   return (
+  <>
     <Container className={`${styles.banner_cont} mt-5`}>
       <div className="btn_box text-end mb-2">
         <button
@@ -298,6 +300,11 @@ function AdminBanner(props) {
         </div>
       </form>
     </Container>
+    
+    {isLoading &&
+      <Loading />
+    }
+    </>
   );
 }
 

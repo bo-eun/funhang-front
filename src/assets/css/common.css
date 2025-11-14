@@ -334,3 +334,61 @@ button {
 .Collapse{
   display: block;
 }
+
+/* 전체 화면 고정 */
+.loading_box {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 어두운 배경 */
+.loading_bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.1);
+}
+
+/* 로고 영역 */
+.loading {
+  position: relative;
+  width: 250px;
+  height: 160px;
+
+  /* 마스크 적용 */
+  -webkit-mask-image: url('../img/footerLogo.png');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  mask-image: url('../img/footerLogo.png');
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+
+  background-color: white; /* 기본 배경 */
+  overflow: hidden;
+}
+
+.loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../img/wave.png') repeat-x;
+  background-size: 200% 100%;
+  animation: waveMove 2s linear infinite, waveRise 3s ease-in-out forwards;
+}
+
+/* 물결 좌우 이동 */
+@keyframes waveMove {
+  0% { background-position-x: 0; }
+  100% { background-position-x: -200%; }
+}
+
+/* 물결 위로 차오름 */
+@keyframes waveRise {
+  0% { top: 100%; }
+  100% { top: -10%; }
+}

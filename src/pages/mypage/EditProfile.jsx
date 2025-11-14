@@ -16,7 +16,7 @@ function EditProfile(props) {
 
     const myInfoSchema = yup.object().shape({
         username: yup.string().required("이름을 입력하십시오"),
-        email: yup.string().required("이메일을 입력하십시오"),
+        email: yup.string().email("올바른 이메일 형식이 아닙니다.").required("이메일을 입력하십시오."),
         phone: yup.string().required("휴대폰 번호를 입력하십시오")
             .matches(/^[0-9]+$/, "숫자만 입력 가능합니다")
             .min(10, "10자리 이상 입력해주세요")

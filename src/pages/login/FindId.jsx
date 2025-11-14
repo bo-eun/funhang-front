@@ -24,7 +24,7 @@ function FindId(props) {
 
     const schema = yup.object().shape({
         userName: yup.string().required("이름을 입력하십시오"),
-        email: yup.string().required("이메일을 입력하십시오"),
+        email: yup.string().email("올바른 이메일 형식이 아닙니다.").required("이메일을 입력하십시오."),
     });
     const {
         register,
