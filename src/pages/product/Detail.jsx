@@ -13,6 +13,8 @@ import { useLocation, useParams } from 'react-router';
 import { authStore } from '../../store/authStore';
 import { useWish } from '../../hooks/useWish';
 import { toast } from 'react-toastify';
+import { useComment } from '../../hooks/useComment';
+import ImgFallback from '../../components/imgFall/imgFallback';
 
 function Detail() {
     const isAuth = authStore().isAuthenticated();
@@ -22,12 +24,24 @@ function Detail() {
     const [prdComment,setPrdComment] = useState([]);
     const [mapName, setMapName] = useState('');
     const { toggleWishMutation, isWish } = useWish();
-    
+    const {addCommentMutation,updateCommentMutation,deleteCommentMutation} = useComment();
     const CHAIN_MAP = {
         SEV: '7ELEVEN',
         GS25: 'GS25',
         CU: 'CU',
     };
+
+    const addComment=(content)=>{
+        if(!isAuth) return alert('로그인 후 댓글을 이용해주세요.');
+        addCommentMutation.mutate({crawlId:productId,content});
+    }
+    const updateComment = (commentId, content)=>{
+        updateCommentMutation.mutate({commentId,content});
+    }
+    const deleteComment = (commentId)=>{
+        deleteCommentMutation.mutate(commentId);
+    }
+    
     
     const {data}= useQuery({
         queryKey:['product', productId],
@@ -82,7 +96,10 @@ function Detail() {
         <section className={styles.detail_section}>
             <div className={styles.prd_info}>
                 <div className={styles.img_box}>
-                    <img src={prd.imageUrl} alt="" />
+                    <ImgFallback
+                        src={prd.imageUrl}
+                        alt={prd.productName}
+                    />
                     <button
                         type="button"
                         className={styles.wish_btn}
@@ -115,7 +132,9 @@ function Detail() {
             
             <CommentLayout 
                 comments={prdComment}
-                productId={productId}
+                add={addComment}
+                update={updateComment}
+                del={deleteComment}
             />
             
         </section>

@@ -23,14 +23,17 @@ function Coupon(props) {
             <div className={styles.coupon_cont}>
                 <h3>보유쿠폰</h3>
                 <ul>
-                    {couponList?.map((item)=>
-                        (
-                        <li key={item.couponId} onClick={openCouponLayer} data-img={item.imgUrl}>
-                            <span>{formatDate(item.acquiredAt)} 발행</span>
-                            <p>{item.couponName}</p>
-                        </li>
-                        )
-                    )}
+                    {couponList&&couponList.length>0?
+                        (couponList?.map((item)=>
+                            (
+                            <li key={item.couponId} onClick={openCouponLayer} data-img={item.imgUrl}>
+                                <span>{formatDate(item.acquiredAt)} 발행</span>
+                                <p>{item.couponName}</p>
+                            </li>
+                            )
+                        )):
+                        (<p className={styles.none_list}>보유한 쿠폰이 없습니다.</p>)
+                    }
                 </ul>
             </div>
 

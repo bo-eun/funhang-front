@@ -10,6 +10,8 @@ import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useWish } from "../../hooks/useWish";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import empty from "../../assets/img/emptyLogo.png";
+import ImgFallback from "../imgFall/imgFallback";
 
 function Item({ product }) {
   const isAuth = authStore().isAuthenticated();  // boolean
@@ -47,7 +49,7 @@ function Item({ product }) {
             left="10px"
           />
           {/* 상품 이미지 */}
-          <img
+          <ImgFallback
             src={product.imageUrl}
             alt={product.productName}
             className={styles.prd_img}

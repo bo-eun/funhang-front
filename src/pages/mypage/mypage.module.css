@@ -44,7 +44,7 @@
 
 .my_cont .sub_category_list li a {
     display: block;
-    padding: 12px 0px 12px 40px;
+    padding: 14px 0px 14px 40px;
     font-size: 20px;
     border-radius: 0 30px 30px 0;
 }
@@ -77,8 +77,10 @@
 }
 
 .none_list{
-    font-size: 20px;
-    margin-top: 50px;
+    font-size: 18px;
+    margin: 50px auto;
+    color: #C9C9C9;
+    /* background-color: #0051FF; */
 }
 
 /* 포인트 내역 */

@@ -34,11 +34,16 @@ function Main(props) {
   const [promoOne, setPromoOne] = useState([]);
   const [promoTwo, setPromoTwo] = useState([]);
 
-  const swiperRef = useRef(null);
 
-  const [slideTexts, setSlideTexts] = useState([]);
 
+    const swiperRef = useRef(null);
+
+    const [slideTexts, setSlideTexts] = useState([]);
     
+    const {data: popular} = useQuery({
+      queryKey: ["product", "popular"],
+      queryFn: async () => productApi.getChainListAll({ size: 5, sort: "likeCount,desc"}),
+    })
 
     const { data: onePlusOne } = useQuery({
       queryKey: ["product", "ONE_PLUS_ONE"],
@@ -51,11 +56,12 @@ function Main(props) {
     });
 
     useEffect(()=>{
-        if(onePlusOne?.items && twoPlusOne?.items){
+        if(onePlusOne?.items && twoPlusOne?.items &&popular?.items){
             setPromoOne(onePlusOne.items)
             setPromoTwo(twoPlusOne.items)
+            setPromoPop(popular.items)
         }
-    },[onePlusOne,twoPlusOne]);
+    },[onePlusOne,twoPlusOne,popular]);
 
   // 등록 배너 가져오기
   useEffect(() => {
@@ -141,36 +147,38 @@ function Main(props) {
           </Swiper>
         )}
       </div>
-      {/* <SubLayoutPdc
+      <div className={styles.prd_total_wrap}>
+
+            <SubLayoutPdc
                 titleName='인기 행사 상품'
-                moreLink='/category?sort=popular'
-            >
+                moreLink='/product/ALL/ALL/ALL?sort=likeCount,desc'
+                >
                 <ul className={styles.prd_list}>
-                    {products?.map((product)=>(
-                        <Item
-                        key={product.crawlId} 
-                        product={product}
-                        />
+                    {promoPop?.map((product)=>(
+                      <Item
+                      key={product.crawlId} 
+                      product={product}
+                      />
                     ))}
                 </ul>
-            </SubLayoutPdc> */}
+            </SubLayoutPdc>
             <SubLayoutPdc
                 titleName='1 + 1 행사'
                 moreLink='/product/ALL/ONE_PLUS_ONE/ALL'
-            >
+                >
                 <ul className={styles.prd_list}>
                 {promoOne?.map((product) => (
-                    <Item key={product.crawlId} product={product} />
+                  <Item key={product.crawlId} product={product} />
                 ))}
                 </ul>
             </SubLayoutPdc>
             <SubLayoutPdc
                 titleName='2 + 1 행사'
                 moreLink='/product/ALL/TWO_PLUS_ONE/ALL'
-            >
+                >
                 <ul className={styles.prd_list}>
                 {promoTwo?.map((product) => (
-                    <Item key={product.crawlId} product={product} />
+                  <Item key={product.crawlId} product={product} />
                 ))}
                 </ul>
             </SubLayoutPdc>
@@ -178,10 +186,10 @@ function Main(props) {
             <SubLayoutPdc
                 titleName='카테고리'
                 moreLink='/product/ALL/ALL/ALL'
-            >
+                >
                 <ul className={styles.cat_list}>
                     {categoryList?.map((category,index)=>(
-                        <li key={index} className={styles.cat_item}>
+                      <li key={index} className={styles.cat_item}>
                             <Link to={category.url}>
                                 <div className={styles.cat_img_wrap}>
                                     <img src={category.img} alt={`${category.name} 이미지`} />
@@ -192,6 +200,7 @@ function Main(props) {
                     ))}
                 </ul>
             </SubLayoutPdc>           
+            </div>
         </Container>
     );
 }

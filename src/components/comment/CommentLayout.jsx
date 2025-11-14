@@ -6,27 +6,31 @@ import { useQuery } from '@tanstack/react-query';
 import { commentApi } from '../../api/comment/commentApi';
 import { useComment } from '../../hooks/useComment';
 
-function CommentLayout({ comments , productId }) {
+function CommentLayout({ comments,add,update,del}) {
     const [text, setText] = useState('');
-    const {addCommentMutation} = useComment();
-
+    const [editingId, setEditingId] = useState(null);
+    
+    //댓글등록
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!text.trim()) return alert('댓글을 입력해주세요');
-        onAddComment();
+        add(text);
         setText('');
     };
-
-    console.log(text);
-    const onAddComment=()=>{
-        addCommentMutation.mutate({crawlId:productId,content:text});
+    //수정
+    const handleStartEdit = (commentId) => {
+        setEditingId(commentId);
+    };
+    const handleCancelEdit = () => {
+        setEditingId(null);
+    };
+    const handleSubmitEdit = (commentId,content)=>{
+        update(commentId,content);
+        setEditingId(null);
     }
-
-    const handleDelete = ()=>{
-        alert('')
-    }
-    const handleUpdate = ()=>{
-        alert('')
+    //삭제
+    const handleDelete = (commentId)=>{
+        del(commentId);
     }
     return (
         
@@ -37,8 +41,11 @@ function CommentLayout({ comments , productId }) {
                         <CommentItem
                             key={comment.commentId}
                             comment={comment}
-                            onDelete={() => handleDelete(comment?.commentId)}
-                            onUpdate={() => handleUpdate(comment?.commentId)}
+                            isEditing={editingId === comment.commentId}
+                            onStartEdit={() => handleStartEdit(comment.commentId)}
+                            onSubmitEdit={handleSubmitEdit}
+                            onCancelEdit={handleCancelEdit}
+                            onDelete={() => handleDelete(comment.commentId)}
                         />
                     ))}
                 </ul>
