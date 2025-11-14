@@ -45,8 +45,13 @@ function Item({ product }) {
           <EventIcon
             product={product}
             cssPosition="absolute"
-            top="10px"
-            left="10px"
+            top="15px"
+            left="15px"
+          />
+          <StoreIcon product={product.sourceChain} 
+            cssPosition="absolute"
+            top="15px"
+            right="15px"
           />
           {/* 상품 이미지 */}
           <ImgFallback
@@ -64,7 +69,7 @@ function Item({ product }) {
           </button>
         </div>
         <div className={styles.info_box}>
-          <StoreIcon product={product.sourceChain} />
+          {/* <StoreIcon product={product.sourceChain} /> */}
           <p className={styles.title}>{product.productName}</p>
           <p className={styles.price}>{product.price.toLocaleString()}원</p>
         </div>
