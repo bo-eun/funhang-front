@@ -3,6 +3,7 @@ import Map from '../../components/map/Map';
 import "@/pages/store/store.css";
 import searchbtn from "../../assets/img/search_btn.svg"
 import StoreIcon from '../../components/icon/StoreIcon';
+import { IoSearch } from 'react-icons/io5';
 
 function Store(props) {
 
@@ -41,7 +42,7 @@ function Store(props) {
                                 onKeyDown={search}
                             />
                             <button type="button" onClick={() => setSearchText(inputText)}>
-                                <img src={searchbtn} alt="검색" />
+                                <IoSearch className='search_icon'/>
                             </button>
                         </div>
                     </div>

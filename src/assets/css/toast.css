@@ -11,7 +11,7 @@
 
 
 .Toastify__toast--info {
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--secondary-color);
     background: #ffffff;
     color: #000000;
 }
@@ -19,7 +19,7 @@
     background: var(--secondary-color);
 }
 .Toastify__toast--success {
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--main-color);
     background: #ffffff;
     color: #000000;
 }
@@ -27,7 +27,7 @@
     background: var(--main-color);
 }
 .Toastify__toast--warning {
-    border: 1px solid #c9c9c9;
+    border: 1px solid #8f1d1d;
     background: #ffffff;
     color: #000000;
 }
@@ -52,8 +52,7 @@
 .Toastify__progress-bar--bg{
     background: none;
 }
-.Toastify__progress-bar {
-    /* background: none; */
+/* .Toastify__progress-bar {
 }
 .Toastify__progress-bar--animated {
 }
@@ -78,4 +77,4 @@
 .Toastify__flip-exit {}
 .Toastify__bounce-enter {}
 .Toastify__bounce-exit {}
-
+ */

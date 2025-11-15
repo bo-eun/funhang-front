@@ -51,7 +51,7 @@ export const useWish = () => {
     onSuccess: (data) => {
       console.log(data);
       if(data.resultMessage === "ADDED"){
-        toast.info("찜이 추가되었습니다 :)");
+        toast.success("찜이 추가되었습니다 :)");
       }
       if(data.resultMessage === "REMOVED"){
         toast.warning("찜이 삭제되었습니다 :)");

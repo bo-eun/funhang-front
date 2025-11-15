@@ -55,7 +55,7 @@ function Layout() {
 
     return (
         <Container className={styles.product_cont}>
-            <h2>{title}</h2>
+            <h2 className={`${styles.title_wrapper} ${styles[title]}`}>{title}</h2>
 
             <ul className={styles.category_list}>
                 {promoList.map((promo) => (

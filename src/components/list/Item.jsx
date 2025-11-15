@@ -52,6 +52,8 @@ function Item({ product }) {
             cssPosition="absolute"
             top="15px"
             right="15px"
+            width="55px"
+            height="55px"
           />
           {/* 상품 이미지 */}
           <ImgFallback

@@ -5,7 +5,7 @@ import cuIcon from '../../assets/img/cu_icon.svg';
 import gsIcon from '../../assets/img/gs25_icon.svg';
 import sevenIcon from '../../assets/img/seven_icon.svg';
 
-function StoreIcon({product, cssPosition="relative", top="", left="", bottom="",right=""}) {
+function StoreIcon({product, cssPosition="relative", top="", left="", bottom="",right="",width,height}) {
     // // 안전하게 문자열 정제 (공백, 대소문자 등 처리)
     // if (!product) return "Unknown";
     // const normalized = (product || "").toLowerCase().trim();
@@ -74,6 +74,8 @@ function StoreIcon({product, cssPosition="relative", top="", left="", bottom="",
     return (
         <span className={`${styles.category} ${storeClass}`}
             style={{
+                width:width,
+                height:height,
                 position:cssPosition,
                 top:top,
                 bottom:bottom,

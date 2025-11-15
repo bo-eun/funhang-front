@@ -16,7 +16,7 @@ function SearchInput({value, onChange}) {
     };
     return (
         <form className='search_box' onSubmit={handleSubmit}>
-            {/* <IoSearch className='search_icon'/> */}
+            
             <input 
                 type="text" 
                 name="search" 
