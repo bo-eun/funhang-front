@@ -8,6 +8,7 @@ import Pagination from '../../components/pagination/Pagination';
 import { couponAdminApi } from '../../api/coupon/couponAdminApi';
 import { usePoint } from '../../hooks/usePoint';
 import { formatDate } from '../../hooks/utils';
+import CustomAlert from '../../components/alert/CustomAlert';
 
 function Point(props) {
     const [show, setShow] = useState(false);
@@ -42,7 +43,9 @@ function Point(props) {
     const changePointHandle = () => {
 
         if(totalPoint<couponPoint){
-            alert('보유한 포인트를 확인해주세요.');
+            CustomAlert({
+                text: "보유한 포인트를 확인해주세요.",
+            });
             return;
         }
 

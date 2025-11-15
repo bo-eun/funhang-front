@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { authStore } from '../store/authStore';
+import CustomAlert from '../components/alert/CustomAlert';
 
 const api = axios.create({
     headers :{
@@ -56,7 +57,9 @@ api.interceptors.response.use(
                 }catch(error){
                     console.log('실패');
                     //refresh실패
-                    alert('유효하지 않은 토큰입니다. 다시 로그인하세요.');
+                    CustomAlert({
+                        text: "유효하지 않은 토큰입니다. 다시 로그인하세요.",
+                    });
                     authStore.getState().clearAuth();
                     location.href='/login';
 

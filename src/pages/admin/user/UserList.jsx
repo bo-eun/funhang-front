@@ -14,6 +14,7 @@ import styles from '@/pages/admin/user/user.module.css';
 import { usePoint } from '../../../hooks/usePoint';
 import { useUser } from '../../../hooks/useUser';
 import { authStore } from '../../../store/authStore';
+import CustomAlert from '../../../components/alert/CustomAlert';
 
 const schema = yup.object().shape({
     givePoint: yup.number().required("지급 할 포인트를 입력해주세요"),
@@ -137,15 +138,19 @@ function UserList() {
     const movePage = (newPage) => updateUrl({ page: newPage });
 
     // 회원 비활성화 버튼
-    const deleteBtn = (userId) => {
-        if (confirm('비활성화시 되돌릴 수 없습니다 진행하시겠습니까?')) {
-            disabledUserMutation.mutate({userId})
-        }else{
-            return;
-        }
-    };
+    const deleteBtn = async (userId) => {
+        const isConfirm = await CustomAlert({
+            title: "회원 비활성화",
+            width:"500px",
+            showCancelButton:true,
+            text:"비활성화시 되돌릴 수 없습니다 진행하시겠습니까?"
+        });
 
-    console.log(userList);
+        if (!isConfirm) return;
+        
+        disabledUserMutation.mutate({userId});
+        
+    };
 
     return (
         <>

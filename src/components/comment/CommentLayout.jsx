@@ -5,6 +5,7 @@ import BtnForm from '../btn/BtnForm';
 import { useQuery } from '@tanstack/react-query';
 import { commentApi } from '../../api/comment/commentApi';
 import { useComment } from '../../hooks/useComment';
+import CustomAlert from '../alert/CustomAlert';
 
 function CommentLayout({ comments,add,update,del}) {
     const [text, setText] = useState('');
@@ -13,7 +14,11 @@ function CommentLayout({ comments,add,update,del}) {
     //댓글등록
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!text.trim()) return alert('댓글을 입력해주세요');
+        if (!text.trim()) {
+            CustomAlert({
+                text:"댓글을 입력해주세요."
+            })
+        }
         add(text);
         setText('');
     };

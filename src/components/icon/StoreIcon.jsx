@@ -41,7 +41,6 @@ function StoreIcon({product, cssPosition="relative", top="", left="", bottom="",
     // 안전하게 문자열 정제 (공백, 대소문자 등 처리)
     if (!product) return "Unknown";
     const normalized = (product || "").toLowerCase().trim();
-    console.log(product);
     // 매핑
     let src;
     let storeClass;

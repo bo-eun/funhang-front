@@ -10,6 +10,7 @@ import { productApi } from '../../../api/product/productApi';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import Pagination from '../../../components/pagination/Pagination';
 import { useProduct } from '../../../hooks/useProduct';
+import CustomAlert from '../../../components/alert/CustomAlert';
 
 function AdminProductList(props) {
     const navigate = useNavigate();
@@ -75,10 +76,15 @@ function AdminProductList(props) {
         navigate(`${location.pathname}?${queryParams.toString()}`);
     }
     // 삭제
-    const handleDelete=(productId)=>{
-        if(window.confirm("정말 삭제하시겠습니까?")) {
-            prdDeleteMutation.mutate(productId);
-        }
+    const handleDelete=async(productId)=>{
+        const isConfirm = await CustomAlert({
+            title: "상품 삭제",
+            width:"500px",
+            showCancelButton:true,
+            text:"정말 삭제하시겠습니까?"
+        });
+        if(!isConfirm)return;
+        prdDeleteMutation.mutate(productId);
     }
 
     // React Query fetch
@@ -98,6 +104,7 @@ function AdminProductList(props) {
         if(data){
             setPrdList(data.items || []);
             setTotalRows(data.totalElements || 0);
+            
         }
     },[data]);
 

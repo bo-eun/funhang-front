@@ -49,7 +49,14 @@ export const useWish = () => {
       toast.error("찜 처리 실패");
     },
     onSuccess: (data) => {
-      toast.success(data.resultMessage === "ADDED" ? "찜 추가됨!" : "찜 취소됨!");
+      console.log(data);
+      if(data.resultMessage === "ADDED"){
+        toast.info("찜이 추가되었습니다 :)");
+      }
+      if(data.resultMessage === "REMOVED"){
+        toast.warning("찜이 삭제되었습니다 :)");
+      }
+      
     },
     onSettled: () => queryClient.invalidateQueries(["wish"]),
   });

@@ -24,11 +24,11 @@ function Item({ product }) {
     const handleWishClick = (e) => {
       e.preventDefault();
       if (!isAuth) {
-        toast.info("로그인 후 찜해주세요!");
+        toast.warning("로그인 후 찜해주세요!");
         return;
       }
       else if (role === "ROLE_ADMIN") {
-        toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
+        toast.warning("관리자는 찜 기능을 이용할 수 없습니다.");
         return;
       }
       if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
