@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { adminApi } from "../api/banner/bannerAdminApi";
 import { authStore } from "../store/authStore";
 import { couponAdminApi } from "../api/coupon/couponAdminApi";
+import CustomAlert from "../components/alert/CustomAlert";
 
 export const useAdmin = () => {
   const queryClient = useQueryClient();
@@ -20,7 +21,9 @@ export const useAdmin = () => {
     },
     onError: (error) => {
       console.error("배너 등록 실패:", error);
-      alert(error?.message || "배너 등록 중 오류가 발생했습니다.");
+      CustomAlert({
+        text: error?.message || "배너 등록 중 오류가 발생했습니다."
+      });
     },
   });
 
@@ -30,11 +33,15 @@ export const useAdmin = () => {
       return response;
     },
     onSuccess: () => {
-      alert("배너가 삭제되었습니다!");
+      CustomAlert({
+        text: "배너가 삭제되었습니다!"
+      });
     },
     onError: (error) => {
       console.error("배너 삭제 실패:", error);
-      alert(error.response?.data);
+      CustomAlert({
+        text: error.response?.data
+      });
     },    
   });
 
@@ -49,7 +56,9 @@ export const useAdmin = () => {
     },
     onError: (error) => {
       console.error("쿠폰 리스트 불러오기 실패:", error);
-      alert(error.response?.data);
+      CustomAlert({
+        text: error.response?.data
+      });
     },
   });
 

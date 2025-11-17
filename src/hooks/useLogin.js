@@ -2,6 +2,7 @@ import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { authStore } from "../store/authStore"
 import { useNavigate } from "react-router";
 import { loginApi } from "../api/login/loginApi";
+import CustomAlert from "../components/alert/CustomAlert";
 
 
 
@@ -31,7 +32,9 @@ export const useLogin = () => {
         },
         onError : (error) =>{
             console.error('Login 실패', error);
-            alert('아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.')
+            CustomAlert({
+                text: "아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요."
+            });
         }
     });
 
@@ -49,7 +52,9 @@ export const useLogin = () => {
         },
         onError: (error) => {
             console.error("아이디 찾기 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })
 
@@ -65,7 +70,9 @@ export const useLogin = () => {
         },
         onError: (error) => {
             console.error("비밀번호 찾기 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })
 
@@ -81,7 +88,9 @@ export const useLogin = () => {
         },
         onError: (error) => {
             console.error("비밀번호 변경 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })    
 
