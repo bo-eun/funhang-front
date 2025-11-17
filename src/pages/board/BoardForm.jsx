@@ -12,10 +12,12 @@ Size.whitelist = ['16px', '18px', '20px', '24px', '32px'];
 Quill.register(Size, true);
 
 function BoardForm({ type }) {
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [imgFile, setImgFile] = useState([]);
 
-  const { createMutate } = useBoard();
+  const { adminCreateMutate, uploadImgMutate } = useBoard();
 
   const navigate = useNavigate();
   
@@ -34,7 +36,7 @@ function BoardForm({ type }) {
   const fileField = 'img';
   const maxWidth = 1600;
   const maxHeight = 1600;
-  const outMime = 'image/jpeg';
+  const outMime = 'image/png';
   const quality = 0.9;
 
   /** Quill 인스턴스를 안전하게 획득 */
@@ -57,6 +59,7 @@ function BoardForm({ type }) {
 
     const ratio = Math.min(1, maxWidth / img.width, maxHeight / img.height);
     if (ratio === 1) {
+      // 리사이즈 원본 파일 저장
       return file;
     }
 
@@ -73,16 +76,21 @@ function BoardForm({ type }) {
       const pica = (await import('pica')).default();
       await pica.resize(from, to, { quality: 3 });
       const blob = await pica.toBlob(to, outMime, quality);
-      return new File([blob],
+
+      const resizedFile = new File([blob],
                       file.name.replace(/\.\w+$/, outMime === 'image/png' ? '.png' : '.jpg'),
                       { type: outMime });
+
+      return resizedFile;
     } catch (e) {
       console.warn('pica 리사이즈 실패, 기본 canvas 사용', e);
       const blob = await new Promise((r) => to.toBlob(r, outMime, quality));
       if (!blob) throw new Error('canvas toBlob 실패');
-      return new File([blob],
+
+      const resizedFile = new File([blob],
                       file.name.replace(/\.\w+$/, outMime === 'image/png' ? '.png' : '.jpg'),
-                      { type: outMime });
+                      { type: outMime });                     
+      return resizedFile;
     }
   }, [maxWidth, maxHeight, outMime, quality]);
 
@@ -114,6 +122,17 @@ function BoardForm({ type }) {
       console.log('🎭 Mock 모드: 이미지를 Base64로 변환 중...');
       const url = await mockUploadImage(file);
       console.log('✅ Mock 업로드 성공');
+      // 중복 이름 제거(원본, 리사이즈 중 리사이즈만 남기기)
+      setImgFile((prev) => {
+        const newArr = Array.from(
+          new Map([...prev, { file: file, index: prev.length }].reverse()
+            .map(item => [item.file.name, item])
+          ).values()
+        ).reverse();
+      return newArr;
+    });
+
+
       return url;
     }
     
@@ -178,11 +197,18 @@ function BoardForm({ type }) {
       ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
       // Canvas를 blob으로 변환
-      const resizedBlob = await new Promise((resolve) => {
-        canvas.toBlob(resolve, outMime, quality);
-      });``
+      const resizedBlob = await new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error('canvas.toBlob 실패'));
+          } else {
+            resolve(blob);
+          }
+        }, outMime, quality);
+      });
 
-      const file = new File([resizedBlob], 'resized.jpg', { type: outMime });
+      const resizeFilename = imgElement.getAttribute('data-file-name') || 'resized-image.png';
+      const file = new File ([resizedBlob], resizeFilename, { type: outMime });
 
       // 서버에 업로드 (또는 Mock)
       const newUrl = await uploadFile(file);
@@ -225,12 +251,13 @@ function BoardForm({ type }) {
         // 이미지 리사이즈 후 업로드
         const resized = await resizeImage(file);
         const url = await uploadFile(resized);
-
         // 에디터에 이미지 삽입
         const range = editor.getSelection(true);
         editor.insertEmbed(range.index, 'image', url);
         editor.setSelection(range.index + 1);
-        
+        // 이미지 리사이즈 시 이미지 덮어쓰기 위한 이미지 이름 저장
+        const img = editor.root.querySelector(`img[src="${url}"]`);
+        if (img) img.setAttribute('data-file-name', file.name);
         console.log('✅ 이미지 삽입 완료');
       } catch (e) {
         console.error('❌ 업로드 오류:', e);
@@ -530,6 +557,19 @@ function BoardForm({ type }) {
     };
   }, [isReady, reuploadResizedImage]);
 
+
+  useEffect(() => {
+    if(imgFile?.length > 0) {
+      const uploadCloudinary = async() => {
+        const urlList = await uploadImgMutate.mutateAsync(imgFile);
+        setImgFile([]);
+        console.log(urlList);
+      }
+
+      uploadCloudinary();
+    }
+  }, [imgFile])
+
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -570,17 +610,14 @@ function BoardForm({ type }) {
     console.log('제목:', title);
     console.log('내용:', content);
 
-    // await createMutate.mutateAsync();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('contents', content);
+
+    console.log(imgFile)
+
+    await adminCreateMutate.mutateAsync(formData);
     // navigate('/board');
-    
-    // if (USE_MOCK) {
-    //   console.log('📝 Mock 제출 데이터:', {
-    //     title,
-    //     content,
-    //     contentLength: content.length
-    //   });
-    //   alert('Mock 모드: 게시글이 제출되었습니다! (콘솔 확인)');
-    // }
   };
 
   return (
@@ -604,6 +641,8 @@ function BoardForm({ type }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder='제목을 입력하세요'
+            name="title"
+            id="title"
             />
         </div>
         <section className={styles.content_bg}>
@@ -618,7 +657,7 @@ function BoardForm({ type }) {
             style={{ height: '500px', marginBottom: '50px' }}
             />
           <div className='short_btn_bg'>
-            <button type='submit' className='min_btn_b' onClick={goSubmit}>
+            <button type='submit' className='min_btn_b'>
               {type === "update" ? "수정" : "등록"}
             </button>
             <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>

@@ -1,10 +1,11 @@
- import React, { useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import likeOn from '../../assets/img/likeOn.png';
 import likeOff from '../../assets/img/likeOff.png';
 import CommentLayout from '../../components/comment/CommentLayout';
 import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
+import { useBoard } from '../../hooks/useBoard';
 
 function BoardDetail() {
     const [isActive, setIsActive] = useState(false);

@@ -13,6 +13,21 @@ export const boardApi = {
         return response;  
     },
 
+    adminCreate: async(formData) => {
+        const response = await api.post(`/api/v1/admin/board`, formData, {
+            headers: {"Content-Type" : "multipart/form-data"},
+        })
+        return response; 
+
+    },    
+    
+    imageCreate: async(formData) => {
+        const response = await api.post(`/api/v1/admin/board/image`, formData, {
+            headers: {"Content-Type" : "multipart/form-data"},
+        })
+        return response; 
+    },
+
     create: async(formData) => {
         const response = await api.post(`/api/v1/board`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},

@@ -16,6 +16,16 @@ export const useBoard = () => {
         }
     });
 
+    const adminCreateMutate = useMutation({
+        mutationFn: async(formData) => {
+            const response = await boardApi.adminCreate(formData);
+            return response.data.response.content
+        },
+        onSettled: (data, error) => {
+            data ? console.log(data) : console.error(error);
+        }
+    });
+
     const createMutate = useMutation({
         mutationFn: async (formData) => {
             const response = await boardApi.create(formData);
@@ -27,6 +37,20 @@ export const useBoard = () => {
             alert(error.response.data.response);
         }
     });
+
+    const uploadImgMutate = useMutation({
+        mutationFn: async (formData) => {
+            const response = await boardApi.imageCreate(formData);
+            return response.data.response.content;
+        },
+        onSuccess: (data) => {
+            console.log(data)
+            console.log('이미지 업로드 성공')
+        },
+        onError: (error) => {
+            console.error("이미지 업로드 실패", error);
+        }
+    })
 
     const updateMutate = useMutation({
         mutationFn: async (brdId, formData) => {
@@ -52,5 +76,5 @@ export const useBoard = () => {
         }
     });    
 
-    return { listMutate, createMutate, updateMutate, deleteMutate }
+    return { listMutate, adminCreateMutate, createMutate, uploadImgMutate, updateMutate, deleteMutate }
 }
