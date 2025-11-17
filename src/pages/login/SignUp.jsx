@@ -8,6 +8,7 @@ import BtnForm from "../../components/btn/BtnForm";
 import styles from '@/pages/login/login.module.css';
 import { loginApi } from "../../api/login/loginApi";
 import { useLogin } from "../../hooks/useLogin";
+import CustomAlert from "../../components/alert/CustomAlert";
 
 const signUpFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
@@ -51,7 +52,9 @@ function SignUp(props) {
     const onSubmit = async (data) => {
         await joinMutation.mutateAsync(data);
         reset();
-        alert('회원가입이 완료되었습니다. 로그인 후 시작해보세요.')
+        CustomAlert({
+            text: '회원가입이 완료되었습니다. 로그인 후 시작해보세요.'
+        })
         location.href = '/login';
 
     };

@@ -211,7 +211,7 @@ button {
   padding: 0 50px 0 20px;
   width: 100%;
   font-size: 18px;
-  padding-left: 50px;
+  padding-left: 25px;
 }
 .search_box input:focus{
   background-color: #fafafa;

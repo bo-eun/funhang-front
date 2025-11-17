@@ -4,6 +4,7 @@ import "@/pages/store/store.css";
 import searchbtn from "../../assets/img/search_btn.svg"
 import StoreIcon from '../../components/icon/StoreIcon';
 import { IoSearch } from 'react-icons/io5';
+import StoreTextIcon from '../../components/icon/StoreTextIcon';
 
 function Store(props) {
 
@@ -78,7 +79,7 @@ function Store(props) {
                             {list?.length > 0 && list.map((item) => {
                                 console.log(item);
                                 return <li key={`${chainName}${item.id}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
-                                    <StoreIcon
+                                    <StoreTextIcon
                                         product={item.category_name}
                                     />
                                     <p className="title">

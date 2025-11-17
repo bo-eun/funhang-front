@@ -15,6 +15,7 @@ import { useWish } from '../../hooks/useWish';
 import { toast } from 'react-toastify';
 import { useComment } from '../../hooks/useComment';
 import ImgFallback from '../../components/imgFall/imgFallback';
+import CustomAlert from '../../components/alert/CustomAlert';
 
 function Detail() {
     const isAuth = authStore().isAuthenticated();
@@ -32,7 +33,7 @@ function Detail() {
     };
 
     const addComment=(content)=>{
-        if(!isAuth) return alert('로그인 후 댓글을 이용해주세요.');
+        if(!isAuth) return CustomAlert({text: '로그인 후 댓글을 이용해주세요.'});
         addCommentMutation.mutate({crawlId:productId,content});
     }
     const updateComment = (commentId, content)=>{
@@ -75,7 +76,9 @@ function Detail() {
     const [copiedText, copy] = useCopyToClipboard();
     const copyUrl = () => {
         copy(window.location);
-        alert('주소가 클립보드에 복사되었습니다');
+        CustomAlert({
+            text: '주소가 클립보드에 복사되었습니다'
+        })
     }
 
     const handleWishClick = (e) => {
