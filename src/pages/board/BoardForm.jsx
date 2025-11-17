@@ -561,9 +561,14 @@ function BoardForm({ type }) {
   useEffect(() => {
     if(imgFile?.length > 0) {
       const uploadCloudinary = async() => {
-        const urlList = await uploadImgMutate.mutateAsync(imgFile);
-        setImgFile([]);
-        console.log(urlList);
+        const formData = new FormData();
+        imgFile.forEach(({ file, index }) => {
+          formData.append("files", file);   // 개별 파일
+          formData.append("indexs", index); // 개별 index
+        });
+        console.log([...formData.entries()]);
+        const urlList = await uploadImgMutate.mutateAsync(formData);
+        //setImgFile([]);
       }
 
       uploadCloudinary();

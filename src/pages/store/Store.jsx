@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Map from '../../components/map/Map';
 import "@/pages/store/store.css";
-import searchbtn from "../../assets/img/search_btn.svg"
 import StoreIcon from '../../components/icon/StoreIcon';
 import { IoSearch } from 'react-icons/io5';
 
@@ -54,19 +53,19 @@ function Store(props) {
                             </label>
                         </li>
                         <li>
-                            <input type="radio" name="chain" id="cu" value="CU" checked={chainName == "cu" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="cu" value="CU" checked={chainName == "CU" && true} onChange={filter} />
                             <label htmlFor="cu">
                                 CU
                             </label>
                         </li>
                         <li>
-                            <input type="radio" name="chain" id="gs25" value="GS25" checked={chainName == "gs25" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="gs25" value="GS25" checked={chainName == "GS25" && true} onChange={filter} />
                             <label htmlFor="gs25">
                                 GS25
                             </label>
                         </li> 
                         <li>
-                            <input type="radio" name="chain" id="7eleven" value="세븐일레븐" checked={chainName == "7eleven" && true} onChange={filter} />
+                            <input type="radio" name="chain" id="7eleven" value="세븐일레븐" checked={chainName == "세븐일레븐" && true} onChange={filter} />
                             <label htmlFor="7eleven">
                                 7ELEVEN
                             </label>
@@ -75,23 +74,26 @@ function Store(props) {
 
                     <div className="search_list_cont">
                         <ul className='search_list'>
-                            {list?.length > 0 && list.map((item) => {
-                                console.log(item);
-                                return <li key={`${chainName}${item.id}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
+                            {list?.length > 0 && list.map((item, index) => {
+                                 console.log(item);
+                                return <li key={`${chainName}${item.id}${index}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
                                     <StoreIcon
                                         product={item.category_name}
                                     />
-                                    <p className="title">
-                                        {item.place_name}
-                                    </p>
-                                    <p className="addr">
-                                        {item.road_address_name}
-                                    </p>
-                                    {item.phone && 
-                                        <p className="call">
-                                            {item.phone}
+                                    <div>
+                                        <p className="title">
+                                            {item.place_name}
                                         </p>
-                                    }
+                                        <p className="addr">
+                                            {item.road_address_name}
+                                        </p>
+                                        {item.phone && 
+                                            <p className="call">
+                                                {item.phone}
+                                            </p>
+                                        }
+                                    </div>
+                                    
                                     
                                 </li>
                             })}

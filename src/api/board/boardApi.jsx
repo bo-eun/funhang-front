@@ -24,6 +24,7 @@ export const boardApi = {
     imageCreate: async(formData) => {
         const response = await api.post(`/api/v1/admin/board/image`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
+            withCredentials: true // 세션 쿠키 보내기
         })
         return response; 
     },

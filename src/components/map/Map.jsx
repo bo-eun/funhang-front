@@ -18,6 +18,8 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
   const chainList = ["CU", "GS25", "세븐일레븐"];
   const chainIcon = [cuIcon, gs25Icon, sevenIcon];
 
+  console.log("searchText : " + searchText);
+
   // 지도 옵션. 검색어가 있을 때 검색어에 맞게 지도 이동, 아니면 내 위치로 이동
   const options = /*searchText.trim() ? undefined : */{ location, radius: 1000 };
 
@@ -151,7 +153,7 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
     const container = document.getElementById("map");
     const options = {
       center: new window.kakao.maps.LatLng(myLocation.latitude, myLocation.longitude),
-      level: 6,
+      level: 4,
     };
 
     const map = new window.kakao.maps.Map(container, options);
@@ -192,11 +194,19 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
 
         if (status !== window.kakao.maps.services.Status.OK) return;
 
+        console.log(keyword)
+
         // 검색어가 있을 경우 첫 번째 검색 결과를 중심으로 지도 이동
-        if (searchText.trim() && data?.length > 0) {
+        if (keyword.trim() && data?.length > 0) {
           const firstPlace = data[0];
           const newCenter = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
           mapInstance.current.setCenter(newCenter);
+          console.log(newCenter)
+          // 첫 번째 검색 결과 위치를 option으로 넣어야 함...
+          setMyLocation({
+          latitude: firstPlace.y,
+          longitude: firstPlace.x,            
+          })
         }
           
         data.forEach((place) => {
@@ -207,23 +217,26 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
         clusterer.addMarkers(markers);
       }
 
-      ps.categorySearch("CS2", (data, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-            // 카테고리 결과 중 keyword가 포함된 항목만 필터링
-            const filtered = data.filter(place => 
-              place.place_name.includes(keyword)
-            );
-
-            // 검색 결과 처리
-            if (filtered.length > 0) {
-              searchService(filtered, status);
-            } else {
-              console.log("카테고리 내 keyword 없음 → 전국 검색");
-              ps.keywordSearch(keyword, searchService, {});
-            }
+      
+      if (searchText.trim()) {
+        // keyword가 있으면 지도 전체에서 키워드 검색
+        console.log('전체 검색' + keyword)
+        console.log(options)
+        ps.categorySearch("CS2", (data, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            searchService(data, status);
           }
-      });
-      console.log(options)
+        }, options);        
+        // ps.keywordSearch(keyword, searchService, options);
+      } else {
+        // keyword 없으면 카테고리 검색
+        console.log('내 위치 검색')
+        ps.categorySearch("CS2", (data, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            searchService(data, status);
+          }
+        }, options);
+      }
     };
 
     // 검색 실행
@@ -258,7 +271,6 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
         return {...data, category_name: data.category_name}
 
       }).sort((a, b) => (a.distance * 1) - (b.distance * 1));
-
       setList(sortedList);
     }
   }, [dataList, setList])

@@ -17,6 +17,8 @@
   margin: 10px 0 0 0;
 }
 .search_list li {
+  display: flex;
+  gap: 15px;
   padding: 15px 0 var(--text-size);
   border-bottom: 1px solid #bcbcbc;
   font-size: var(--text-size);
@@ -27,7 +29,6 @@
 }
 .search_list li .title {
   font-size: 20px;
-  padding-top: 6px;
 }
 .search_list li .addr {
   padding: 12px 0 14px;
