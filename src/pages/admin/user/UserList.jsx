@@ -13,6 +13,8 @@ import * as yup from 'yup';
 import styles from '@/pages/admin/user/user.module.css';
 import { usePoint } from '../../../hooks/usePoint';
 import { useUser } from '../../../hooks/useUser';
+import { authStore } from '../../../store/authStore';
+import CustomAlert from '../../../components/alert/CustomAlert';
 
 const schema = yup.object().shape({
     givePoint: yup.number().required("지급 할 포인트를 입력해주세요"),
@@ -21,6 +23,7 @@ const schema = yup.object().shape({
 
 function UserList() {
     const navigate = useNavigate();
+    const {userRole}=authStore();
     const queryParams = new URLSearchParams(location.search);
     const {grantPointMutation} = usePoint();
     const {disabledUserMutation} = useUser();
@@ -135,15 +138,19 @@ function UserList() {
     const movePage = (newPage) => updateUrl({ page: newPage });
 
     // 회원 비활성화 버튼
-    const deleteBtn = (userId) => {
-        if (confirm('비활성화시 되돌릴 수 없습니다 진행하시겠습니까?')) {
-            disabledUserMutation.mutate({userId})
-        }else{
-            return;
-        }
-    };
+    const deleteBtn = async (userId) => {
+        const isConfirm = await CustomAlert({
+            title: "회원 비활성화",
+            width:"500px",
+            showCancelButton:true,
+            text:"비활성화시 되돌릴 수 없습니다 진행하시겠습니까?"
+        });
 
-    console.log(userList);
+        if (!isConfirm) return;
+        
+        disabledUserMutation.mutate({userId});
+        
+    };
 
     return (
         <>
@@ -210,7 +217,7 @@ function UserList() {
                     <InputForm className={styles.info} label='생년월일' readOnly defaultValue={selectedUser?.birth|| ''} />
                     <InputForm className={styles.info} label='핸드폰 번호' readOnly defaultValue={selectedUser?.phone|| ''} />
                     <InputForm className={styles.info} type='number' label='보유 포인트' readOnly defaultValue={selectedUser?.pointBalance|| ''} />
-                    {selectedUser.delYn === 'N' &&
+                    {((selectedUser.delYn === 'N')&&(selectedUser.userRole === 'USER')) &&
                     <>
                         <InputForm className={styles.info} type='number' label='포인트 지급' name='givePoint' register={register} error={errors.givePoint} />
                         <InputForm className={styles.info} type='text' label='포인트 지급 사유' name='pointReason' register={register} error={errors.pointReason} />

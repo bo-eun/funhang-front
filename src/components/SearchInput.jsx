@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import searchbtn from "../assets/img/search_btn.svg"
+import searchbtn from "../assets/img/search_btn.svg";
+import { IoSearch } from "react-icons/io5";
 
 function SearchInput({value, onChange}) {
     const [input, setInput] = useState(value);
@@ -15,6 +16,7 @@ function SearchInput({value, onChange}) {
     };
     return (
         <form className='search_box' onSubmit={handleSubmit}>
+            
             <input 
                 type="text" 
                 name="search" 
@@ -24,7 +26,7 @@ function SearchInput({value, onChange}) {
                 onChange={(e)=>setInput(e.target.value)}
             />
             <button type="submit">
-                <img src={searchbtn} alt="검색" />
+                <IoSearch className='search_icon'/>
             </button>
         </form>
     );

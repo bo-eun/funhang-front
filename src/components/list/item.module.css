@@ -7,6 +7,7 @@
     border-radius: 20px;
     width: 100%;
     aspect-ratio: 1 / 1.17;
+    overflow: hidden;
 }
 
 .prd_item .img_box .wish_btn {
@@ -19,9 +20,15 @@
     margin-top: 15px;
 }
 .prd_img{
-    width: 70%;
-    height: 70%;
+    width: 75%;
+    height: 75%;
     object-fit: contain;
+    transition: transform 0.3s ease-in-out;
+    z-index: 0;
+}
+.prd_img:hover{
+    transform: scale(1.2);
+    z-index: 0;
 }
 
 .prd_item .info_box .title {
@@ -29,6 +36,6 @@
     padding-top: 10px;
 }
 .prd_item .info_box .price {
-    font-size: 20px;
+    font-size: 23px;
     font-weight: bold;
 }

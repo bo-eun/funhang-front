@@ -4,6 +4,7 @@ import api from '../api/axiosApi';
 import { useNavigate } from "react-router";
 import { myInfoApi } from "../api/mypage/myInfoApi";
 import { dailyCheckApi } from "../api/mypage/dailyCheckApi";
+import CustomAlert from "../components/alert/CustomAlert";
 
 
 export const useMypage = () => {
@@ -22,7 +23,9 @@ export const useMypage = () => {
             console.log("내 정보 가져오기 완료");
         },
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })
 
@@ -37,7 +40,9 @@ export const useMypage = () => {
             alert("내 정보가 수정되었습니다.");
         },
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })    
 
@@ -52,7 +57,9 @@ export const useMypage = () => {
             console.log("비밀번호 변경이 완료되었습니다.");
         },
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })
 
@@ -62,12 +69,16 @@ export const useMypage = () => {
             return response;
         },
         onSuccess: (data) => {
-            alert(data.data.response);
+            CustomAlert({
+                text: data.data.response
+            })
             clearAuth();
             navigate('/');
         },
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })
         }
     })
 
@@ -80,7 +91,9 @@ export const useMypage = () => {
 
         },
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response
+            })            
         }        
     })
 

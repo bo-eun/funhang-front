@@ -1,21 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@/components/comment/comment.module.css';
+import { formatDate } from '../../hooks/utils';
+import { authStore } from '../../store/authStore';
 
-function CommentItem({comment,onDelete}) {
+function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,onDelete}) {
+    const {userId}= authStore();
+    const [localText, setLocalText] = useState(comment.content);
+
+    // 수정 모드 들어갈 때 원래 내용으로 초기화
+    useEffect(() => {
+        if (isEditing) {
+            setLocalText(comment.content);
+        }
+    }, [isEditing, comment.content]);
+
+    console.log(userId);
+
     return (
         <li className={styles.comment_item}>
             <div className={styles.comment_head}>
-                <p className={styles.name}>{comment.name}</p>
+                <p className={styles.name}>{comment.nickname ?? comment.userId}</p>
                 <div className={styles.info}>
-                    <span className={styles.date}>{comment.date}</span>
-                    <div className={styles.btn_box}>
-                        <button type="button">수정</button>
-                        |
-                        <button type="button" onClick={onDelete}>삭제</button>
-                    </div>
+                    <span className={styles.date}>{formatDate(comment.createDate)}</span>
+                    {comment.userId === userId && (
+                        !isEditing ? (
+                            <div className={styles.btn_box}>
+                            <button type="button" onClick={onStartEdit}>수정</button> |
+                            <button type="button" onClick={onDelete}>삭제</button>
+                            </div>
+                        ) : (
+                            <div className={styles.btn_box}>
+                            <button
+                                type="button"
+                                onClick={() => onSubmitEdit(comment.commentId, localText)}
+                            >
+                                완료
+                            </button>
+                            |
+                            <button type="button" onClick={onCancelEdit}>취소</button>
+                            </div>
+                        )
+                    )}
                 </div>
             </div>
-            <p className={styles.text}>{comment.text}</p>
+            {isEditing?
+                (
+                    <textarea 
+                        className={styles.updateText} 
+                        value={localText} 
+                        onChange={(e)=>setLocalText(e.target.value)}>
+                    </textarea>
+                ):(
+                    <p className={styles.text}>
+                        {comment.content}
+                    </p>
+                )
+            }
         </li> 
     );
 }

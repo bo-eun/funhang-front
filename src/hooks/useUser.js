@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { adminUserApi } from "../api/user/adminUserApi"
+import CustomAlert from "../components/alert/CustomAlert";
 
 export const useUser = () => {
     const queryClient = useQueryClient();
@@ -10,12 +11,16 @@ export const useUser = () => {
             return response;
         },
         onSuccess: ()=>{
-            alert('비활성화 처리 되었습니다.');
+            CustomAlert({
+                text:"비활성화 처리 되었습니다."
+            })
             queryClient.invalidateQueries({queryKey:['user']});
         },
         onError: (err) => {
             console.error(err);
-            alert("비활설화 처리에 실패하였습니다.");
+            CustomAlert({
+                text:"비활성화 처리에 실패하였습니다."
+            })
         }
     })
     return{disabledUserMutation}

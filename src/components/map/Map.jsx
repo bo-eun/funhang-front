@@ -3,6 +3,7 @@ import cuIcon from "../../assets/img/cu_icon.svg";
 import gs25Icon from "../../assets/img/gs25_icon.svg";
 import sevenIcon from "../../assets/img/seven_icon.svg";
 import "@/components/map/map.css";
+import CustomAlert from '../alert/CustomAlert';
 
 const KAKAO_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
@@ -95,7 +96,9 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
   // 현재 위치 가져오기
   useEffect(() => {
     if (!navigator.geolocation) {
-      alert("위치 정보를 지원하지 않는 브라우저입니다.");
+      CustomAlert({
+        text: '위치 정보를 지원하지 않는 브라우저입니다.'
+      });
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -182,8 +185,9 @@ function Map({ chainName, searchText = "", setList, selectedItem, height ,showAl
 
       const searchService = (data, status) => {
         if(isLast && status === window.kakao.maps.services.Status.ZERO_RESULT) {
-          if(showAlert) alert('검색 결과가 없습니다.')
-          return;
+          if (showAlert) {
+            CustomAlert({ text: "검색 결과가 없습니다." });
+          }
         }
 
         if (status !== window.kakao.maps.services.Status.OK) return;

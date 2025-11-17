@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminApi } from "../api/banner/bannerAdminApi";
 import { couponAdminApi } from "../api/coupon/couponAdminApi";
+import CustomAlert from "../components/alert/CustomAlert";
 import { loadingStore } from "../store/loadingStore";
 
 export const useAdmin = () => {
@@ -38,7 +39,10 @@ export const useAdmin = () => {
       console.log(data);
       console.log(error);
       setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
+      const msg = data && !error ? data.resultMessage : error.response;
+      CustomAlert({
+        text: error?.message || msg
+      });
     }
   });
 
@@ -47,12 +51,13 @@ export const useAdmin = () => {
       const response = await adminApi.delete(bannerId);
       return response;
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
-      setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
-    }    
+    onSuccess: () => {
+      alert("배너가 삭제되었습니다!");
+    },
+    onError: (error) => {
+      console.error("배너 삭제 실패:", error);
+      alert(error.response?.data);
+    },    
   });
 
   const getCouponListMutation = useMutation({
@@ -61,11 +66,17 @@ export const useAdmin = () => {
       return response;
     },
     mutationKey: ['coupon', 'list'], // 중복 요청 막음
+    onSuccess: () => {
+      console.log('쿠폰 리스트 불러오기 완료')
+    },
     onSettled: (data, error) => {
       console.log(data);
       console.log(error);
       setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
+      const msg = data && !error ? data.resultMessage : error.response;
+      CustomAlert({
+        text: msg
+      });
     }     
   });
 

@@ -6,7 +6,7 @@ export const couponApi = {
         return response.data.response;
     },
     change:async(couponId)=>{
-        const response = await api.post(`/api/v1/user/coupon/${couponId}`)
+        const response = await api.post(`/api/v1/user/coupon/${couponId}`);
         return response.data.response;
     }
 }

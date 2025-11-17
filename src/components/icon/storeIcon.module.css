@@ -1,5 +1,29 @@
 
 .category{
+    width: 50px;
+    height: 50px;
+    /* border: 1px solid #a8a8a8; */
+    border-radius: 30px;
+    box-shadow: 1px 1px 3px 1px #c9c9c9;
+    z-index: 1;
+}
+.category._cu{
+    background: #C6E857;
+    color:#652F8D;
+}
+.category._7eleven{
+    background: #147350;
+    color:white;
+}
+.category._gs25{
+    background: #43d2f1;
+    color:#0062a3;
+}
+.category._default{
+    background: #147350;
+    color:white;
+}
+/* .category{
     display: inline-block;
     font-size: 14px;
     line-height: 25px;
@@ -22,5 +46,5 @@
 .category._default{
     background: #147350;
     color:white;
-}
+} */
 

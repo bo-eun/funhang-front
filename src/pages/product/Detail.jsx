@@ -13,22 +13,35 @@ import { useLocation, useParams } from 'react-router';
 import { authStore } from '../../store/authStore';
 import { useWish } from '../../hooks/useWish';
 import { toast } from 'react-toastify';
+import { useComment } from '../../hooks/useComment';
+import ImgFallback from '../../components/imgFall/imgFallback';
 
 function Detail() {
-    const {isAuthenticated, userRole} = authStore();
-    const isAuth = authStore().isAuthenticated();  // boolean
+    const isAuth = authStore().isAuthenticated();
     const role = authStore().userRole;
     const {productId} = useParams();
     const [prd,setPrd] = useState([]);
     const [prdComment,setPrdComment] = useState([]);
     const [mapName, setMapName] = useState('');
     const { toggleWishMutation, isWish } = useWish();
-    
+    const {addCommentMutation,updateCommentMutation,deleteCommentMutation} = useComment();
     const CHAIN_MAP = {
         SEV: '7ELEVEN',
         GS25: 'GS25',
         CU: 'CU',
     };
+
+    const addComment=(content)=>{
+        if(!isAuth) return alert('로그인 후 댓글을 이용해주세요.');
+        addCommentMutation.mutate({crawlId:productId,content});
+    }
+    const updateComment = (commentId, content)=>{
+        updateCommentMutation.mutate({commentId,content});
+    }
+    const deleteComment = (commentId)=>{
+        deleteCommentMutation.mutate(commentId);
+    }
+    
     
     const {data}= useQuery({
         queryKey:['product', productId],
@@ -68,11 +81,11 @@ function Detail() {
     const handleWishClick = (e) => {
         e.preventDefault();
         if (!isAuth) {
-            toast.info("로그인 후 찜해주세요!");
+            toast.warning("로그인 후 찜해주세요!");
             return;
         }
         else if (role === "ROLE_ADMIN") {
-            toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
+            toast.warning("관리자는 찜 기능을 이용할 수 없습니다.");
             return;
         }
         if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
@@ -83,7 +96,10 @@ function Detail() {
         <section className={styles.detail_section}>
             <div className={styles.prd_info}>
                 <div className={styles.img_box}>
-                    <img src={prd.imageUrl} alt="" />
+                    <ImgFallback
+                        src={prd.imageUrl}
+                        alt={prd.productName}
+                    />
                     <button
                         type="button"
                         className={styles.wish_btn}
@@ -116,6 +132,9 @@ function Detail() {
             
             <CommentLayout 
                 comments={prdComment}
+                add={addComment}
+                update={updateComment}
+                del={deleteComment}
             />
             
         </section>

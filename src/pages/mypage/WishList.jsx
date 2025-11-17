@@ -9,7 +9,7 @@ import { Navigate, useLocation, useNavigate, useOutletContext } from 'react-rout
 import { useWish } from '../../hooks/useWish';
 
 function WishList() {
-    const { movePage, currentPage, setWishTotal } = useOutletContext();
+    const { movePage, currentPage } = useOutletContext();
     const [wish, setWish]=useState([]);
     const { wishList } = useWish();
     const pagedList = wish.slice(currentPage * 12, (currentPage + 1) * 12);
@@ -18,7 +18,6 @@ function WishList() {
     useEffect(()=>{
         if(wishList){
             setWish(wishList || []);
-            setWishTotal(wishList.length || 0);
         }
     },[wishList]);
 

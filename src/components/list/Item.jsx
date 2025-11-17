@@ -10,6 +10,8 @@ import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useWish } from "../../hooks/useWish";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import empty from "../../assets/img/emptyLogo.png";
+import ImgFallback from "../imgFall/imgFallback";
 
 function Item({ product }) {
   const isAuth = authStore().isAuthenticated();  // boolean
@@ -22,11 +24,11 @@ function Item({ product }) {
     const handleWishClick = (e) => {
       e.preventDefault();
       if (!isAuth) {
-        toast.info("로그인 후 찜해주세요!");
+        toast.warning("로그인 후 찜해주세요!");
         return;
       }
       else if (role === "ROLE_ADMIN") {
-        toast.info("관리자는 찜 기능을 이용할 수 없습니다.");
+        toast.warning("관리자는 찜 기능을 이용할 수 없습니다.");
         return;
       }
       if (toggleWishMutation.isLoading) return; // 중복 클릭 방지
@@ -43,11 +45,18 @@ function Item({ product }) {
           <EventIcon
             product={product}
             cssPosition="absolute"
-            top="10px"
-            left="10px"
+            top="15px"
+            left="15px"
+          />
+          <StoreIcon product={product.sourceChain} 
+            cssPosition="absolute"
+            top="15px"
+            right="15px"
+            width="55px"
+            height="55px"
           />
           {/* 상품 이미지 */}
-          <img
+          <ImgFallback
             src={product.imageUrl}
             alt={product.productName}
             className={styles.prd_img}
@@ -62,7 +71,7 @@ function Item({ product }) {
           </button>
         </div>
         <div className={styles.info_box}>
-          <StoreIcon product={product.sourceChain} />
+          {/* <StoreIcon product={product.sourceChain} /> */}
           <p className={styles.title}>{product.productName}</p>
           <p className={styles.price}>{product.price.toLocaleString()}원</p>
         </div>

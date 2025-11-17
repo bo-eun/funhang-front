@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import styles from "@/pages/mypage/mypage.module.css";
 import ShowModal from '../../components/modal/ShowModal';
 import { useOutletContext } from 'react-router';
+import { formatDate } from '../../hooks/utils';
 
 function Coupon(props) {
     const {movePage, currentPage, couponList}=useOutletContext();
     const [show, setShow] = useState(false);
     const [showCoupon, setShowCoupon] = useState('');
-
-    const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
-        const dd = String(date.getDate()).padStart(2, '0');
-        return `${yyyy}.${mm}.${dd}`;
-    };
 
     const handleClose = () => {
         setShow(false);
@@ -30,14 +23,17 @@ function Coupon(props) {
             <div className={styles.coupon_cont}>
                 <h3>보유쿠폰</h3>
                 <ul>
-                    {couponList?.map((item)=>
-                        (
-                        <li key={item.couponId} onClick={openCouponLayer} data-img={item.imgUrl}>
-                            <span>{formatDate(item.acquiredAt)} 발행</span>
-                            <p>{item.couponName}</p>
-                        </li>
-                        )
-                    )}
+                    {couponList&&couponList.length>0?
+                        (couponList?.map((item)=>
+                            (
+                            <li key={item.couponId} onClick={openCouponLayer} data-img={item.imgUrl}>
+                                <span>{formatDate(item.acquiredAt)} 발행</span>
+                                <p>{item.couponName}</p>
+                            </li>
+                            )
+                        )):
+                        (<p className={styles.none_list}>보유한 쿠폰이 없습니다.</p>)
+                    }
                 </ul>
             </div>
 

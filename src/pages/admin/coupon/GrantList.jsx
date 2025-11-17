@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { couponAdminApi } from '../../../api/coupon/couponAdminApi';
 import { useAdmin } from '../../../hooks/useAdmin';
 import { useQuery } from '@tanstack/react-query';
+import { formatDate } from '../../../hooks/utils';
 
 
 const colWidth = ['60px', '', '300px', '150px'];
@@ -15,14 +16,6 @@ function GrantList(props) {
     const [columns, setColumns] = useState([]);
     const [couponList, setCouponList] = useState([]);
     const [checkedList, setCheckedList] = useState([]); // 선택한 게시글 리스트 저장
-
-    const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
-        const dd = String(date.getDate()).padStart(2, '0');
-        return `${yyyy}.${mm}.${dd}`;
-    };
 
     const {data}= useQuery({
         queryKey : ['coupon'],
