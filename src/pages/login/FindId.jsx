@@ -6,6 +6,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLogin } from "../../hooks/useLogin";
+import { loadingStore } from "../../store/loadingStore";
+import Loading from "../../components/Loading";
 
 const findIdFields = [
     { label: "이름", name: "userName", type: "text", placeholder: "이름을 입력하세요" },
@@ -35,6 +37,7 @@ function FindId(props) {
         resolver: yupResolver(schema),
     });
 
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
     
     const onSubmit = async (data) => {
         console.log("폼 데이터:", data);
@@ -94,7 +97,10 @@ function FindId(props) {
                     </div>
                 </div>
             </div>
-        )}
+        )} 
+        {isLoading &&
+            <Loading />
+        }
         </>
     );
 }

@@ -5,6 +5,8 @@ import searchbtn from "../../assets/img/search_btn.svg"
 import StoreIcon from '../../components/icon/StoreIcon';
 import { IoSearch } from 'react-icons/io5';
 import StoreTextIcon from '../../components/icon/StoreTextIcon';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function Store(props) {
 
@@ -15,6 +17,8 @@ function Store(props) {
     const [toggle, setToggle] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [activeId, setActiveId] = useState('');
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const filter = (e) => {
         setChainName(e.target.value);
@@ -33,6 +37,7 @@ function Store(props) {
     }
 
     return (
+        <>
         <div className='store_cont'>
             <div className={`option_cont ${toggle ? 'on' : ''}`}>
                 <div className="option_box">
@@ -106,6 +111,11 @@ function Store(props) {
 
             <Map chainName={chainName} searchText={searchText} setList={setList} height={"calc(100vh - 100px)"} selectedItem={selectedItem} />
         </div>
+        {isLoading &&
+                <Loading />
+            }
+        </>
+        
     );
 }
 

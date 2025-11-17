@@ -11,10 +11,12 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import Pagination from '../../../components/pagination/Pagination';
 import { useProduct } from '../../../hooks/useProduct';
 import CustomAlert from '../../../components/alert/CustomAlert';
+import { loadingStore } from '../../../store/loadingStore';
 
 function AdminProductList(props) {
     const navigate = useNavigate();
     const location = useLocation();
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
     const [prdList, setPrdList] = useState([]);
     const { prdDeleteMutation } = useProduct();
     const queryParams = new URLSearchParams(location.search);

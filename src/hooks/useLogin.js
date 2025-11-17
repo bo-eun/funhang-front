@@ -3,6 +3,7 @@ import { authStore } from "../store/authStore"
 import { useNavigate } from "react-router";
 import { loginApi } from "../api/login/loginApi";
 import CustomAlert from "../components/alert/CustomAlert";
+import { loadingStore } from "../store/loadingStore";
 
 
 
@@ -11,8 +12,11 @@ export const useLogin = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
+    const setLoading = loadingStore.getState().setLoading;
+
     const joinMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await loginApi.create(formData);
             return response;
         },
@@ -27,6 +31,7 @@ export const useLogin = () => {
 
     const loginMutation =  useMutation({
         mutationFn :  async (formData) => {
+            setLoading(true);
             const response = await loginApi.login(formData);
             return response;
         },
@@ -54,6 +59,7 @@ export const useLogin = () => {
 
     const findIdMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const params = new URLSearchParams(formData).toString();
             const response = await loginApi.findId(params);
 
@@ -64,8 +70,10 @@ export const useLogin = () => {
             console.log("아이디 찾기 성공");
             console.log(data);
         },
-        onError: (error) => {
-            console.error("아이디 찾기 실패", error);
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
                 text: error.response.data.response
             })
@@ -74,15 +82,18 @@ export const useLogin = () => {
 
     const findPwMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await loginApi.findPw(formData);
             return response.data.response;
         },
 
         onSuccess: (data) => {
-            alert(data);
+            CustomAlert({ text : data});
         },
-        onError: (error) => {
-            console.error("비밀번호 찾기 실패", error);
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
                 text: error.response.data.response
             })
@@ -91,13 +102,20 @@ export const useLogin = () => {
 
     const confirmEmailCodeMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await loginApi.confirmEmailCode(formData);
             return response.data.response;
+        },
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
         }
     });
 
     const newPwMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await loginApi.newPw(formData);
             return response.data.response;
         },
@@ -106,8 +124,10 @@ export const useLogin = () => {
             console.log("비밀번호 변경 성공");
             console.log(data);
         },
-        onError: (error) => {
-            console.error("비밀번호 변경 실패", error);
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
                 text: error.response.data.response
             })

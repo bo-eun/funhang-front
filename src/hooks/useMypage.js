@@ -5,16 +5,20 @@ import { useNavigate } from "react-router";
 import { myInfoApi } from "../api/mypage/myInfoApi";
 import { dailyCheckApi } from "../api/mypage/dailyCheckApi";
 import CustomAlert from "../components/alert/CustomAlert";
+import { loadingStore } from "../store/loadingStore";
 
 
 export const useMypage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
+    const setLoading = loadingStore.getState().setLoading; // 로딩 상태 변경 메서드
+
     const { clearAuth } = authStore();
 
     const getMyInfoMutation = useMutation({
         mutationFn: async() => {
+            setLoading(true);
             const response = await myInfoApi.get();
             return response;
         },
@@ -22,32 +26,38 @@ export const useMypage = () => {
         onSuccess: (data) => {
             console.log("내 정보 가져오기 완료");
         },
-        onError: (error) => {
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
-                text: error.response.data.response
+                text: error.response.data.message || error.response.data
             })
         }
     })
 
     const setMyInfoMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await myInfoApi.set(formData);
 
             return response;
         },
 
-        onSuccess: (data) => {
-            alert("내 정보가 수정되었습니다.");
-        },
-        onError: (error) => {
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
+            const msg = data?"내 정보가 수정되었습니다.":error.response.data.response;
             CustomAlert({
-                text: error.response.data.response
+                text: error?.message || msg
             })
         }
     })    
 
     const newMypwMutation = useMutation({
         mutationFn: async(formData) => {
+            setLoading(true);
             const response = await myInfoApi.put(formData);
 
             return response;
@@ -56,15 +66,19 @@ export const useMypage = () => {
         onSuccess: (data) => {
             console.log("비밀번호 변경이 완료되었습니다.");
         },
-        onError: (error) => {
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
-                text: error.response.data.response
+                text: error.response.data.response || error.response.data
             })
         }
     })
 
     const deleteUserMutation = useMutation({
         mutationFn: async() => {
+            setLoading(true);
             const response = await myInfoApi.delete();
             return response;
         },
@@ -75,7 +89,10 @@ export const useMypage = () => {
             clearAuth();
             navigate('/');
         },
-        onError: (error) => {
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
                 text: error.response.data.response
             })
@@ -84,17 +101,21 @@ export const useMypage = () => {
 
     const dailyCheckListMutation = useMutation({
         mutationFn: async() => {
+            setLoading(true);
             const response = await dailyCheckApi.list();
             return response;
         },
         onSuccess: (data) => {
 
         },
-        onError: (error) => {
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
             CustomAlert({
                 text: error.response.data.response
-            })            
-        }        
+            }) 
+        }       
     })
 
     return { getMyInfoMutation, setMyInfoMutation, newMypwMutation, deleteUserMutation, dailyCheckListMutation }

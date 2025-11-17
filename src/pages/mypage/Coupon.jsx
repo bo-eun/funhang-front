@@ -3,11 +3,15 @@ import styles from "@/pages/mypage/mypage.module.css";
 import ShowModal from '../../components/modal/ShowModal';
 import { useOutletContext } from 'react-router';
 import { formatDate } from '../../hooks/utils';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function Coupon(props) {
     const {movePage, currentPage, couponList}=useOutletContext();
     const [show, setShow] = useState(false);
     const [showCoupon, setShowCoupon] = useState('');
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const handleClose = () => {
         setShow(false);
@@ -48,7 +52,10 @@ function Coupon(props) {
                     <p>※ 오프라인 전용 쿠폰입니다.</p>
                     <p>※ 교환 후 마이페이지 보유 쿠폰 메뉴에서 확인해주세요.</p>
                 </div>
-            </ShowModal>            
+            </ShowModal>    
+            {isLoading &&
+                <Loading />
+            }        
         </>
     );
 }

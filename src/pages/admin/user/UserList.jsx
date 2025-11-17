@@ -15,6 +15,8 @@ import { usePoint } from '../../../hooks/usePoint';
 import { useUser } from '../../../hooks/useUser';
 import { authStore } from '../../../store/authStore';
 import CustomAlert from '../../../components/alert/CustomAlert';
+import Loading from '../../../components/Loading';
+import { loadingStore } from '../../../store/loadingStore';
 
 const schema = yup.object().shape({
     givePoint: yup.number().required("지급 할 포인트를 입력해주세요"),
@@ -28,6 +30,8 @@ function UserList() {
     const {grantPointMutation} = usePoint();
     const {disabledUserMutation} = useUser();
     const queryClient = useQueryClient();
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     // 상태
     const [showModal, setShowModal] = useState(false);
@@ -228,6 +232,9 @@ function UserList() {
             )}
 
             <Pagination page={currentPage} totalRows={totalRows} pagePerRows={10} movePage={movePage} />
+            {isLoading &&
+                <Loading />
+            }
         </>
     );
 }

@@ -14,8 +14,6 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
         }
     }, [isEditing, comment.content]);
 
-    console.log(userId);
-
     return (
         <li className={styles.comment_item}>
             <div className={styles.comment_head}>

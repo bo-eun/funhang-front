@@ -16,6 +16,8 @@ import SubLayoutPdc from '../../components/product/SubLayoutPdc';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
 import { adminApi } from "../../api/banner/bannerAdminApi";
+import { loadingStore } from "../../store/loadingStore";
+import Loading from "../../components/Loading";
 
 const categoryList = [
   { name: "전체상품", img: allImg, url: "/product/ALL/ALL/ALL" },
@@ -37,6 +39,8 @@ function Main(props) {
 
 
     const swiperRef = useRef(null);
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const [slideTexts, setSlideTexts] = useState([]);
     
@@ -88,6 +92,7 @@ function Main(props) {
 
   
   return (
+    <>
     <Container className={styles.main_cont}>
       <SearchInput onChange={handleSearch} />
 
@@ -202,6 +207,10 @@ function Main(props) {
             </SubLayoutPdc>           
             </div>
         </Container>
+        {isLoading &&
+                <Loading />
+            }
+        </>
     );
 }
 

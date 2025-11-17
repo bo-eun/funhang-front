@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from 'react-router';
 import Table from '../../../components/table/Table';
 import { useAdmin } from '../../../hooks/useAdmin';
+import { loadingStore } from '../../../store/loadingStore';
+import Loading from '../../../components/Loading';
 
 const colWidth = ['60px', '70%'];
 const headers = ['NO' ,'쿠폰 이름', '관리'];
@@ -18,6 +20,8 @@ function List(props) {
     const [columns, setColumns] = useState([]);
     const [currentCoupon, setCurrentCoupon] = useState(null);
     const [checkedList, setCheckedList] = useState([]);
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const { getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation } = useAdmin();
 
@@ -204,6 +208,9 @@ function List(props) {
                 <div>
                     등록한 쿠폰이 없습니다.
                 </div>
+            }
+            {isLoading &&
+                <Loading />
             }
         </>
     );

@@ -9,6 +9,8 @@ import styles from '@/pages/login/login.module.css';
 import { loginApi } from "../../api/login/loginApi";
 import { useLogin } from "../../hooks/useLogin";
 import CustomAlert from "../../components/alert/CustomAlert";
+import { loadingStore } from "../../store/loadingStore";
+import Loading from "../../components/Loading";
 
 const signUpFields = [
     { label: "아이디", name: "userId", type: "text", placeholder: "아이디를 입력하세요" },
@@ -24,6 +26,8 @@ const signUpFields = [
 function SignUp(props) {
 
     const { joinMutation } = useLogin();
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
     
     const schema = yup.object().shape({
         userId: yup.string().required("아이디를 입력하십시오"),
@@ -60,6 +64,7 @@ function SignUp(props) {
     };
 
     return (
+        <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 
                 <section className={styles.user_loginp_wrap}>
@@ -76,7 +81,10 @@ function SignUp(props) {
                     <button type="submit" className="btn_50_b">회원가입</button>
                 </div>
             </form>
-       
+            {isLoading &&
+                <Loading />
+            }
+        </>
     );
 }
 

@@ -7,12 +7,16 @@ import { wishApi } from '../../api/mypage/wishApi';
 import Pagination from '../../components/pagination/Pagination';
 import { Navigate, useLocation, useNavigate, useOutletContext } from 'react-router';
 import { useWish } from '../../hooks/useWish';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function WishList() {
     const { movePage, currentPage } = useOutletContext();
     const [wish, setWish]=useState([]);
     const { wishList } = useWish();
     const pagedList = wish.slice(currentPage * 12, (currentPage + 1) * 12);
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
 
     useEffect(()=>{
@@ -22,6 +26,7 @@ function WishList() {
     },[wishList]);
 
     return (
+        <>
         <div className={styles.wish_cont}>
             <h3>찜목록</h3>
 
@@ -45,6 +50,11 @@ function WishList() {
             </ul>
             <Pagination page={currentPage} totalRows={wish.length} pagePerRows={12} movePage={movePage} />
         </div>
+        
+            {isLoading &&
+                <Loading />
+            }
+        </>
     );
 }
 

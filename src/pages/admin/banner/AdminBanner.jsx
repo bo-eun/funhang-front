@@ -115,13 +115,14 @@ function AdminBanner(props) {
 
   // 배너 등록
   const updateBanners = async () => {
+
     const formData = makeFormData();
 
     const useBannerCount = checkBannerCount();
 
     if (useBannerCount > 5) {
       CustomAlert({
-          text: `배너 노출 개수는 최대 5개 입니다.\n현재 노출 개수 : ${useBannerCount}개`
+          text: `배너 노출 개수는 최대 5개 입니다.<br/><br/>현재 노출 개수 : ${useBannerCount}개`
       })
       return;
     }
@@ -139,7 +140,7 @@ function AdminBanner(props) {
             showCancelButton:true,
             text:"배너를 삭제하시겠습니까?"
         });
-        
+
     if (!rows[index].bannerId) {
       remove(index);
       return;
