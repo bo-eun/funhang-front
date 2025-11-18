@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminTableList from '../../../components/admin/AdminTableList';
+import CustomAlert from '../../../components/alert/CustomAlert';
 
 function AdminCategory(props) {
     const [cateList, setCateList] = useState([]);
@@ -17,7 +18,9 @@ function AdminCategory(props) {
     };
 
     const addCate = () => {
-        alert('카테고리가 등록되었습니다!')
+        CustomAlert({
+          text: `카테고리가 등록되었습니다!`
+      })
     };
     useEffect(() => {
         setCateList([

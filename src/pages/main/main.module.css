@@ -16,8 +16,11 @@
     border-radius: 0 15px 15px 0;    
 }
 
-.swiper .swiper-slide img {
+:global(.swiper-slide){
+    height: 300px;
+}
 
+.swiper .swiper-slide img {
     width: 100%;
 }
 
@@ -41,9 +44,11 @@
     background: var(--secondary-color);
     color: #222;
 }
+
 .swiper_cont :global(.swiper-slide) img {
-    aspect-ratio: 412 / 165;
-    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    object-fit:contain;
 }
 
 .prd_total_wrap{

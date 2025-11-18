@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../../api/product/productApi';
 import { useProduct } from '../../../hooks/useProduct';
+import { loadingStore } from '../../../store/loadingStore';
+import Loading from '../../../components/Loading';
 
 const schema = yup.object().shape({
     productName: yup.string().required("상품명을 입력하십시오"),
@@ -22,6 +24,7 @@ function AdminProductUpdate() {
     const navigate = useNavigate();
     const { productId } = useParams();
     const { prdUpdateMutation } = useProduct(productId);
+    
 
     const [viewImg, setViewImg] = useState('');
     const [inputURL, setInputURL] = useState('');
@@ -30,6 +33,8 @@ function AdminProductUpdate() {
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
         resolver: yupResolver(schema),
     });
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const { data } = useQuery({
         queryKey: ['product', productId],
@@ -89,6 +94,7 @@ function AdminProductUpdate() {
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.content_bg}>
                 <div className={styles.view_img_wrap}>
@@ -179,6 +185,10 @@ function AdminProductUpdate() {
                 <Link to='/admin/product' className='min_btn_w'>목록</Link>
             </div>
         </form>
+        {isLoading &&
+            <Loading />
+        }
+        </>
     );
 }
 

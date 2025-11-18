@@ -7,12 +7,16 @@ import InputForm from "../../components/InputForm";
 import BtnForm from "../../components/btn/BtnForm";
 import styles from "@/pages/mypage/mypage.module.css";
 import { useMypage } from "../../hooks/useMypage";
+import { loadingStore } from "../../store/loadingStore";
+import Loading from "../../components/Loading";
 
 function EditProfile(props) {
 
     const [myInfo, setMyInfo] = useState(null);
 
     const [showPwForm, setShowPwForm] = useState(false);
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const myInfoSchema = yup.object().shape({
         username: yup.string().required("이름을 입력하십시오"),
@@ -77,6 +81,7 @@ function EditProfile(props) {
 
 
     return (
+        <>
         <div className={styles.point_cont}>
             <h3>내 정보 수정</h3>
 
@@ -189,6 +194,10 @@ function EditProfile(props) {
             </div>
 
         </div>
+        {isLoading &&
+            <Loading />
+        }
+        </>
     );
 }
 

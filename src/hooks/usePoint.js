@@ -3,33 +3,38 @@ import { useNavigate } from "react-router";
 import { adminUserApi } from "../api/user/adminUserApi";
 import { couponApi } from "../api/mypage/couponApi";
 import CustomAlert from "../components/alert/CustomAlert";
+import { loadingStore } from "../store/loadingStore";
 
 export const usePoint = () => {
     const queryClient = useQueryClient();
 
+    const setLoading = loadingStore.getState().setLoading; // 로딩 상태 변경 메서드
+
     const grantPointMutation = useMutation({
         mutationFn:async({ userId, amount, reason })=>{
+            setLoading(true);
             const response = await adminUserApi.givePoint(userId, amount, reason);
             return response;
         },
         onSuccess : ()=>{
-            CustomAlert({
-                text: "포인트 지급 완료"
-            });
+            
             queryClient.invalidateQueries({queryKey:['user']});
             queryClient.invalidateQueries({queryKey:['point']});
         },
-        onError: (err) => {
-            console.error(err);
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
+            const msg = data? "포인트 지급 완료":"포인트 지급 중 오류가 발생했습니다.";
             CustomAlert({
-                text: "포인트 지급 중 오류가 발생했습니다."
+                text: msg
             });
-            
         }
     });
 
     const changePoint = useMutation({
         mutationFn : async(couponId)=>{
+            setLoading(true);
             const response = await couponApi.change(couponId);
             return response;
         },

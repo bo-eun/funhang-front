@@ -8,6 +8,7 @@ import ShowModal from "../../components/modal/ShowModal";
 import styles from '@/pages/login/login.module.css';
 import { useLogin } from "../../hooks/useLogin";
 import Loading from "../../components/Loading";
+import { loadingStore } from "../../store/loadingStore";
 
 
 const findPwFields = [
@@ -25,7 +26,7 @@ function FindPw(props) {
     const navigate = useNavigate();
     
     const [show, setShow] = useState(false);
-
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
     const { findPwMutation, confirmEmailCodeMutation, newPwMutation } = useLogin();
 
     const handleClose = () => {
@@ -147,7 +148,8 @@ function FindPw(props) {
                 비밀번호가 변경되었습니다.<br />
                 새 비밀번호로 로그인해 주세요.
             </ShowModal>
-            {(findPwMutation.isLoading || confirmEmailCodeMutation.isLoading || newPwMutation.isLoading) &&
+            
+            {isLoading &&
                 <Loading />
             }
         </>

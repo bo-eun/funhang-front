@@ -6,12 +6,16 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../../api/product/productApi';
 import Pagination from '../../components/pagination/Pagination';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function List() {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const { chainId, promoId, categoryId } = useOutletContext();
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const [prdList, setPrdList] = useState([]);
     const [totalRows, setTotalRows] = useState(0);
@@ -89,6 +93,9 @@ function List() {
                 </ul>
             </section>
             <Pagination page={currentPage} totalRows={totalRows} pagePerRows='20' movePage={movePage} />
+            {isLoading &&
+                <Loading />
+            }
         </>
     );
 }

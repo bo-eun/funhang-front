@@ -9,6 +9,8 @@ import { couponAdminApi } from '../../api/coupon/couponAdminApi';
 import { usePoint } from '../../hooks/usePoint';
 import { formatDate } from '../../hooks/utils';
 import CustomAlert from '../../components/alert/CustomAlert';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function Point(props) {
     const [show, setShow] = useState(false);
@@ -16,6 +18,8 @@ function Point(props) {
     const [admincouponList, setAdminCouponList]=useState([]);
     const [couponId, setCouponId]=useState(0);
     const [couponPoint, setCouponPoint]=useState(0);
+
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const {changePoint}=usePoint();
 
@@ -120,6 +124,9 @@ function Point(props) {
             </div>
         </ShowModal>
         <Pagination page={currentPage} totalRows={pointList.length} pagePerRows={10} movePage={movePage} />
+        {isLoading &&
+            <Loading />
+        }
         </>
     );
 }

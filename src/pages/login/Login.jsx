@@ -9,19 +9,17 @@ import { useState } from "react";
 import { authStore } from "../../store/authStore";
 import { loginApi } from "../../api/login/loginApi";
 import { useLogin } from "../../hooks/useLogin";
+import { loadingStore } from "../../store/loadingStore";
+import Loading from "../../components/Loading";
 
 const loginFields = [
   { label: "아이디", name: "username", type: "text", placeholder: "아이디를 입력하세요" },
   { label: "비밀번호", name: "password", type: "password", placeholder: "비밀번호를 입력하세요" },
 ];
 function Login() {
-    const [role, setRole] = useState("user");
     const { loginMutation }  = useLogin();
-    const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setRole(e.target.value);
-    };
+    
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
     const schema = yup.object().shape({
         username: yup.string().required("아이디를 입력하십시오"),
@@ -98,6 +96,9 @@ function Login() {
                 </div>
 
             </form>
+            {isLoading &&
+                <Loading />
+            }
         
         </>
     );

@@ -11,6 +11,7 @@ import { useAdmin } from "../../../hooks/useAdmin";
 import { adminApi } from "../../../api/banner/bannerAdminApi";
 import Loading from "../../../components/Loading";
 import { loadingStore } from "../../../store/loadingStore";
+import CustomAlert from "../../../components/alert/CustomAlert";
 function AdminBanner(props) {
   const schema = yup.object().shape({
     rows: yup.array().of(
@@ -114,12 +115,15 @@ function AdminBanner(props) {
 
   // 배너 등록
   const updateBanners = async () => {
+
     const formData = makeFormData();
 
     const useBannerCount = checkBannerCount();
 
     if (useBannerCount > 5) {
-      alert(`배너 노출 개수는 최대 5개 입니다.\n현재 노출 개수 : ${useBannerCount}개`);
+      CustomAlert({
+          text: `배너 노출 개수는 최대 5개 입니다.<br/><br/>현재 노출 개수 : ${useBannerCount}개`
+      })
       return;
     }
 
@@ -130,12 +134,19 @@ function AdminBanner(props) {
   // 배너 삭제
   const deleteBanner = async (index) => {
     // 배너 추가 삭제할 경우 요청 보내지 않고 리스트에서만 삭제
+    const isConfirm = await CustomAlert({
+            title: "배너 삭제",
+            width:"500px",
+            showCancelButton:true,
+            text:"배너를 삭제하시겠습니까?"
+        });
+
     if (!rows[index].bannerId) {
       remove(index);
       return;
     }
 
-    if (!confirm("배너를 삭제하시겠습니까?")) return;
+    if (!isConfirm) return;
 
     const result = await deleteBannerMutation.mutateAsync(
       rows[index].bannerId

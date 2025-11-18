@@ -15,6 +15,9 @@ import { useWish } from '../../hooks/useWish';
 import { toast } from 'react-toastify';
 import { useComment } from '../../hooks/useComment';
 import ImgFallback from '../../components/imgFall/imgFallback';
+import CustomAlert from '../../components/alert/CustomAlert';
+import { loadingStore } from '../../store/loadingStore';
+import Loading from '../../components/Loading';
 
 function Detail() {
     const isAuth = authStore().isAuthenticated();
@@ -31,8 +34,10 @@ function Detail() {
         CU: 'CU',
     };
 
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+
     const addComment=(content)=>{
-        if(!isAuth) return alert('로그인 후 댓글을 이용해주세요.');
+        if(!isAuth) return CustomAlert({text: '로그인 후 댓글을 이용해주세요.'});
         addCommentMutation.mutate({crawlId:productId,content});
     }
     const updateComment = (commentId, content)=>{
@@ -75,7 +80,9 @@ function Detail() {
     const [copiedText, copy] = useCopyToClipboard();
     const copyUrl = () => {
         copy(window.location);
-        alert('주소가 클립보드에 복사되었습니다');
+        CustomAlert({
+            text: '주소가 클립보드에 복사되었습니다'
+        })
     }
 
     const handleWishClick = (e) => {
@@ -93,6 +100,7 @@ function Detail() {
     };
 
     return (
+        <>
         <section className={styles.detail_section}>
             <div className={styles.prd_info}>
                 <div className={styles.img_box}>
@@ -138,6 +146,11 @@ function Detail() {
             />
             
         </section>
+        {isLoading &&
+            <Loading />
+        }
+        
+        </>
     );
 }
 

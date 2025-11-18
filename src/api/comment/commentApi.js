@@ -11,7 +11,7 @@ export const commentApi = {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" }
             }
         );
-        return response.data.response;
+        return response.data;
     },
     updatePrd : async(commentId , content)=>{
         const params = new URLSearchParams();
@@ -21,10 +21,10 @@ export const commentApi = {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" }
             }
         );
-        return response.data.response;
+        return response.data;
     },
     deletePrd : async(commentId)=>{
         const response = await api.delete(`/api/v1/crawl/comment/${commentId}`);
-        return response.data.response;
+        return response.data;
     },
 };

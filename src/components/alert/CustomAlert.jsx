@@ -5,7 +5,7 @@ import './customAlert.css';
 const CustomAlert = ({
   title = '',
   text = '',
-  width = '450px',               // 반드시 문자열 단위(px, %, em)
+  width = '450px',
   padding = '2em',
   color = '#000000',
   background = '#ffffff',
@@ -17,7 +17,7 @@ const CustomAlert = ({
 }) => {
 return Swal.fire({
     title,
-    text,
+    html: text.replace(/\n/g, '<br />'),
     width,
     padding,
     color,
