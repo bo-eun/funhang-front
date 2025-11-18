@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
             element: <BoardForm type="update" />,
           },
           {
-            path: "write",
+            path: ":boardId",
             element: <BoardForm type="write" />,
           },
         ],

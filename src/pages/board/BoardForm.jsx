@@ -4,7 +4,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -16,6 +16,8 @@ function BoardForm({ type }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imgFile, setImgFile] = useState([]);
+
+  const params = useParams();
 
   const { adminCreateMutate, uploadImgMutate } = useBoard();
 
@@ -558,6 +560,7 @@ function BoardForm({ type }) {
   }, [isReady, reuploadResizedImage]);
 
 
+  // 이미지 업로드 요청
   useEffect(() => {
     if(imgFile?.length > 0) {
       const uploadCloudinary = async() => {
@@ -566,14 +569,73 @@ function BoardForm({ type }) {
           formData.append("files", file);   // 개별 파일
           formData.append("indexs", index); // 개별 index
         });
+        formData.append("brdId", params.boardId);
         console.log([...formData.entries()]);
-        const urlList = await uploadImgMutate.mutateAsync(formData);
-        //setImgFile([]);
+        const urlList = await uploadImgMutate.mutateAsync({
+          brdId: params.boardId,
+          formData: formData
+        });
+        console.log(urlList.uploadedUrls)
+        setImgFile([]);
+        insertImageToQuill(urlList.uploadedUrls[0]);
       }
 
       uploadCloudinary();
     }
   }, [imgFile])
+
+
+// 업로드 url로 변경
+function insertImageToQuill(url) {
+  const editor = quillInstanceRef.current;
+
+  const range = editor.getSelection(true); // 현재 커서 위치
+  editor.insertEmbed(range.index, 'image', url, 'user');
+}
+
+
+
+// 업로드 이미지 url로 이미지 변경
+useEffect(() => {
+  if (!isReady) return;
+  const quill = quillInstanceRef.current;
+  if (!quill) return;
+
+  let prevImages = [];
+
+  // 초기 이미지 목록 저장
+  const extractImages = () => {
+    const editor = quill.root;
+    return Array.from(editor.querySelectorAll('img')).map(img => img.getAttribute('src'));
+  };
+
+  prevImages = extractImages();
+
+  const handleChange = () => {
+    const currentImages = extractImages();
+
+    // 삭제된 이미지 찾기
+    const deleted = prevImages.filter(src => !currentImages.includes(src));
+
+    if (deleted.length > 0) {
+      console.log("🗑 삭제된 이미지:", deleted);
+
+      // 서버에 삭제 요청
+      // deleted.forEach(src => axios.delete(`/api/image?url=${src}`));
+    }
+
+    prevImages = currentImages;
+  };
+
+  quill.on('text-change', handleChange);
+
+  return () => {
+    quill.off('text-change', handleChange);
+  };
+}, [isReady]);
+
+
+
 
   const modules = useMemo(
     () => ({

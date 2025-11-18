@@ -13,28 +13,19 @@ export const boardApi = {
         return response;  
     },
 
-    adminCreate: async(formData) => {
-        const response = await api.post(`/api/v1/admin/board`, formData, {
-            headers: {"Content-Type" : "multipart/form-data"},
-        })
-        return response; 
-
-    },    
-    
-    imageCreate: async(formData) => {
-        const response = await api.post(`/api/v1/admin/board/image`, formData, {
-            headers: {"Content-Type" : "multipart/form-data"},
+    create: async() => {
+        const response = await api.post(`/api/v1/board/temp`, {
             withCredentials: true // 세션 쿠키 보내기
         })
         return response; 
-    },
 
-    create: async(formData) => {
-        const response = await api.post(`/api/v1/board`, formData, {
+    },
+    
+    imageCreate: async(formData, brdId) => {
+        const response = await api.post(`/api/v1/board/${brdId}/image`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
         })
         return response; 
-
     },
 
     update: async(brdId, formData) => {

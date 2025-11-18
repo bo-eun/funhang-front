@@ -16,32 +16,22 @@ export const useBoard = () => {
         }
     });
 
-    const adminCreateMutate = useMutation({
-        mutationFn: async(formData) => {
-            const response = await boardApi.adminCreate(formData);
-            return response.data.response.content
-        },
-        onSettled: (data, error) => {
-            data ? console.log(data) : console.error(error);
-        }
-    });
-
     const createMutate = useMutation({
-        mutationFn: async (formData) => {
-            const response = await boardApi.create(formData);
-            return response.data.response.content;
+        mutationFn: async () => {
+            const response = await boardApi.create();
+            console.log(response)
+            return response.data.response.boardId;
         },
         
         onError: (error) => {
-            console.error("게시글 작성 실패", error);
             alert(error.response.data.response);
         }
     });
 
     const uploadImgMutate = useMutation({
-        mutationFn: async (formData) => {
-            const response = await boardApi.imageCreate(formData);
-            return response.data.response.content;
+        mutationFn: async ({brdId, formData}) => {
+            const response = await boardApi.imageCreate(formData, brdId);
+            return response.data.response;
         },
         onSuccess: (data) => {
             console.log(data)
@@ -76,5 +66,5 @@ export const useBoard = () => {
         }
     });    
 
-    return { listMutate, adminCreateMutate, createMutate, uploadImgMutate, updateMutate, deleteMutate }
+    return { listMutate, createMutate, uploadImgMutate, updateMutate, deleteMutate }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from '@/pages/board/boardList.module.css';
 import SearchInput from "../../components/SearchInput";
 import Pagination from "@/components/pagination/Pagination";
@@ -13,12 +13,17 @@ const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
 
 function BoardList(props) {
     const { userRole } = authStore();
-    const { listMutate } = useBoard();
     const isAdmin = userRole === "ADMIN";
+
+    const navigate = useNavigate();
+
     const [chkOn,setChkOn] = useState([]);
     const [selected, setSelected]= useState([]);
     const [columns, setColumns] = useState([]);
+    
 
+    const { createMutate, listMutate } = useBoard();
+    
     // const [boardList, setBoardList] = useState([
     //     {
     //     id: 1,
@@ -52,6 +57,11 @@ function BoardList(props) {
     const delBrd=()=>{
         setBoardList((prev)=>prev.filter((item)=>!chkOn.includes(item.id)));
         setChkOn([]);
+    }
+
+    const writeHandler = async () => {
+        const boardId = await createMutate.mutateAsync();
+        navigate(`/board/${boardId}`);
     }
 
     useEffect(() => {
@@ -114,9 +124,7 @@ function BoardList(props) {
             </section>
 
             <div className="r_btn">
-                <Link to="/board/write" className="min_btn_b">
-                    글쓰기
-                </Link>
+                <button onClick={writeHandler} className="min_btn_b">글쓰기</button>
             </div>
 
             <section className="">
