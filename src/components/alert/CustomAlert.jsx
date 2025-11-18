@@ -15,9 +15,16 @@ const CustomAlert = ({
   backdrop = 'rgba(0,0,0,0.5)',
   customClass = {}               // 클래스 직접 적용
 }) => {
+
+  const isString = typeof text === 'string';
+  
 return Swal.fire({
     title,
-    html: text.replace(/\n/g, '<br />'),
+    // 문자열이면 html로 변환해서 줄바꿈 지원
+    ...(isString
+      ? { html: text.replace(/\n/g, '<br/>') }
+      : { text: JSON.stringify(text, null, 2) } // 객체/배열이면 text로 출력
+    ),
     width,
     padding,
     color,

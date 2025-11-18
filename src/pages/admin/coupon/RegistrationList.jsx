@@ -51,7 +51,6 @@ function List(props) {
         const result = await getCouponListMutation.mutateAsync();
         const data = result.data.response.content;
         setCouponList(data);
-        console.log(data)
         
         const columns = data.map((el) => {
             const {couponId, couponName, ...rest} = el;
@@ -106,8 +105,6 @@ function List(props) {
             const newUrl = URL.createObjectURL(file);
         }
     };
-
-    console.log(currentCoupon);
 
 
     // 쿠폰 리스트 가져오기
