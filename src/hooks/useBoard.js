@@ -42,6 +42,21 @@ export const useBoard = () => {
         }
     })
 
+    // 이미지 리사이징 요청
+    const resizeImgMutation = useMutation({
+        mutationFn: async ({brdId, formData}) => {
+            const response = await boardApi.imageCreate(formData, brdId);
+            return response.data.response;
+        },
+        onSuccess: (data) => {
+            console.log(data)
+            console.log('이미지 리사이징 성공')
+        },
+        onError: (error) => {
+            console.error("이미지 리사이징 실패", error);
+        }
+    });
+
     const updateMutate = useMutation({
         mutationFn: async (brdId, formData) => {
             const response = await boardApi.update(brdId, formData);
@@ -66,5 +81,5 @@ export const useBoard = () => {
         }
     });    
 
-    return { listMutate, createMutate, uploadImgMutate, updateMutate, deleteMutate }
+    return { listMutate, createMutate, uploadImgMutate, updateMutate, deleteMutate, resizeImgMutation }
 }
