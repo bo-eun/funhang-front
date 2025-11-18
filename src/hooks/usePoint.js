@@ -17,9 +17,11 @@ export const usePoint = () => {
             return response;
         },
         onSuccess : ()=>{
-            
             queryClient.invalidateQueries({queryKey:['user']});
             queryClient.invalidateQueries({queryKey:['point']});
+        },
+        onError:(error)=>{
+
         },
         onSettled: (data, error) => {
             console.log(data);
@@ -50,6 +52,11 @@ export const usePoint = () => {
             CustomAlert({
                 text: "쿠폰 교환에 실패하였습니다."
             });
+        },
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
         }
     })
 

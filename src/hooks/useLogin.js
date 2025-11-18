@@ -26,6 +26,11 @@ export const useLogin = () => {
         onError : (error) =>{
             console.error('회원가입 실패', error);
             alert(error.response.data.response);
+        },
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
         }
     })
 
@@ -54,6 +59,11 @@ export const useLogin = () => {
             CustomAlert({
                 text: "아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요."
             });
+        },
+        onSettled: (data, error) => {
+            console.log(data);
+            console.log(error);
+            setLoading(false);
         }
     });
 
@@ -65,18 +75,16 @@ export const useLogin = () => {
 
             return response.data.response;
         },
-
         onSuccess: (data) => {
-            console.log("아이디 찾기 성공");
-            console.log(data);
+            console.log("아이디 찾기 성공", data);
+        },
+        onError: (error)=>{
+            console.error("아이디 찾기 실패", error);
         },
         onSettled: (data, error) => {
             console.log(data);
             console.log(error);
             setLoading(false);
-            CustomAlert({
-                text: error.response.data.response
-            })
         }
     })
 
@@ -90,13 +98,13 @@ export const useLogin = () => {
         onSuccess: (data) => {
             CustomAlert({ text : data});
         },
+        onError: (error)=>{
+            console.error("비밀번호 찾기 실패", error);
+        },
         onSettled: (data, error) => {
             console.log(data);
             console.log(error);
             setLoading(false);
-            CustomAlert({
-                text: error.response.data.response
-            })
         }
     });
 
@@ -124,13 +132,13 @@ export const useLogin = () => {
             console.log("비밀번호 변경 성공");
             console.log(data);
         },
+        onError:(error)=>{
+            console.error("비밀번호 변경 실패", error);
+        },
         onSettled: (data, error) => {
             console.log(data);
             console.log(error);
             setLoading(false);
-            CustomAlert({
-                text: error.response.data.response
-            })
         }
     })    
 

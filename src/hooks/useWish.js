@@ -2,14 +2,18 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { authStore } from "../store/authStore";
 import { wishApi } from "../api/mypage/wishApi";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { loadingStore } from "../store/loadingStore";
 
 export const useWish = () => {
   const queryClient = useQueryClient();
   const isAuth = authStore().isAuthenticated();
 
+  const setLoading = loadingStore.getState().setLoading;
+  const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+
   // 찜 리스트 fetch
-  const { data: wishData = { content: [], count: 0 } } = useQuery({
+  const { data: wishData = { content: [], count: 0 }, isLoading : wishLoading } = useQuery({
     queryKey: ["wish"],
     queryFn: async () => {
       const res = await wishApi.list();
@@ -18,12 +22,17 @@ export const useWish = () => {
     enabled: isAuth,
   });
 
+  useEffect(() => {
+    setLoading(wishLoading);
+  }, [wishLoading]);
+
   // 빠른 조회용 Set
   const wishSet = useMemo(() => new Set(wishData.content.map(item => item.crawlId)), [wishData]);
 
   // 찜 토글
   const toggleWishMutation = useMutation({
     mutationFn: async (product) => {
+      setLoading(true);
       const exists = wishSet.has(product.crawlId);
       return exists
         ? await wishApi.delete(product.crawlId)
@@ -58,7 +67,10 @@ export const useWish = () => {
       }
       
     },
-    onSettled: () => queryClient.invalidateQueries(["wish"]),
+    onSettled: () => {
+      queryClient.invalidateQueries(["wish"])
+      setLoading(false);
+    },
   });
 
   return {

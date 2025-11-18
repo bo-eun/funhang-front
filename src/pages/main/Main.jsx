@@ -41,23 +41,35 @@ function Main(props) {
     const swiperRef = useRef(null);
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
     const [slideTexts, setSlideTexts] = useState([]);
     
-    const {data: popular} = useQuery({
+    const {data: popular, isLoading: popularLoading} = useQuery({
       queryKey: ["product", "popular"],
       queryFn: async () => productApi.getChainListAll({ size: 5, sort: "likeCount,desc"}),
     })
 
-    const { data: onePlusOne } = useQuery({
+    const { data: onePlusOne, isLoading: onePlusOneLoading } = useQuery({
       queryKey: ["product", "ONE_PLUS_ONE"],
       queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
     });
 
-    const { data: twoPlusOne } = useQuery({
+    const { data: twoPlusOne, isLoading: twoPlusOneLoading } = useQuery({
     queryKey: ['product', 'TWO_PLUS_ONE'],
     queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
     });
+
+    useEffect(() => {
+    //세 개 중 하나라도 로딩이면 true
+    if (popularLoading || onePlusOneLoading || twoPlusOneLoading) {
+        setLoading(true);
+      } 
+      //세 개 모두 로딩 끝나면 false
+      else {
+        setLoading(false);
+      }
+    }, [popularLoading, onePlusOneLoading, twoPlusOneLoading]);
 
     useEffect(()=>{
         if(onePlusOne?.items && twoPlusOne?.items &&popular?.items){

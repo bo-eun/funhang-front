@@ -5,6 +5,7 @@ import { Outlet, useLocation, useMatches } from 'react-router';
 import '../assets/css/common.css';
 import { titleMap } from '../hooks/pageTitle';
 import { authStore } from '../store/authStore';
+import ScrollToTop from '../components/ScrollToTop';
 
 function Layout() {
     const location = useLocation();
@@ -21,6 +22,7 @@ function Layout() {
 
     return (
         <div className='layout-root'>
+            <ScrollToTop /> 
             <Header/>            
             <section className='layout-content'>
                 <Outlet />
