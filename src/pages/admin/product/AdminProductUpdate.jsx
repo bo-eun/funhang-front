@@ -35,12 +35,17 @@ function AdminProductUpdate() {
     });
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
-    const { data } = useQuery({
+    const { data , isLoading : prdLoading} = useQuery({
         queryKey: ['product', productId],
-        queryFn: () => productApi.getDetail({ crawlId: productId }),
+        queryFn: async() => productApi.getDetail({ crawlId: productId }),
         keepPreviousData: true,
     });
+    //리스트 불러올 때 전역 로딩 상태 동기화
+    useEffect(()=>{
+        setLoading(prdLoading);
+    },[prdLoading,setLoading]);
 
     useEffect(() => {
         if(data) {
@@ -57,9 +62,6 @@ function AdminProductUpdate() {
             setChain(data.product.sourceChain);
         }
     }, [data, reset]);
-
-    console.log(data);
-
 
     const handleChange = (e) => setInputURL(e.target.value);
 

@@ -12,18 +12,12 @@ import Loading from '../../components/Loading';
 
 function WishList() {
     const { movePage, currentPage } = useOutletContext();
-    const [wish, setWish]=useState([]);
     const { wishList } = useWish();
+
+    const isLoading = loadingStore(state => state.loading);
+
+    const wish = wishList ?? [];
     const pagedList = wish.slice(currentPage * 12, (currentPage + 1) * 12);
-
-    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
-
-
-    useEffect(()=>{
-        if(wishList){
-            setWish(wishList || []);
-        }
-    },[wishList]);
 
     return (
         <>

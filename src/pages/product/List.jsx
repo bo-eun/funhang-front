@@ -16,8 +16,8 @@ function List() {
     const { chainId, promoId, categoryId } = useOutletContext();
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
-    const [prdList, setPrdList] = useState([]);
     const [totalRows, setTotalRows] = useState(0);
 
     const currentSort = queryParams.get('sort') ?? 'price,asc';
@@ -25,7 +25,7 @@ function List() {
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
     
     // API 호출
-    const { data} = useQuery({
+    const { data, isLoading:prdLoading } = useQuery({
         queryKey: ['product', chainId, promoId, categoryId, currentPage, currentSort,searchQuery],
         queryFn: async () => productApi.getChainListAll({
             sourceChain: chainId,
@@ -37,27 +37,31 @@ function List() {
         }),
         keepPreviousData: true,
     });
+    useEffect(()=>{
+        setLoading(prdLoading);
+    },[prdLoading]);
 
-    // -------------------------
+    const prdList = data?.items ?? [] ;
+
     // 페이지 이동 처리
-    // -------------------------
     const movePage = (newPage) => {
         queryParams.set('page', newPage);
         navigate(`${location.pathname}?${queryParams.toString()}`);
     };
+    useEffect(() => {
+        if (data) {
+            setTotalRows(data.totalElements || 0);
+        }
+    }, [data]);
 
-    // -------------------------
     // 정렬
-    // -------------------------
     const sortChange = (e) => {
         const newSort = e.target.value;
         queryParams.set('sort', newSort);
         queryParams.set('page', 0);
         navigate(`${location.pathname}?${queryParams.toString()}`);
     };
-    // -------------------------
     // 검색
-    // -------------------------
     const handleSearch=(newQuery)=>{
         queryParams.set('q', newQuery);
         queryParams.set('page', 0);
@@ -65,12 +69,6 @@ function List() {
     }
 
 
-    useEffect(() => {
-        if (data) {
-            setPrdList(data.items || []);
-            setTotalRows(data.totalElements || 0);
-        }
-    }, [data]);
 
     return (
         <>

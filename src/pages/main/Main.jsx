@@ -29,15 +29,9 @@ const categoryList = [
 
 function Main(props) {
 
-  const navigate = useNavigate();
-  const [bannerList, setBannerList] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [promoPop, setPromoPop] = useState([]);
-  const [promoOne, setPromoOne] = useState([]);
-  const [promoTwo, setPromoTwo] = useState([]);
-
-
-
+    const navigate = useNavigate();
+    const [bannerList, setBannerList] = useState([]);
+    const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
@@ -48,36 +42,40 @@ function Main(props) {
     const {data: popular, isLoading: popularLoading} = useQuery({
       queryKey: ["product", "popular"],
       queryFn: async () => productApi.getChainListAll({ size: 5, sort: "likeCount,desc"}),
+      keepPreviousData: true,
     })
 
     const { data: onePlusOne, isLoading: onePlusOneLoading } = useQuery({
       queryKey: ["product", "ONE_PLUS_ONE"],
       queryFn: async () => productApi.getPromo5List("ONE_PLUS_ONE"),
+      keepPreviousData: true,
     });
 
     const { data: twoPlusOne, isLoading: twoPlusOneLoading } = useQuery({
-    queryKey: ['product', 'TWO_PLUS_ONE'],
-    queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
+      queryKey: ['product', 'TWO_PLUS_ONE'],
+      queryFn: async () =>productApi.getPromo5List('TWO_PLUS_ONE'),
+      keepPreviousData: true,
     });
-
+    //전역 로딩 상태 동기화
     useEffect(() => {
-    //세 개 중 하나라도 로딩이면 true
-    if (popularLoading || onePlusOneLoading || twoPlusOneLoading) {
-        setLoading(true);
-      } 
-      //세 개 모두 로딩 끝나면 false
-      else {
-        setLoading(false);
-      }
+      if (popularLoading || onePlusOneLoading || twoPlusOneLoading) {
+          setLoading(true);
+        }
+        else {
+          setLoading(false);
+        }
     }, [popularLoading, onePlusOneLoading, twoPlusOneLoading]);
 
-    useEffect(()=>{
-        if(onePlusOne?.items && twoPlusOne?.items &&popular?.items){
-            setPromoOne(onePlusOne.items)
-            setPromoTwo(twoPlusOne.items)
-            setPromoPop(popular.items)
-        }
-    },[onePlusOne,twoPlusOne,popular]);
+    // useEffect(()=>{
+    //     if(onePlusOne?.items && twoPlusOne?.items &&popular?.items){
+    //         setPromoOne(onePlusOne.items)
+    //         setPromoTwo(twoPlusOne.items)
+    //         setPromoPop(popular.items)
+    //     }
+    // },[onePlusOne,twoPlusOne,popular]);
+    const promoPop = popular?.items ?? [];
+    const promoOne = onePlusOne?.items ?? [];
+    const promoTwo = twoPlusOne?.items ?? [];
 
   // 등록 배너 가져오기
   useEffect(() => {

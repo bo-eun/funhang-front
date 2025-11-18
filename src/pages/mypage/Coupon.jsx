@@ -5,6 +5,7 @@ import { useOutletContext } from 'react-router';
 import { formatDate } from '../../hooks/utils';
 import { loadingStore } from '../../store/loadingStore';
 import Loading from '../../components/Loading';
+import Pagination from '../../components/pagination/Pagination';
 
 function Coupon(props) {
     const {movePage, currentPage, couponList}=useOutletContext();
@@ -12,6 +13,8 @@ function Coupon(props) {
     const [showCoupon, setShowCoupon] = useState('');
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+
+    const pagedList = couponList.slice(currentPage * 9, (currentPage + 1) * 9);
 
     const handleClose = () => {
         setShow(false);
@@ -28,7 +31,7 @@ function Coupon(props) {
                 <h3>보유쿠폰</h3>
                 <ul>
                     {couponList&&couponList.length>0?
-                        (couponList?.map((item)=>
+                        (pagedList?.map((item)=>
                             (
                             <li key={item.couponId} onClick={openCouponLayer} data-img={item.imgUrl}>
                                 <span>{formatDate(item.acquiredAt)} 발행</span>
@@ -52,7 +55,8 @@ function Coupon(props) {
                     <p>※ 오프라인 전용 쿠폰입니다.</p>
                     <p>※ 교환 후 마이페이지 보유 쿠폰 메뉴에서 확인해주세요.</p>
                 </div>
-            </ShowModal>    
+            </ShowModal>  
+            <Pagination page={currentPage} totalRows={couponList.length} pagePerRows={10} movePage={movePage} />  
             {isLoading &&
                 <Loading />
             }        

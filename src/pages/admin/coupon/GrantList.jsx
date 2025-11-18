@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Table from '../../../components/table/Table';
 import { Link } from 'react-router';
 import { couponAdminApi } from '../../../api/coupon/couponAdminApi';
@@ -14,35 +14,32 @@ const headers = ['NO', '요청 정보', '유저 ID', '요청 날짜'];
 
 function GrantList(props) {
 
-    const [boardList, setBoardList] = useState(null);
-    const [columns, setColumns] = useState([]);
-    const [couponList, setCouponList] = useState([]);
-    const [checkedList, setCheckedList] = useState([]); // 선택한 게시글 리스트 저장
-
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
-    const {data}= useQuery({
+    const {data,isLoading:couponLoading}= useQuery({
         queryKey : ['coupon'],
         queryFn: async()=>couponAdminApi.requestList(),
+        keepPreviousData: true,
     })
 
-    console.log(data);
-
-    useEffect(()=>{
-        if(data){
-            setCouponList(data.items);
-        }
-    },[data]);
-
+     // 전역 로딩 상태 동기화
     useEffect(() => {
-        if (!couponList) return;
-        const mappedColumns = couponList.map((item, index) => ({
-            couponId: index,
+        setLoading(couponLoading);
+    }, [couponLoading, setLoading]);
+
+    //데이터 세팅
+    const couponList = data?.items ?? [];
+    
+    //사용자의 쿠폰요청 리스트
+    const columns = useMemo(() => {
+        if (!couponList) return [];
+        return couponList.map((item, index) => ({
+            couponId: index + 1,
             couponName: item.couponName,
             userId: item.userId,
             date: formatDate(item.acquiredAt)
         }));
-        setColumns(mappedColumns);
     }, [couponList])
 
     return (
@@ -53,10 +50,9 @@ function GrantList(props) {
                 </div>
                 <Table 
                     headers={headers} 
-                    data={boardList} 
+                    data={couponList} 
                     colWidth={colWidth}
                     columns={columns}
-                    setCheckedList={setCheckedList}
                     />
             </section>
             {isLoading &&
