@@ -23,8 +23,6 @@ function Detail() {
     const isAuth = authStore().isAuthenticated();
     const role = authStore().userRole;
     const {productId} = useParams();
-    const [prd,setPrd] = useState([]);
-    const [prdComment,setPrdComment] = useState([]);
     const [mapName, setMapName] = useState('');
     const { toggleWishMutation, isWish } = useWish();
     const {addCommentMutation,updateCommentMutation,deleteCommentMutation} = useComment();
@@ -35,6 +33,7 @@ function Detail() {
     };
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
     const addComment=(content)=>{
         if(!isAuth) return CustomAlert({text: '로그인 후 댓글을 이용해주세요.'});
@@ -48,20 +47,20 @@ function Detail() {
     }
     
     
-    const {data}= useQuery({
+    const {data, isLoading:prdLoading}= useQuery({
         queryKey:['product', productId],
         queryFn: async()=> productApi.getDetail({
             crawlId: productId
         }),
         keepPreviousData: true,
     });
-    
+
     useEffect(()=>{
-        if(data){
-            setPrd(data.product ||[]);
-            setPrdComment(data.comments ||[])
-        }
-    }, [data]);
+        setLoading(prdLoading);
+    },[prdLoading,setLoading]);
+
+    const prd = data?.product ?? [];
+    const prdComment = data?.comments ?? [];
 
     const [month, setMonth] = useState(null);
 

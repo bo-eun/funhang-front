@@ -25,18 +25,16 @@ const schema = yup.object().shape({
 
 function UserList() {
     const navigate = useNavigate();
-    const {userRole}=authStore();
     const queryParams = new URLSearchParams(location.search);
     const {grantPointMutation} = usePoint();
     const {disabledUserMutation} = useUser();
-    const queryClient = useQueryClient();
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
     // 상태
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [userList, setUserList] = useState([]);
     //필터 및 검색
     const [roleFilterQuery, setRoleFilterQuery] = useState(queryParams.get('roleFilter') ?? '');
     const [delYnQuery, setDelYnQuery] = useState(queryParams.get('delYn') ?? '');
@@ -61,8 +59,9 @@ function UserList() {
         });
         navigate(`${location.pathname}?${params.toString()}`);
     }, [navigate]);
-
-    const { data:user } = useQuery({
+    
+    //데이터 불러오기
+    const { data:user, isLoading:userLoading } = useQuery({
         queryKey: ['user', searchQuery, roleFilterQuery,delYnQuery, currentPage],
         queryFn: () => adminUserApi.list({
             searchText: searchQuery,
@@ -74,12 +73,23 @@ function UserList() {
         keepPreviousData: true
     });
 
+    //리스트 불러올 때 전역 로딩 상태 동기화
+    useEffect(()=>{
+        setLoading(userLoading);
+    },[userLoading,setLoading]);
+
+    //데이터 세팅
+    const userList = user?.content ?? [];
+
+    //총 데이터 개수 set(pagination)
     useEffect(() => {
         if (user) {
-            setUserList(user.content || []);
             setTotalRows(user.total || 0);
         }
     }, [user]);
+
+    // 페이징
+    const movePage = (newPage) => updateUrl({ page: newPage });
 
     // 검색
     const handleSearch = (newQuery) => {
@@ -105,14 +115,6 @@ function UserList() {
         setSelectedUser(user);
         setShowModal(true);
     };
-
-    useEffect(() => {
-    if (selectedUser) {
-        console.log('모달 열릴 때 선택된 사용자 ID:', selectedUser.userId);
-    }
-}, [selectedUser]);
-
-
     const handleClose = () => setShowModal(false);
 
     const handlePoint = handleSubmit((formData)=>{
@@ -127,7 +129,8 @@ function UserList() {
             setShowModal(false);
         }});
     })
-    //input 모달 창 열면 초기화
+
+    //모달 창 열면 input 초기화
     useEffect(() => {
     if (showModal && selectedUser) {
         reset({
@@ -136,10 +139,6 @@ function UserList() {
         });
     }
     }, [showModal, selectedUser, reset]);
-
-
-    // 페이징
-    const movePage = (newPage) => updateUrl({ page: newPage });
 
     // 회원 비활성화 버튼
     const deleteBtn = async (userId) => {

@@ -12,28 +12,30 @@ import Pagination from '../../../components/pagination/Pagination';
 import { useProduct } from '../../../hooks/useProduct';
 import CustomAlert from '../../../components/alert/CustomAlert';
 import { loadingStore } from '../../../store/loadingStore';
+import Loading from '../../../components/Loading';
 
 function AdminProductList(props) {
     const navigate = useNavigate();
     const location = useLocation();
-    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
-    const [prdList, setPrdList] = useState([]);
     const { prdDeleteMutation } = useProduct();
     const queryParams = new URLSearchParams(location.search);
-
+    
     //페이징
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(parseInt(queryParams.get('page') ?? '0', 10));
+    //sort필터사용시 활성
     const [currentSort, setCurrentSort] = useState(queryParams.get('sort') ?? 'price,asc');
     //검색
     const searchQuery = queryParams.get('q') ?? '';
-
+    
     //편의점명, 행사, 카테고리
     const { sourceChain, promoType, productType } = useParams();
     const [chainId, setChainId] = useState(sourceChain?.toUpperCase() || 'ALL');
     const [promoId, setPromoId] = useState(promoType?.toUpperCase() || 'ALL');
     const [categoryId, setCategoryId] = useState(productType?.toUpperCase() || 'ALL');
-  
+    
+    
+
     // 필터 변경 시 URL 업데이트
     const updateUrl = useCallback((newParams) => {
         Object.entries(newParams).forEach(([key, value]) => {
@@ -72,7 +74,6 @@ function AdminProductList(props) {
     };
     // 검색
     const handleSearch=(newQuery)=>{
-        // const params = new URLSearchParams(location.search);
         queryParams.set('q', newQuery);
         queryParams.set('page', 0);
         navigate(`${location.pathname}?${queryParams.toString()}`);
@@ -89,8 +90,12 @@ function AdminProductList(props) {
         prdDeleteMutation.mutate(productId);
     }
 
-    // React Query fetch
-    const { data} = useQuery({
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
+    
+
+    // 데이터 리스트 불러오기
+    const { data, isLoading : prdLoading} = useQuery({
         queryKey: ['product', chainId, promoId, categoryId, currentPage,searchQuery],
         queryFn: async () => productApi.getChainListAll({
             sourceChain:chainId,
@@ -101,16 +106,18 @@ function AdminProductList(props) {
         }),
         keepPreviousData: true,
     });
-
+    //리스트 불러올 때 전역 로딩 상태 동기화
+    useEffect(()=>{
+        setLoading(prdLoading);
+    },[prdLoading,setLoading]);
+    //데이터 셋팅
+    const prdList = data?.items ?? [];
+    //페이징처리 위해 data 총 length
     useEffect(()=>{
         if(data){
-            setPrdList(data.items || []);
             setTotalRows(data.totalElements || 0);
-            
         }
     },[data]);
-
-    console.log(data);
 
     return (
         <>
@@ -172,7 +179,9 @@ function AdminProductList(props) {
                 </ListBtnLayout>
             ))}
             <Pagination page={currentPage} totalRows={totalRows} pagePerRows={20} movePage={movePage} />
-            
+            {isLoading &&
+                <Loading />
+            }
         </>
     );
 }
