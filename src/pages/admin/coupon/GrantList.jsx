@@ -48,7 +48,6 @@ function GrantList(props) {
     const couponList = data?.items ?? [];
 
     useEffect(()=>{
-        console.log(data);
         setTotalRows(data?.count);
     },[data])
     

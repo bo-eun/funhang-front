@@ -120,7 +120,6 @@ function AdminProductList(props) {
     const prdList = data?.items ?? [];
     //페이징처리 위해 data 총 length
     useEffect(()=>{
-        console.log(prdList);
         if(data){
             setTotalRows(data.totalElements || 0);
         }
