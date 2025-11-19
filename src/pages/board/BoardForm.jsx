@@ -4,7 +4,8 @@ import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import { loadingStore } from '../../store/loadingStore';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -12,16 +13,19 @@ Size.whitelist = ['16px', '18px', '20px', '24px', '32px'];
 Quill.register(Size, true);
 
 function BoardForm({ type }) {
+  const location = useLocation();
+  const prevLocation = useRef(location.pathname);
+
+  const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imgFile, setImgFile] = useState([]);
-
-  const [uploadImg, setUploadImg] = useState({}); 
+  const [boardDetail, setBoardDetail] = useState({});
 
   const params = useParams();
 
-  const { adminCreateMutate, uploadImgMutate } = useBoard();
+  const { getMutate, updateMutate, uploadImgMutate, deleteMutate } = useBoard();
 
   const navigate = useNavigate();
   
@@ -262,7 +266,7 @@ function BoardForm({ type }) {
         // 미리보기 이미지를 덮어쓰기 위한 이미지 이름 저장
         const uniqueId = Date.now() + Math.random();
         if (img) {
-          img.dataset.fileName = uploadImg.name;
+          img.dataset.fileName = file.name;
           img.dataset.id = uniqueId;
         }
         console.log('이미지 삽입 완료');
@@ -639,6 +643,10 @@ function BoardForm({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(isLoading) {
+      alert("이미지 업로드중입니다. 잠시후에 다시 시도해주세요.") ;
+      return false;
+    };
     console.log('제목:', title);
     console.log('내용:', content);
 
@@ -648,9 +656,41 @@ function BoardForm({ type }) {
 
     console.log(imgFile)
 
-    await adminCreateMutate.mutateAsync(formData);
-    // navigate('/board');
+    await updateMutate.mutateAsync({
+      brdId: params.boardId,
+      formData: formData
+    });
+    navigate('/board');
   };
+
+  const cancleWrite = async () => {
+    await deleteMutate.mutateAsync(params.boardId);
+  }
+
+  const goBoard = () => {
+    type==="update" ? navigate("/board/detail") : navigate("/board");
+  }
+
+  // 게시물 내용 가져오기
+  useEffect(() => {
+    const fetchBoard = async () => {
+      const result = await getMutate.mutateAsync(params.boardId);
+      setBoardDetail(result.board);
+      setTitle(result.board.title);
+      setContent(result.board.contents);
+      console.log(result.board);
+    }
+    fetchBoard();
+  }, [])
+
+  // 게시물 등록 단계일 때, 다른 페이지 이동 시 게시물 삭제
+
+  useEffect(() => {
+    if (prevLocation.current !== location.pathname) {
+      cancleWrite();                // 이동 직전에 실행할 함수
+      prevLocation.current = location.pathname;
+    }
+  }, [location.pathname, cancleWrite]);
 
   return (
     <>
@@ -692,7 +732,7 @@ function BoardForm({ type }) {
             <button type='submit' className='min_btn_b'>
               {type === "update" ? "수정" : "등록"}
             </button>
-            <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>
+            <button type="button" className='min_btn_w' onClick={goBoard}>취소</button>
           </div>
         </section>
       </form>

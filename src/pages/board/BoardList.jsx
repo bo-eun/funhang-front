@@ -6,6 +6,7 @@ import Pagination from "@/components/pagination/Pagination";
 import { authStore } from "../../store/authStore";
 import Table from "../../components/table/Table";
 import { useBoard } from "../../hooks/useBoard";
+import { useAdmin } from "../../hooks/useAdmin";
 
 const colWidth = ['50px', '', '160px', '80px', '130px'];
 const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
@@ -13,72 +14,72 @@ const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
 
 function BoardList(props) {
     const { userRole } = authStore();
-    const isAdmin = userRole === "ADMIN";
+    const isAdmin = userRole === "ROLE_ADMIN";
 
     const navigate = useNavigate();
 
     const [chkOn,setChkOn] = useState([]);
-    const [selected, setSelected]= useState([]);
     const [columns, setColumns] = useState([]);
     
-
     const { createMutate, listMutate } = useBoard();
-    
-    // const [boardList, setBoardList] = useState([
-    //     {
-    //     id: 1,
-    //     title: "맛나다 맛나@",
-    //     name: "김땡땡",
-    //     likeCount: "5",
-    //     date: new Date().toISOString().slice(0, 10),
-    //     adminPick: false,
-    //     },
-    // ]);
+    const { deleteBoardMutate, bestBoardMutate, noticeBoardMutate } = useAdmin();
 
-    const [boardList, setBoardList] = useState(null);
+    const [boardList, setBoardList] = useState([]);
+
+    // 게시글 리스트 가져오기
+    const fetchList = async() => {
+        const result = await listMutate.mutateAsync();
+        setBoardList(result.items);
+        // board테이블에 adminPick 들어가야함...
+    };
+
+    const isChecked = () => {
+        if(chkOn.length <= 0) {
+            alert('채택할 게시물을 선택해주세요');
+            return false;
+        }   
+        return true;
+    }
 
     // 채택
-    const selectBrd=()=>{
-        console.log(selected);
-        setBoardList((prev) => 
-            prev.map(list => {
-                if(chkOn.includes(list.id)) {
-                    list.adminPick = true;
-                }
-
-                return list
-            })
-
-        )
+    const selectBrd = async ()=>{
+        if(!isChecked()) return;
+        await bestBoardMutate.mutateAsync(chkOn);
         setChkOn([]);
+        fetchList();
+    }
+
+    // 공지 등록
+    const noticeBrd = async () => {
+        if(!isChecked()) return;
+        await noticeBoardMutate.mutateAsync(chkOn);
+        setChkOn([]);
+        fetchList();
     }
 
     // 삭제
-    const delBrd=()=>{
-        setBoardList((prev)=>prev.filter((item)=>!chkOn.includes(item.id)));
-        setChkOn([]);
+    const delBrd= async ()=>{
+        if(!isChecked()) return;
+        await deleteBoardMutate.mutateAsync(chkOn);
+        fetchList();
     }
 
     const writeHandler = async () => {
         const boardId = await createMutate.mutateAsync();
-        navigate(`/board/${boardId}`);
+        navigate(`/board/${boardId}/write`);
     }
 
     useEffect(() => {
-        const fetchList = async() => {
-            //const list = await listMutate.mutateAsync();
-            //setBoardList(list);
-            // board테이블에 adminPick 들어가야함...
-        };
         fetchList();
     }, [])
 
     useEffect(() => {
-        if(boardList) {
+        if(boardList.length > 0) {
             const tableList = boardList?.map((list) => {
-                const { adminPick, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
-                return rest; // 새로운 객체 반환
+                const { brdId, title, userId, likeCount, createDate, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
+                return { brdId, title, userId, likeCount, createDate }; // 새로운 객체 반환
             });
+            console.log(tableList) 
             setColumns(tableList); // 새로운 배열로 setColumns 호출
         }
     }, [boardList]);
@@ -97,15 +98,16 @@ function BoardList(props) {
             <div className={styles.brd_info_wrap}>
                 <div className={styles.brd_list_info}>
                     <div className="total">
-                        총 <strong>{boardList?.length}</strong> 개
+                        총 <strong>{boardList.length > 0 ? boardList.length : 0}</strong> 개
                     </div>
                     <select name="" id="" className="form-select">
                         <option value="price">등록순</option>
                         <option value="best">추천순</option>
                     </select>
                 </div>
-                {isAdmin&&(
+                {isAdmin &&(
                     <>
+                        <button className="min_btn_w" onClick={noticeBrd}>공지</button>
                         <button className="min_btn_w" onClick={selectBrd}>채택</button>
                         <button className="min_btn_w" onClick={delBrd}>삭제</button>
                     </>
@@ -117,8 +119,9 @@ function BoardList(props) {
                     colWidth={colWidth}
                     headers={headers}
                     setCheckedList={setChkOn}
+                    checkedList={chkOn}
                     columns={columns}
-                    isCheckbox={true}
+                    useCheckbox={true}
                     data={boardList}
                 />
             </section>

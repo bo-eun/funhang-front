@@ -3,6 +3,7 @@ import { adminApi } from "../api/banner/bannerAdminApi";
 import { couponAdminApi } from "../api/coupon/couponAdminApi";
 import CustomAlert from "../components/alert/CustomAlert";
 import { loadingStore } from "../store/loadingStore";
+import { boardAdminApi } from "../api/board/boardAdminApi";
 
 export const useAdmin = () => {
   const queryClient = useQueryClient();
@@ -125,5 +126,67 @@ export const useAdmin = () => {
     }      
   })
 
-  return { getBannerListMutation, createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation };
+  const deleteBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+          const response = await boardAdminApi.delete(brdIdList);
+          return response.data.response;
+      },
+      onSuccess: (data) => {
+          console.log(data)
+          alert('게시글 삭제 완료');
+      },
+      
+      onError: (error) => {
+          console.error("게시글 삭제 실패", error);
+          alert(error.response.data.response);
+      }
+  });  
+
+
+  const bestBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+          const response = await boardAdminApi.best(brdIdList);
+          return response.data.response;
+      },
+      onSuccess: (data) => {
+          console.log(data)
+          alert('게시글 채택 완료');
+      },
+      
+      onError: (error) => {
+          console.error("게시글 채택 실패", error);
+          console.log(error)
+      }
+  }); 
+
+  const noticeBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+          const response = await boardAdminApi.notice(brdIdList);
+          return response.data.response;
+      },
+      onSuccess: (data) => {
+          console.log(data)
+          alert(data.resultMessage);
+      },
+      
+      onError: (error) => {
+          console.error("게시글 공지 등록 실패", error);
+          console.log(error)
+      }
+  }); 
+
+
+
+  return { 
+    getBannerListMutation, 
+    createBannerMutation, 
+    deleteBannerMutation, 
+    getCouponListMutation, 
+    createCouponMutation, 
+    updateCouponMutation, 
+    deleteCouponMutation ,
+    deleteBoardMutate,
+    bestBoardMutate,
+    noticeBoardMutate
+  };
 };

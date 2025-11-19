@@ -117,6 +117,15 @@ button {
   gap: 10px;
 }
 /* 가로길이 110px 고정 버튼 blue */
+.min_btn {
+  display: flex;
+  justify-content: center;
+  width: 110px;
+  height: 45px;
+  line-height: 45px;
+  border-radius: 25px;
+  padding: 0 20px;
+}
 .min_btn_b{
   display: flex;
   justify-content: center;
@@ -155,6 +164,14 @@ button {
   border-color: #f0f0f0;
   color: rgb(0, 0, 0);
 }
+.min_btn.line.red {
+  border: 1px solid #e45555;
+  color:#dd3d3d;
+}
+.min_btn.line.red:hover {
+  background: #ffeded;
+}
+
 
 /* 부모넓이 없으면 text 길이에 맞게 */
 /* 높이 50px 넓이100%  blue 버튼 */
