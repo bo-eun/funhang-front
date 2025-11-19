@@ -14,7 +14,8 @@
 }
 
 .brd_list_info :global(.form-select){
-    width: 170px;
+    width: 130px;
+    height: 38px;
 }
 
 .brd_info_wrap button{
@@ -23,10 +24,16 @@
 .brd_info_wrap button:nth-of-type(1){
     border:1px solid rgb(8, 116, 26);
     color: rgb(8, 116, 26);
+    height: 38px;
+    line-height: 38px;
+    border-radius: 5px;
 }
 .brd_info_wrap button:nth-of-type(2){
     border:1px solid rgb(161, 16, 16);
     color: rgb(161, 16, 16);
+    height: 38px;
+    line-height: 38px;
+    border-radius: 5px;
 }
 
 /* 게시판 리스트 */

@@ -31,9 +31,7 @@ export const useMypage = () => {
                 text: error.response.data.message || error.response.data
             })
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
@@ -55,9 +53,7 @@ export const useMypage = () => {
                 text: error?.message || error.response.data.response
             })
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })    
@@ -80,9 +76,7 @@ export const useMypage = () => {
                 text: error.response.data.response || error.response.data
             })
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
@@ -105,9 +99,7 @@ export const useMypage = () => {
                 text: error.response.data.response
             })
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
@@ -126,9 +118,7 @@ export const useMypage = () => {
                 text: error.response.data.response
             }) 
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }       
     })

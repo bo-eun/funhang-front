@@ -48,10 +48,9 @@ function List() {
         queryParams.set('page', newPage);
         navigate(`${location.pathname}?${queryParams.toString()}`);
     };
+    
     useEffect(() => {
-        if (data) {
-            setTotalRows(data.totalElements || 0);
-        }
+        setTotalRows(data?.totalElements || 0);
     }, [data]);
 
     // 정렬
@@ -84,9 +83,9 @@ function List() {
                 </div>
                 <ul className={styles.prd_list}>
                     {prdList?.map((product) => (
-                            <li key={product.crawlId}>
-                                <Item key={product.crawlId} product={product}/>
-                            </li>
+                        <li key={product.crawlId}>
+                            <Item key={product.crawlId} product={product}/>
+                        </li>
                     ))}
                 </ul>
             </section>

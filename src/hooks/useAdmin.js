@@ -19,9 +19,7 @@ export const useAdmin = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSettled: () => {
       setLoading(false);
     }
   });
@@ -34,6 +32,9 @@ export const useAdmin = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
+    },
+    onError: (error)=>{
+
     },
     onSettled: (data, error) => {
       console.log(data);
@@ -83,9 +84,7 @@ export const useAdmin = () => {
         text: error.response
       });
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSettled: () => {
       setLoading(false);
     }     
   });

@@ -1,10 +1,24 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-function ButtonOrLink({ isLink = false, to, onClick, children, className, style, disabled }) {
+function ButtonOrLink({ 
+  isLink = false, 
+  to,
+  state, 
+  onClick, 
+  children, 
+  className, 
+  style, 
+  disabled,
+}) {
   if (isLink) {
     return (
-      <Link to={to} className={className} style={style}>
+      <Link 
+        to={to} 
+        className={className} 
+        style={style}
+        state={state}
+      >
         {children}
       </Link>
     );

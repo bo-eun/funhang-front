@@ -27,9 +27,7 @@ export const useLogin = () => {
             console.error('회원가입 실패', error);
             alert(error.response.data.response);
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
@@ -60,9 +58,7 @@ export const useLogin = () => {
                 text: "아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요."
             });
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     });
@@ -81,9 +77,7 @@ export const useLogin = () => {
         onError: (error)=>{
             console.error("아이디 찾기 실패", error);
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
@@ -101,9 +95,7 @@ export const useLogin = () => {
         onError: (error)=>{
             console.error("비밀번호 찾기 실패", error);
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     });
@@ -114,9 +106,7 @@ export const useLogin = () => {
             const response = await loginApi.confirmEmailCode(formData);
             return response.data.response;
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     });
@@ -135,9 +125,7 @@ export const useLogin = () => {
         onError:(error)=>{
             console.error("비밀번호 변경 실패", error);
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })    

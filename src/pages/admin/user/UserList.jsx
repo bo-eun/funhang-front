@@ -172,7 +172,11 @@ function UserList() {
 
                 <SearchInput onChange={handleSearch} value={searchQuery} />
             </div>
-
+            <div className={`${styles.admin_total}`}>
+                <div className='total'>
+                    총 <strong>{totalRows}</strong> 명
+                </div>
+            </div>
             {userList.map((user) => (
                 <ListBtnLayout
                     key={user.userId}

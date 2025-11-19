@@ -28,12 +28,17 @@ function List(props) {
     const schema = yup.object().shape({
         couponName: yup.string().required("쿠폰 이름을 입력하십시오"),
         requiredPoint: yup.string().required("차감 포인트를 입력하십시오"),
-        file: yup.mixed().required("파일을 선택해주세요")
-                    .test(
-                        "fileSelected",
-                        "파일을 선택해주세요",
-                        value => value && value.length > 0
-                    )
+        file: yup.mixed().when("imgUrl", (imgUrl, schema) => {
+          return imgUrl
+            ? schema
+            : schema.required("이미지 파일을 업로드 해주세요.");
+        }),
+        // file: yup.mixed().required("파일을 선택해주세요")
+        //             .test(
+        //                 "fileSelected",
+        //                 "파일을 선택해주세요",
+        //                 value => value && value.length > 0
+        //             )
     });
     const {
         register,

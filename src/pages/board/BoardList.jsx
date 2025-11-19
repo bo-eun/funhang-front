@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import styles from '@/pages/board/boardList.module.css';
 import SearchInput from "../../components/SearchInput";
 import Pagination from "@/components/pagination/Pagination";
@@ -12,12 +12,24 @@ const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
 
 
 function BoardList(props) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    //총데이터수 넣어주기
+    const [totalRows, setTotalRows] = useState(0);
+    //이동 된 페이지
+    const [currentPage,setCurrentPage]= useState(parseInt(queryParams.get("page")??"0", 10)); 
+    
+
     const { userRole } = authStore();
     const { listMutate } = useBoard();
     const isAdmin = userRole === "ADMIN";
     const [chkOn,setChkOn] = useState([]);
     const [selected, setSelected]= useState([]);
     const [columns, setColumns] = useState([]);
+
+    
 
     // const [boardList, setBoardList] = useState([
     //     {
@@ -75,6 +87,11 @@ function BoardList(props) {
 
     console.log(columns)
 
+    const movePage =(newPage)=>{
+        setCurrentPage(newPage);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
+    }
+
     return (
         <>
             <div className='base_search_bg'>
@@ -94,7 +111,7 @@ function BoardList(props) {
                         <option value="best">추천순</option>
                     </select>
                 </div>
-                {isAdmin&&(
+                {location.pathname === '/admin/board'&&(
                     <>
                         <button className="min_btn_w" onClick={selectBrd}>채택</button>
                         <button className="min_btn_w" onClick={delBrd}>삭제</button>
@@ -120,12 +137,7 @@ function BoardList(props) {
             </div>
 
             <section className="">
-                <Pagination
-                    page="0"
-                    // totalRows={}
-                    pagePerRows = "10"
-                    // movePage={}
-                />
+                <Pagination page={currentPage} totalRows={totalRows} pagePerRows={10} movePage={movePage} />
             </section>
              
         </>

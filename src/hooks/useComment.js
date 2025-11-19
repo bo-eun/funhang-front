@@ -25,9 +25,7 @@ export const useComment=()=>{
                 text: "댓글 등록에 실패하였습니다."
             });
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.error(error);
+        onSettled: () => {
             setLoading(false);
         },
 
@@ -49,9 +47,7 @@ export const useComment=()=>{
                 text: "댓글이 수정에 실패하였습니다."
             });
         },
-        onSettled:(data,error)=>{
-            console.log(data);
-            console.error(error);
+        onSettled:()=>{
             setLoading(false);
         }
     });
@@ -73,9 +69,7 @@ export const useComment=()=>{
                 text: "댓글이 삭제에 실패하였습니다."
             });
         },
-        onSettled:(data,error)=>{
-            console.log(data);
-            console.error(error);
+        onSettled:()=>{
             setLoading(false);
         }
     })
