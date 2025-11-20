@@ -1,5 +1,5 @@
  import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import likeOn from '../../assets/img/likeOn.png';
 import likeOff from '../../assets/img/likeOff.png';
 import CommentLayout from '../../components/comment/CommentLayout';
@@ -11,11 +11,14 @@ import { authStore } from '../../store/authStore';
 import CustomAlert from '../../components/alert/CustomAlert';
 
 function BoardDetail() {
+    const location = useLocation();
+    const navigate = useNavigate();
     const params = useParams();
 
     const isAuth = authStore().isAuthenticated();
     const role = authStore().userRole;
 
+    const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
 
     const [isActive, setIsActive] = useState(false);
     const [boardDetail, setBoardDetail] = useState({});
@@ -37,8 +40,15 @@ function BoardDetail() {
     }
 
     const deleteBoard = async () => {
-        if(!confirm('게시물을 삭제하시겠습니까?')) return;
+        const isConfirm = await CustomAlert({
+            title: "게시글 삭제",
+            width:"500px",
+            showCancelButton:true,
+            text:"게시물을 삭제하시겠습니까?"
+        });
+        if(!isConfirm) return;
         await deleteMutate.mutateAsync(params.boardId);
+        navigate(adminPage? `/admin/board`:`/board`);
     }
 
     const bestBoard = async () => {
@@ -106,7 +116,7 @@ function BoardDetail() {
                         <span>추천</span>
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
-                    <Link to={`/board/${params.boardId}/write`} className='min_btn_b'>수정</Link>
+                    <Link to={adminPage ? `/admin/board/${params.boardId}/update`:`/board/${params.boardId}/update`} className='min_btn_b'>수정</Link>
                     <button type="button" className='min_btn line red' onClick={deleteBoard}>삭제</button>
                     <Link to="/board" className='min_btn_w'>목록</Link>
                 </div>

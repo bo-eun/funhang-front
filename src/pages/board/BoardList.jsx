@@ -18,6 +18,8 @@ function BoardList(props) {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
 
+    const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
+
     //총데이터수 넣어주기
     const [totalRows, setTotalRows] = useState(0);
     //이동 된 페이지
@@ -78,7 +80,7 @@ function BoardList(props) {
 
     const writeHandler = async () => {
         const boardId = await createMutate.mutateAsync();
-        navigate(`/board/${boardId}/write`);
+        navigate(adminPage?`/admin/board/${boardId}/write`:`/board/${boardId}/write`);
     }
 
     useEffect(() => {
@@ -122,7 +124,7 @@ function BoardList(props) {
                         <option value="best">추천순</option>
                     </select>
                 </div>
-                {location.pathname === '/admin/board' &&(
+                {adminPage &&(
                     <>
                         <button className="min_btn_w" onClick={noticeBrd}>공지</button>
                         <button className="min_btn_w" onClick={selectBrd}>채택</button>
@@ -140,6 +142,7 @@ function BoardList(props) {
                     columns={columns}
                     useCheckbox={true}
                     data={boardList}
+                    path={adminPage? "/admin/board":"/board"}
                 />
             </section>
 

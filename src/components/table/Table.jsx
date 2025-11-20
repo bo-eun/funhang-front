@@ -3,7 +3,7 @@ import styles from "./Table.module.css";
 import { formatDate } from "../../utils/dateFormat";
 import { useNavigate } from 'react-router';
 
-function Table({ headers, data, colWidth, columns=data, useCheckbox=false, checkedList, setCheckedList, clickColumnBtn=null }) {
+function Table({ headers, data, colWidth, columns=data, useCheckbox=false, checkedList, setCheckedList, clickColumnBtn=null,path }) {
 
     const navigate = useNavigate();
     
@@ -49,7 +49,7 @@ function Table({ headers, data, colWidth, columns=data, useCheckbox=false, check
                                 <td 
                                 key={`${key}${index}`} 
                                 className={`${key} ${data[index]?.bestYn == "Y" ? 'pick' : ''}`} 
-                                onClick={() => navigate(`/board/${brdId}`)}
+                                onClick={path ? () => navigate(`${path}/${brdId}`) : () => {}}
                                 >
                                     {item}
                                 </td>

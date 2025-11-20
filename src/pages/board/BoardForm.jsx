@@ -29,6 +29,8 @@ function BoardForm({ type }) {
   const { getMutate, updateMutate, uploadImgMutate, deleteMutate } = useBoard();
 
   const navigate = useNavigate();
+
+  const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
   
   const quillRef = useRef(null);
   const quillInstanceRef = useRef(null);
@@ -268,8 +270,14 @@ function BoardForm({ type }) {
         // 에디터에 이미지 삽입
         const range = editor.getSelection(true);
         console.log(range)
-        editor.insertEmbed(range.index, 'image', url);
-        editor.setSelection(range.index + 1);
+        if (range) {
+          editor.insertEmbed(range.index, 'image', url);
+          editor.setSelection(range.index + 1);
+        } else {
+          const lastIndex = editor.getLength();
+          editor.insertEmbed(lastIndex, "image", url);
+          editor.setSelection(lastIndex + 1);
+        }
         
         const img = editor.root.querySelector(`img[src="${url}"]`); // 미리보기 이미지
         // 미리보기 이미지를 덮어쓰기 위한 이미지 이름 저장
@@ -663,6 +671,18 @@ function BoardForm({ type }) {
       })
       return false;
     };
+    if(!(title.trim())){
+      CustomAlert({
+        text: "제목 입력 후 등록해주세요."
+      })
+      return false;
+    }
+    if(!(content.trim())){
+      CustomAlert({
+        text: "내용 입력 후 등록해주세요."
+      })
+      return false;
+    }
     console.log('제목:', title);
     console.log('내용:', content);
 
@@ -676,7 +696,8 @@ function BoardForm({ type }) {
       brdId: params.boardId,
       formData: formData
     });
-    navigate('/board');
+    
+    navigate(adminPage?`/admin/board/${params.boardId}`:`/board/${params.boardId}`);
   };
 
   const cancleWrite = async () => {
@@ -684,7 +705,13 @@ function BoardForm({ type }) {
   }
 
   const goBoard = () => {
-    type==="update" ? navigate("/board/detail") : navigate("/board");
+    if (type === "update") {
+      if (adminPage) navigate(`/admin/board/${params.boardId}`);
+      else navigate(`/board/${params.boardId}`);
+    } else {
+      if(adminPage) navigate("/admin/board");
+      else navigate("/board");
+    }
   }
 
   // 게시물 내용 가져오기
