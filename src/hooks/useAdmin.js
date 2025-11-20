@@ -224,7 +224,7 @@ export const useAdmin = () => {
         console.error("게시글 공지 등록 실패", error);
         console.log(error)
         CustomAlert({
-          text:"게시글 공지 등록 실패"
+          text: error.response.data.response
         })
       },
       onSettled: () => {

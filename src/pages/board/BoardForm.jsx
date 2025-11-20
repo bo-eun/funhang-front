@@ -4,9 +4,11 @@ import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useBlocker, useLocation, useNavigate, useParams } from 'react-router';
 import { loadingStore } from '../../store/loadingStore';
 import CustomAlert from '../../components/alert/CustomAlert';
+import { boardStore } from '../../store/boardStore';
+
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -15,7 +17,9 @@ Quill.register(Size, true);
 
 function BoardForm({ type }) {
   const location = useLocation();
-  const prevLocation = useRef(location.pathname);
+  const params = useParams();
+
+  const { toggleRefresh } = boardStore();
 
   const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
@@ -24,7 +28,13 @@ function BoardForm({ type }) {
   const [imgFile, setImgFile] = useState([]);
   const [boardDetail, setBoardDetail] = useState({});
 
-  const params = useParams();
+
+
+  // 다른 페이지로 이동 할 경우 차단됨
+ const blocker = useBlocker(({ currentLocation, nextLocation, historyAction }) => {
+    return currentLocation.pathname !== nextLocation.pathname;
+ });
+
 
   const { getMutate, updateMutate, uploadImgMutate, deleteMutate } = useBoard();
 
@@ -35,10 +45,6 @@ function BoardForm({ type }) {
   const quillRef = useRef(null);
   const quillInstanceRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
-
-  const goSubmit= async()=>{
-    navigate('/board');
-  }
 
   // 설정값
   const USE_MOCK = true;
@@ -696,15 +702,17 @@ function BoardForm({ type }) {
       brdId: params.boardId,
       formData: formData
     });
-    
+
     navigate(adminPage?`/admin/board/${params.boardId}`:`/board/${params.boardId}`);
   };
 
   const cancleWrite = async () => {
     await deleteMutate.mutateAsync(params.boardId);
+    toggleRefresh(); // 리스트 다시 불러오게 설정
   }
 
   const goBoard = () => {
+    cancleWrite();
     if (type === "update") {
       if (adminPage) navigate(`/admin/board/${params.boardId}`);
       else navigate(`/board/${params.boardId}`);
@@ -727,13 +735,15 @@ function BoardForm({ type }) {
   }, [])
 
   // 게시물 등록 단계일 때, 다른 페이지 이동 시 게시물 삭제
-
   useEffect(() => {
-    if (prevLocation.current !== location.pathname) {
-      cancleWrite();                // 이동 직전에 실행할 함수
-      prevLocation.current = location.pathname;
+    if(blocker.state === 'blocked') {
+      // 작성중이 아닐 경우 
+      if(title.trim() == '' && content.trim() == '') {
+        cancleWrite();
+      }
+      blocker.proceed();
     }
-  }, [location.pathname, cancleWrite]);
+  }, [blocker])
 
   return (
     <>

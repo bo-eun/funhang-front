@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { boardStore } from "../../store/boardStore";
 import { Link, useLocation, useNavigate } from "react-router";
 import styles from '@/pages/board/boardList.module.css';
 import SearchInput from "../../components/SearchInput";
@@ -17,6 +18,8 @@ function BoardList(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
+
+    const refresh = boardStore((state) => state.refresh);
 
     const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
 
@@ -48,7 +51,7 @@ function BoardList(props) {
     const isChecked = () => {
         if(chkOn.length <= 0) {
             CustomAlert({
-                text: '채택할 게시물을 선택해주세요'
+                text: '게시물을 선택해주세요'
             })
             return false;
         }   
@@ -84,21 +87,18 @@ function BoardList(props) {
     }
 
     useEffect(() => {
-        fetchList();
-    }, [])
-
-    useEffect(() => {
         if(boardList.length > 0) {
             const tableList = boardList?.map((list) => {
                 const { brdId, title, userId, likeCount, createDate, ...rest } = list; // admin 필드를 제외한 나머지 속성들만 남김
                 return { brdId, title, userId, likeCount, createDate }; // 새로운 객체 반환
             });
-            console.log(tableList) 
             setColumns(tableList); // 새로운 배열로 setColumns 호출
         }
     }, [boardList]);
 
-    console.log(columns)
+    useEffect(() => {
+        fetchList();
+    }, [refresh]) 
 
     const movePage =(newPage)=>{
         setCurrentPage(newPage);
@@ -140,7 +140,6 @@ function BoardList(props) {
                     setCheckedList={setChkOn}
                     checkedList={chkOn}
                     columns={columns}
-                    useCheckbox={true}
                     data={boardList}
                     path={adminPage? "/admin/board":"/board"}
                 />
