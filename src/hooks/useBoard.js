@@ -161,9 +161,9 @@ export const useBoard = () => {
         //     alert('추천되었습니다!')
         // },
         onError: (error) => {
-            console.error("추천 실패", error);
+            console.log(error)
             CustomAlert({
-                text: "추천 실패"
+                text: error.response.data.response
             })
         },
         onSettled: () => {
