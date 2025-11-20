@@ -3,11 +3,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, Outlet, useParams, useNavigate, useLocation } from 'react-router';
 import styles from "@/pages/product/product.module.css";
 import activeIcon from "../../assets/img/sub_cate_active.svg";
+// import activeIcon from "../../assets/img/plus.png";
 import { pageInfo } from '../../hooks/pageTitle';
 
 function Layout() {
     const location = useLocation();
-    const [title, setTitle] = useState("");
+    const titleName = location.pathname.split('/').slice(0, 3).join('/');
+    const title = pageInfo[titleName]?.title || "";
     const { sourceChain, promoType, productType } = useParams();
 
     // Detail 페이지 여부
@@ -20,14 +22,6 @@ function Layout() {
     
     //outlet에 넘겨줄 값
     const outletContext = { chainId, promoId, categoryId };
-
-    // 페이지 title (리다이렉트 중에도 안정적)
-    useEffect(() => {
-        const pathSegments = location.pathname.split('/');
-        const firstSegment = `/${pathSegments[1]}/${pathSegments[2]}`;
-        const chainTitle = pageInfo[firstSegment]?.title;
-        setTitle(chainTitle);
-    }, [location.pathname]);
 
     // 행사 목록
     const promoList = useMemo(() => {
@@ -72,6 +66,7 @@ function Layout() {
                 <Col xs={2}>
                     <ul className={`${styles.sub_category_list} ${isDetail ? styles.detail : ''}`}>
                         {categoryList.map((cate) => (
+
                             <li
                                 key={cate.id}
                                 className={outletContext.categoryId === cate.id ? styles.active : ''}
@@ -82,6 +77,7 @@ function Layout() {
                                         <img src={activeIcon} alt="active" />
                                     )}
                                 </Link>
+
                             </li>
                         ))}
                     </ul>

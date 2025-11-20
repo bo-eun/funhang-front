@@ -7,6 +7,7 @@ import { authStore } from "../../store/authStore";
 import Table from "../../components/table/Table";
 import { useBoard } from "../../hooks/useBoard";
 import { useAdmin } from "../../hooks/useAdmin";
+import CustomAlert from "../../components/alert/CustomAlert";
 
 const colWidth = ['50px', '', '160px', '80px', '130px'];
 const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
@@ -16,6 +17,8 @@ function BoardList(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
+
+    const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
 
     //총데이터수 넣어주기
     const [totalRows, setTotalRows] = useState(0);
@@ -44,7 +47,9 @@ function BoardList(props) {
 
     const isChecked = () => {
         if(chkOn.length <= 0) {
-            alert('채택할 게시물을 선택해주세요');
+            CustomAlert({
+                text: '채택할 게시물을 선택해주세요'
+            })
             return false;
         }   
         return true;
@@ -75,7 +80,7 @@ function BoardList(props) {
 
     const writeHandler = async () => {
         const boardId = await createMutate.mutateAsync();
-        navigate(`/board/${boardId}/write`);
+        navigate(adminPage?`/admin/board/${boardId}/write`:`/board/${boardId}/write`);
     }
 
     useEffect(() => {
@@ -119,7 +124,7 @@ function BoardList(props) {
                         <option value="best">추천순</option>
                     </select>
                 </div>
-                {isAdmin &&(
+                {adminPage &&(
                     <>
                         <button className="min_btn_w" onClick={noticeBrd}>공지</button>
                         <button className="min_btn_w" onClick={selectBrd}>채택</button>
@@ -137,6 +142,7 @@ function BoardList(props) {
                     columns={columns}
                     useCheckbox={true}
                     data={boardList}
+                    path={adminPage? "/admin/board":"/board"}
                 />
             </section>
 

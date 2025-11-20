@@ -94,7 +94,7 @@ export const router = createBrowserRouter([
             element: <BoardDetail />,
           },
           {
-            path: "update",
+            path: ":boardId/update",
             element: <BoardForm type="update" />,
           },
           {
@@ -169,6 +169,18 @@ export const router = createBrowserRouter([
           {
             path: "board",
             element: <BoardList />,
+          },
+          {
+            path: "board/:boardId",
+            element: <BoardDetail />,
+          },
+          {
+            path: "board/:boardId/update",
+            element: <BoardForm type="update" />,
+          },
+          {
+            path: "board/:boardId/write",
+            element: <BoardForm type="write" />,
           },
           {
             path: "category",
