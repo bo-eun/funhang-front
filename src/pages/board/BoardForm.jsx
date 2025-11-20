@@ -697,7 +697,7 @@ function BoardForm({ type }) {
       formData: formData
     });
     
-    navigate(adminPage?`/admin/board/${params.boardId}`:`/board/${params.boardId}`);
+    navigate(adminPage?`/admin/board`:`/board`);
   };
 
   const cancleWrite = async () => {

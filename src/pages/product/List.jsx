@@ -42,6 +42,7 @@ function List() {
     },[prdLoading]);
 
     const prdList = data?.items ?? [] ;
+    const prdCount = data?.totalElements ?? 0;
 
     // 페이지 이동 처리
     const movePage = (newPage) => {
@@ -74,7 +75,7 @@ function List() {
             <section className={styles.list_section}>
                 <SearchInput onChange={handleSearch} value={searchQuery}/>
                 <div className={styles.list_info}>
-                    <div className='total'>총 <strong>{prdList.length}</strong> 개</div>
+                    <div className='total'>총 <strong>{prdCount}</strong> 개</div>
                     <select name="" id="" className="form-select" value={currentSort} onChange={sortChange}>
                         <option value="price,asc">가격 낮은 순</option>
                         <option value="price,desc">가격 높은 순</option>

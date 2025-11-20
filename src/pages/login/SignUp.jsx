@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import * as yup from "yup";
 import InputForm from "../../components/InputForm";
 import BtnForm from "../../components/btn/BtnForm";
@@ -24,6 +24,7 @@ const signUpFields = [
 ];
 
 function SignUp(props) {
+    const navigate = useNavigate();
 
     const { joinMutation } = useLogin();
 
@@ -59,7 +60,7 @@ function SignUp(props) {
         CustomAlert({
             text: '회원가입이 완료되었습니다. 로그인 후 시작해보세요.'
         })
-        location.href = '/login';
+        navigate('/login');
 
     };
 
