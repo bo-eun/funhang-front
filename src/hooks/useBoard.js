@@ -56,7 +56,7 @@ export const useBoard = () => {
         onError: (error) => {
              console.error("게시판 등록 실패", error.response.data.response);
             CustomAlert({
-                text: "게시판 등록 실패"
+                text: error.response.data.response
             })
         },
         onSettled: () => {
@@ -136,15 +136,12 @@ export const useBoard = () => {
             return response.data.response;
         },
         onSuccess: (data) => {
-            CustomAlert({
-                text: "게시글을 삭제하였습니다."
-            })
+            // CustomAlert({
+            //     text: "게시글을 삭제하였습니다."
+            // })
         },
         onError: (error) => {
             console.error("게시글 삭제 실패", error);
-            CustomAlert({
-                text: "게시글 삭제 실패"
-            })
         },
         onSettled: () => {
             setLoading(false);
@@ -161,9 +158,9 @@ export const useBoard = () => {
         //     alert('추천되었습니다!')
         // },
         onError: (error) => {
-            console.error("추천 실패", error);
+            console.log(error)
             CustomAlert({
-                text: "추천 실패"
+                text: error.response.data.response
             })
         },
         onSettled: () => {

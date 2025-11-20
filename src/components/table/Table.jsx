@@ -10,7 +10,7 @@ function Table({ headers, data, colWidth, columns=data, checkedList, setCheckedL
     
     const { userRole } = authStore();
     const isAdmin = userRole === "ROLE_ADMIN";
-    
+
     const handleCheck =(id)=>{
         setCheckedList((prev) =>
             prev.includes((id)) ? prev.filter((item) => item !== id) : [...prev, id]
