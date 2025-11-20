@@ -54,6 +54,13 @@ export const authStore = create(
        // 원하는 내용을 localstorge 에 저장 
     {
         name : 'auth-info',
+
+            
+         storage: {
+                getItem: (name) => sessionStorage.getItem(name),
+                setItem: (name, value) => sessionStorage.setItem(name, value),
+                removeItem: (name) => sessionStorage.removeItem(name),
+            },
         partialize : (state) =>({
             token : state.token,
             userId: state.userId,
