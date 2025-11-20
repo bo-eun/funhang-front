@@ -14,9 +14,9 @@ function BoardDetail() {
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
+    const {userRole,isAuthenticated,userId}=authStore();
 
-    const isAuth = authStore().isAuthenticated();
-    const role = authStore().userRole;
+    const isAdmin = userRole === 'ROLE_ADMIN';
 
     const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
 
@@ -62,7 +62,7 @@ function BoardDetail() {
 
     }
     const addComment= async(content)=>{
-        if(!isAuth) return CustomAlert({text: '로그인 후 댓글을 이용해주세요.'});
+        if(!isAuthenticated()) return CustomAlert({text: '로그인 후 댓글을 이용해주세요.'});
         const formData = new FormData();
         formData.append("contents", content)
         await createCommentMutate.mutateAsync({brdId:params.boardId, formData});
@@ -116,8 +116,12 @@ function BoardDetail() {
                         <span>추천</span>
                         <img src={isActive ? likeOn : likeOff} alt="좋아요 아이콘" />
                     </button>
-                    <Link to={adminPage ? `/admin/board/${params.boardId}/update`:`/board/${params.boardId}/update`} className='min_btn_b'>수정</Link>
-                    <button type="button" className='min_btn line red' onClick={deleteBoard}>삭제</button>
+                    {(isAdmin || userId === boardDetail.userId) &&
+                        <>
+                            <Link to={adminPage ? `/admin/board/${params.boardId}/update`:`/board/${params.boardId}/update`} className='min_btn_b'>수정</Link>
+                            <button type="button" className='min_btn line red' onClick={deleteBoard}>삭제</button>
+                        </> 
+                    }
                     <Link to="/board" className='min_btn_w'>목록</Link>
                 </div>
             </section>
