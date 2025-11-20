@@ -78,7 +78,7 @@ function BoardDetail() {
   }, [])
 
   useEffect(() => {
-    const active = boardDetail?.isLiked ? true : false;
+    const active = boardDetail?.isLiked;
     setIsActive(active);
   }, [boardDetail])
 
