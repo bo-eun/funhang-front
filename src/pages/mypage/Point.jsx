@@ -35,7 +35,7 @@ function Point(props) {
         setLoading(adminCouponLoading);
     },[adminCouponLoading,setLoading]);
 
-    const admincouponList = couponData.data?.response.content ?? [];
+    const admincouponList = couponData?.data.response.content ?? [];
 
     const handleChange=(e)=>{
         setCouponId(Number(e.target.id));
