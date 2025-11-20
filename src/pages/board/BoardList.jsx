@@ -26,7 +26,7 @@ function BoardList(props) {
     const [currentPage,setCurrentPage]= useState(parseInt(queryParams.get("page")??"0", 10)); 
     
 
-    const { userRole } = authStore();
+    const { userRole, isAuthenticated } = authStore();
     const isAdmin = userRole === "ROLE_ADMIN";
 
 
@@ -77,8 +77,14 @@ function BoardList(props) {
         await deleteBoardMutate.mutateAsync(chkOn);
         fetchList();
     }
-
+    //게시글 등록
     const writeHandler = async () => {
+        if(!isAuthenticated()){
+            CustomAlert({
+                text: "로그인 후 이용해주세요."
+            })
+            return navigate('/login');
+        }
         const boardId = await createMutate.mutateAsync();
         navigate(adminPage?`/admin/board/${boardId}/write`:`/board/${boardId}/write`);
     }

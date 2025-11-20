@@ -41,7 +41,7 @@ function Main(props) {
     
     const {data: popular, isLoading: popularLoading} = useQuery({
       queryKey: ["product", "popular"],
-      queryFn: async () => productApi.getChainListAll({ size: 5, sort: "likeCount,desc"}),
+      queryFn: async () => productApi.getPop5List(),
       keepPreviousData: true,
     })
 
@@ -69,6 +69,10 @@ function Main(props) {
     const promoPop = popular?.items ?? [];
     const promoOne = onePlusOne?.items ?? [];
     const promoTwo = twoPlusOne?.items ?? [];
+
+    useEffect(()=>{
+      console.log(popular);
+    },[popular]);
 
   // 등록 배너 가져오기
   useEffect(() => {

@@ -2,6 +2,14 @@ import React from 'react';
 import api from '../axiosApi';
 
 export const productApi = {
+    //메인페이지 인기상품 5개 노출
+    getPop5List:async()=>{
+        const response = await api.get(
+            `/api/v1/crawl/likeCount`
+        )
+        return response.data.response;
+    },
+
     //메인페이지 행사별 상품 5개 노출
     getPromo5List: async(promoTypeName,size=5)=>{
         const queryParams = new URLSearchParams({

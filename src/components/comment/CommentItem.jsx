@@ -7,6 +7,10 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
     const {userId}= authStore();
     const [localText, setLocalText] = useState(comment.contents);
 
+    useEffect(()=>{
+        console.log(comment);
+    },[comment])
+
     // 수정 모드 들어갈 때 원래 내용으로 초기화
     useEffect(() => {
         if (isEditing) {
@@ -19,7 +23,7 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
             <div className={styles.comment_head}>
                 <p className={styles.name}>{comment.nickname ?? comment.userId}</p>
                 <div className={styles.info}>
-                    <span className={styles.date}>{formatDate(comment.createdDate)}</span>
+                    <span className={styles.date}>{comment.updatedDate?`수정됨 ${formatDate(comment.updatedDate)} `:formatDate(comment.createdDate)}</span>
                     {comment.userId === userId && (
                         !isEditing ? (
                             <div className={styles.btn_box}>
