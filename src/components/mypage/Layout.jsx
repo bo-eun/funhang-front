@@ -9,31 +9,28 @@ import { wishApi } from '../../api/mypage/wishApi';
 import { pointApi } from '../../api/mypage/pointApi';
 import { couponApi } from '../../api/mypage/couponApi';
 import { useWish } from '../../hooks/useWish';
+import Loading from '../Loading';
+import { loadingStore } from '../../store/loadingStore';
 
 
 function Layout() {
-    const {userName} = authStore();
-    const { wishCount } = useWish();
+    const { userName } = authStore();
     const isAuth = authStore().isAuthenticated(); 
     const location = useLocation();
     const navigate = useNavigate();
-
+    
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get('page') ?? '0', 10);
-
+    
     const { deleteUserMutation } = useMypage();
 
-    const [pointList,setPointList] = useState([]);
-    const [totalPoint,setTotalPoint] = useState(0);
+    const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
-    const [couponList,setCouponList] = useState([]);
-    const [couponCount,setCouponCount] = useState(0);
+    // 전역 상태 연동 총 찜 개수
+    const { wishCount } = useWish();
 
-
-
-    // -------------------------
     // 페이지 이동 처리
-    // -------------------------
     const movePage = (newPage) => {
         const params = new URLSearchParams(location.search);
         params.set('page', newPage);
@@ -61,27 +58,33 @@ function Layout() {
             },
         ],
     });
-
+    
     // 결과값을 state에 반영
-    useEffect(() => {
-        const [pointRes,couponRes] = results;
-        // totalPoint 업데이트
-        if (pointRes.data) {
-            setPointList(pointRes.data.items  || []);
-            setTotalPoint(pointRes.data.balance  || 0);
+    const [pointRes, couponRes] = results;
+
+    const isPointLoading = pointRes?.isLoading;
+    const isCouponLoading = couponRes?.isLoading;
+
+    useEffect(()=>{
+        if(isPointLoading ||isCouponLoading){
+            setLoading(true);
+        }else{
+            setLoading(false);
         }
-        // couponCount 업데이트
-        if (couponRes.data) {
-            setCouponCount(couponRes.data.count || 0);
-            setCouponList(couponRes.data.items || []);
-        }
-    }, [results]);
+    },[isPointLoading,isCouponLoading,setLoading]);
+
+    const pointList = pointRes.data?.items ?? [];
+    const totalPoint = pointRes.data?.balance ?? 0;
+
+    const couponList = couponRes.data?.items ?? [];
+    const couponCount = couponRes.data?.count ?? 0;
 
     const deleteUser = async () => {
         await deleteUserMutation.mutateAsync();
     };
     
     return (
+        <>
         <Container className={styles.my_cont}>
             <h2 className={styles['page_title']}>마이페이지</h2>
             <div className={styles.top_box}>
@@ -140,6 +143,10 @@ function Layout() {
                 </Col>
             </Row>
         </Container>
+        {isLoading &&
+            <Loading />
+        }
+        </>
     );
 }
 

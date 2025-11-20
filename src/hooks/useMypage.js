@@ -26,13 +26,13 @@ export const useMypage = () => {
         onSuccess: (data) => {
             console.log("내 정보 가져오기 완료");
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
-            setLoading(false);
+        onError:(error)=>{
             CustomAlert({
                 text: error.response.data.message || error.response.data
             })
+        },
+        onSettled: () => {
+            setLoading(false);
         }
     })
 
@@ -43,15 +43,18 @@ export const useMypage = () => {
 
             return response;
         },
-
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
-            setLoading(false);
-            const msg = data?"내 정보가 수정되었습니다.":error.response.data.response;
+        onSuccess:(data)=>{
             CustomAlert({
-                text: error?.message || msg
+                text: "내 정보가 수정되었습니다."
             })
+        },
+        onError:(error)=>{
+            CustomAlert({
+                text: error?.message || error.response.data.response
+            })
+        },
+        onSettled: () => {
+            setLoading(false);
         }
     })    
 
@@ -59,20 +62,22 @@ export const useMypage = () => {
         mutationFn: async(formData) => {
             setLoading(true);
             const response = await myInfoApi.put(formData);
-
             return response;
         },
 
         onSuccess: (data) => {
-            console.log("비밀번호 변경이 완료되었습니다.");
-        },
-        onSettled: (data, error) => {
             console.log(data);
-            console.log(error);
-            setLoading(false);
+            CustomAlert({
+                text:"비밀번호 변경이 완료되었습니다."
+            })
+        },
+        onError:(error)=>{
             CustomAlert({
                 text: error.response.data.response || error.response.data
             })
+        },
+        onSettled: () => {
+            setLoading(false);
         }
     })
 
@@ -89,13 +94,13 @@ export const useMypage = () => {
             clearAuth();
             navigate('/');
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
-            setLoading(false);
+        onError:(error)=>{
             CustomAlert({
                 text: error.response.data.response
             })
+        },
+        onSettled: () => {
+            setLoading(false);
         }
     })
 
@@ -108,13 +113,13 @@ export const useMypage = () => {
         onSuccess: (data) => {
 
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
-            setLoading(false);
+        onError:(error)=>{
             CustomAlert({
                 text: error.response.data.response
             }) 
+        },
+        onSettled: () => {
+            setLoading(false);
         }       
     })
 

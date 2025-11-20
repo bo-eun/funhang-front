@@ -3,6 +3,7 @@ import { adminApi } from "../api/banner/bannerAdminApi";
 import { couponAdminApi } from "../api/coupon/couponAdminApi";
 import CustomAlert from "../components/alert/CustomAlert";
 import { loadingStore } from "../store/loadingStore";
+import { boardAdminApi } from "../api/board/boardAdminApi";
 
 export const useAdmin = () => {
   const queryClient = useQueryClient();
@@ -19,9 +20,7 @@ export const useAdmin = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSettled: () => {
       setLoading(false);
     }
   });
@@ -34,6 +33,9 @@ export const useAdmin = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
+    },
+    onError: (error)=>{
+
     },
     onSettled: (data, error) => {
       console.log(data);
@@ -48,20 +50,29 @@ export const useAdmin = () => {
 
   const deleteBannerMutation = useMutation({
     mutationFn: async (bannerId) => {
+      setLoading(true);
       const response = await adminApi.delete(bannerId);
       return response;
     },
     onSuccess: () => {
-      alert("배너가 삭제되었습니다!");
+      CustomAlert({
+        text: "배너가 삭제되었습니다!"
+      });
     },
     onError: (error) => {
-      console.error("배너 삭제 실패:", error);
-      alert(error.response?.data);
-    },    
+      console.error("배너 삭제 실패:", error.response?.data);
+      CustomAlert({
+        text: "배너 삭제 실패"
+      });
+    },
+    onSettled:()=>{
+      setLoading(false);
+    }    
   });
 
   const getCouponListMutation = useMutation({
     mutationFn: async () => {
+      setLoading(true);
       const response = await couponAdminApi.list();
       return response;
     },
@@ -69,61 +80,170 @@ export const useAdmin = () => {
     onSuccess: () => {
       console.log('쿠폰 리스트 불러오기 완료')
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
-      setLoading(false);
-      const msg = data && !error ? data.resultMessage : error.response;
+    onError:(error)=>{
+      console.log(error.response);
       CustomAlert({
-        text: msg
+        text: "쿠폰 리스트 불러오기에 실패하였습니다."
       });
+    },
+    onSettled: () => {
+      setLoading(false);
     }     
   });
 
   const createCouponMutation = useMutation({
     mutationFn: async (formData) => {
+      setLoading(true);
       const response = await couponAdminApi.create(formData);
       return response;
     },
     mutationKey: ['coupon', 'create'], // 중복 요청 막음
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSuccess:(data)=>{
+      CustomAlert({
+        text: data.resultMessage
+      })
+    },
+    onError:(error)=>{
+      console.error(error.response);
+      CustomAlert({
+        text: "쿠폰 등록에 실패하였습니다."
+      })
+    },
+    onSettled: () => {
       setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
     }    
   });
 
   const updateCouponMutation = useMutation({
     mutationFn: async (formData) => {
+      setLoading(true);
       console.log(formData)
       const response = await couponAdminApi.update(formData.couponId, formData);
       console.log(response);
       return response;
     },
     mutationKey: ['coupon', 'update'], // 중복 요청 막음
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSuccess:(data)=>{
+      CustomAlert({
+        text: data.resultMessage
+      })
+    },
+    onError:(error)=>{
+      console.error(error.response);
+      CustomAlert({
+        text: "쿠폰 수정에 실패하였습니다."
+      })
+    },
+    onSettled: () => {
       setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
     }    
   })  
 
   const deleteCouponMutation = useMutation({
     mutationFn: async(couponIds) => {
+      setLoading(true);
       const response = await couponAdminApi.delete(couponIds);
       console.log(response);
       return response;
     },
     mutationKey: ['coupon', 'delete'], // 중복 요청 막음
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSuccess:(data)=>{
+      CustomAlert({
+        text: data.resultMessage
+      })
+    },
+    onError:(error)=>{
+      console.error(error.response);
+      CustomAlert({
+        text: "쿠폰 삭제에 실패하였습니다"
+      })
+    },
+    onSettled: () => {
       setLoading(false);
-      data && !error ? alert(data.resultMessage) : alert(error.response);
     }      
   })
 
-  return { getBannerListMutation, createBannerMutation, deleteBannerMutation, getCouponListMutation, createCouponMutation, updateCouponMutation, deleteCouponMutation };
+  const deleteBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+          setLoading(true);
+          const response = await boardAdminApi.delete(brdIdList);
+          return response.data.response;
+      },
+      onSuccess: (data) => {
+          CustomAlert({
+            text:"게시글 삭제를 완료하였습니다."
+          });
+      },
+      
+      onError: (error) => {
+          console.error("게시글 삭제 실패", error.response.data.response);
+          CustomAlert({
+            text:"게시글 삭제에 실패하였습니다."
+          });
+      },
+      onSettled: () => {
+        setLoading(false);
+      } 
+  });  
+
+
+  const bestBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+        setLoading(true);
+        const response = await boardAdminApi.best(brdIdList);
+        return response.data.response;
+      },
+      onSuccess: (data) => {
+        console.log(data)
+        CustomAlert({
+          text: data.resultMessage
+        });
+      },
+      
+      onError: (error) => {
+        console.error("게시글 채택에 실패하였습니다.", error);
+      },
+      onSettled: () => {
+        setLoading(false);
+      } 
+  }); 
+
+  const noticeBoardMutate = useMutation({
+      mutationFn: async (brdIdList) => {
+        setLoading(true);
+        const response = await boardAdminApi.notice(brdIdList);
+        return response.data.response;
+      },
+      onSuccess: (data) => {
+        console.log(data)
+        CustomAlert({
+          text: data.resultMessage
+        })
+      },
+      onError: (error) => {
+        console.error("게시글 공지 등록 실패", error);
+        console.log(error)
+        CustomAlert({
+          text:"게시글 공지 등록 실패"
+        })
+      },
+      onSettled: () => {
+        setLoading(false);
+      } 
+  }); 
+
+
+
+  return { 
+    getBannerListMutation, 
+    createBannerMutation, 
+    deleteBannerMutation, 
+    getCouponListMutation, 
+    createCouponMutation, 
+    updateCouponMutation, 
+    deleteCouponMutation ,
+    deleteBoardMutate,
+    bestBoardMutate,
+    noticeBoardMutate
+  };
 };

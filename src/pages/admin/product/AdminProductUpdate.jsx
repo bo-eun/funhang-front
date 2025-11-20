@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/pages/admin/product/adminProduct.module.css';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import errorImg from '../../../assets/img/errorImg.png';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,6 +22,7 @@ const schema = yup.object().shape({
 
 function AdminProductUpdate() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { productId } = useParams();
     const { prdUpdateMutation } = useProduct(productId);
     
@@ -35,12 +36,17 @@ function AdminProductUpdate() {
     });
 
     const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
+    const setLoading = loadingStore.getState().setLoading;
 
-    const { data } = useQuery({
+    const { data , isLoading : prdLoading} = useQuery({
         queryKey: ['product', productId],
-        queryFn: () => productApi.getDetail({ crawlId: productId }),
+        queryFn: async() => productApi.getDetail({ crawlId: productId }),
         keepPreviousData: true,
     });
+    //리스트 불러올 때 전역 로딩 상태 동기화
+    useEffect(()=>{
+        setLoading(prdLoading);
+    },[prdLoading,setLoading]);
 
     useEffect(() => {
         if(data) {
@@ -58,9 +64,6 @@ function AdminProductUpdate() {
         }
     }, [data, reset]);
 
-    console.log(data);
-
-
     const handleChange = (e) => setInputURL(e.target.value);
 
     const imgSubmit = () => {
@@ -77,7 +80,8 @@ function AdminProductUpdate() {
 
     const onSubmit = (data) => {
         prdUpdateMutation.mutate(data);
-        navigate("/admin/product");
+        const from = location.state?.from;
+        navigate(from ? from.pathname + from.search : '/admin/product');
     }
 
     const watchedPromoType = watch("promoType");
@@ -182,7 +186,12 @@ function AdminProductUpdate() {
 
             <div className='short_btn_bg'>
                 <button type='submit' className='min_btn_b'>수정</button>
-                <Link to='/admin/product' className='min_btn_w'>목록</Link>
+                <Link 
+                    to={location.state?.from ? location.state.from.pathname + location.state.from.search : '/admin/product'}
+                    className='min_btn_w'
+                >
+                    목록
+                </Link>
             </div>
         </form>
         {isLoading &&

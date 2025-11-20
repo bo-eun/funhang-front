@@ -5,7 +5,7 @@ import { authStore } from '../../store/authStore';
 
 function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,onDelete}) {
     const {userId}= authStore();
-    const [localText, setLocalText] = useState(comment.content);
+    const [localText, setLocalText] = useState(comment.contents);
 
     // 수정 모드 들어갈 때 원래 내용으로 초기화
     useEffect(() => {
@@ -19,7 +19,7 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
             <div className={styles.comment_head}>
                 <p className={styles.name}>{comment.nickname ?? comment.userId}</p>
                 <div className={styles.info}>
-                    <span className={styles.date}>{formatDate(comment.createDate)}</span>
+                    <span className={styles.date}>{formatDate(comment.createdDate)}</span>
                     {comment.userId === userId && (
                         !isEditing ? (
                             <div className={styles.btn_box}>
@@ -50,7 +50,7 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
                     </textarea>
                 ):(
                     <p className={styles.text}>
-                        {comment.content}
+                        {comment.contents}
                     </p>
                 )
             }

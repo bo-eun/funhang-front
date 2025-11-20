@@ -17,7 +17,7 @@
 }
 
 :global(.swiper-slide){
-    height: 300px;
+    height: 303px;
 }
 
 .swiper .swiper-slide img {
@@ -95,6 +95,7 @@
 }
 .cat_item{
     text-align: center;
+    font-size: 18px;
 }
 .cat_img_wrap{
     background-color: white;

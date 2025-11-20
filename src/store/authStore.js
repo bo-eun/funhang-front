@@ -45,7 +45,7 @@ export const authStore = create(
                 set((state)=>{
                     state.token = null;
                     state.userId = null;
-                    state.suerName = null;
+                    state.userName = null;
                     state.userRole = null;
                     state.nickname = null;
             }),
@@ -68,5 +68,13 @@ export const authStore = create(
             userRole : state.userRole,
             nickname : state.nickname,
         }),
+         storage: {
+                getItem: (name) => {
+                    const str = sessionStorage.getItem(name);
+                    return str ? JSON.parse(str) : null; // 객체로 변환해서 반환
+                },
+                setItem: (name, value) => sessionStorage.setItem(name, JSON.stringify(value)), //문자열로 변환해서 저장
+                removeItem: (name) => sessionStorage.removeItem(name),
+            },
     })
 );

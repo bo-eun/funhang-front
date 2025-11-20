@@ -14,8 +14,7 @@ import Loading from '../../components/Loading';
 
 function Point(props) {
     const [show, setShow] = useState(false);
-    const { movePage, currentPage, pointList, totalPoint,couponList } = useOutletContext();
-    const [admincouponList, setAdminCouponList]=useState([]);
+    const { movePage, currentPage, pointList, totalPoint } = useOutletContext();
     const [couponId, setCouponId]=useState(0);
     const [couponPoint, setCouponPoint]=useState(0);
 
@@ -24,20 +23,19 @@ function Point(props) {
     const {changePoint}=usePoint();
 
     const pagedList = pointList.slice(currentPage * 10, (currentPage + 1) * 10);
+    const setLoading = loadingStore.getState().setLoading;
 
-
-    const {data:couponData} = useQuery({
+    //관리자가 등록한 쿠폰 리스트
+    const {data:couponData, isLoading:adminCouponLoading} = useQuery({
         queryKey:['adminCouponList'],
         queryFn:async()=>couponAdminApi.list(),
     });
-
+    //로딩 동기화
     useEffect(()=>{
-        if(couponData){
-            setAdminCouponList(couponData?.data.response.content || []);
-        }
-    },[couponData]);
+        setLoading(adminCouponLoading);
+    },[adminCouponLoading,setLoading]);
 
-
+    const admincouponList = couponData.data?.response.content ?? [];
 
     const handleChange=(e)=>{
         setCouponId(Number(e.target.id));

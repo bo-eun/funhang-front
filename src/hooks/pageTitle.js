@@ -61,6 +61,6 @@ export const pageInfo = {
     "/admin/board": { title: "게시판 관리" },
     "/admin/category": { title: "카테고리 관리" },
     "/admin/coupon/regist": { title: "쿠폰 리스트" },
-    "/admin/coupon/grant": { title: "쿠폰 발급 현황" },
+    "/admin/coupon/grant": { title: "쿠폰 발급 요청현황" },
     "/admin/banner": { title: "메인 배너 관리" },
 };

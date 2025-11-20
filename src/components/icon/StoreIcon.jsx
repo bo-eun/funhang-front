@@ -26,6 +26,7 @@ function StoreIcon({product, cssPosition="relative", top="", left="", bottom="",
             src = gsIcon
             break;
 
+        case "세븐일레븐":
         case "7eleven":
         case "seveneleven":
         case "sev":

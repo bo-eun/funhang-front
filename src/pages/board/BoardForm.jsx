@@ -4,7 +4,9 @@ import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import { loadingStore } from '../../store/loadingStore';
+import CustomAlert from '../../components/alert/CustomAlert';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -12,14 +14,23 @@ Size.whitelist = ['16px', '18px', '20px', '24px', '32px'];
 Quill.register(Size, true);
 
 function BoardForm({ type }) {
+  const location = useLocation();
+  const prevLocation = useRef(location.pathname);
+
+  const isLoading = loadingStore(state => state.loading); // 요청에 대한 로딩 상태
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imgFile, setImgFile] = useState([]);
+  const [boardDetail, setBoardDetail] = useState({});
 
-  const { adminCreateMutate, uploadImgMutate } = useBoard();
+  const params = useParams();
+
+  const { getMutate, updateMutate, uploadImgMutate, deleteMutate } = useBoard();
 
   const navigate = useNavigate();
+
+  const adminPage = location.pathname.split('/').slice(0, 3).join('/') === '/admin/board';
   
   const quillRef = useRef(null);
   const quillInstanceRef = useRef(null);
@@ -33,7 +44,6 @@ function BoardForm({ type }) {
   const USE_MOCK = true;
   const authToken = null;
   const uploadUrl = '/api/v1/book/ed/img';
-  const fileField = 'img';
   const maxWidth = 1600;
   const maxHeight = 1600;
   const outMime = 'image/png';
@@ -116,43 +126,29 @@ function BoardForm({ type }) {
     });
   }, []);
 
+
+  // 이미지 cloudinary에 업로드 요청
+  const uploadCloudinary = async(file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const urlList = await uploadImgMutate.mutateAsync({
+      brdId: params.boardId,
+      formData: formData
+    });
+
+    return urlList;
+  }
+
   /** 서버 업로드 함수 */
   const uploadFile = useCallback(async (file) => {
-    if (USE_MOCK) {
       console.log('🎭 Mock 모드: 이미지를 Base64로 변환 중...');
       const url = await mockUploadImage(file);
+
       console.log('✅ Mock 업로드 성공');
-      // 중복 이름 제거(원본, 리사이즈 중 리사이즈만 남기기)
-      setImgFile((prev) => {
-        const newArr = Array.from(
-          new Map([...prev, { file: file, index: prev.length }].reverse()
-            .map(item => [item.file.name, item])
-          ).values()
-        ).reverse();
-      return newArr;
-    });
-
-
-      return url;
-    }
     
-
-    const fd = new FormData();
-    fd.append(fileField, file);
-    
-    const res = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
-      body: fd,
-    });
-    
-    if (!res.ok) throw new Error('이미지 업로드 실패');
-    
-    const data = await res.json();
-    const url = data.imageUrl || data.url;
-    if (!url) throw new Error('서버 응답에 URL이 없습니다');
     return url;
-  }, [USE_MOCK, mockUploadImage, authToken, uploadUrl, fileField]);
+  }, [USE_MOCK, mockUploadImage, authToken, uploadUrl, imgFile]);
 
   /** URL에서 이미지를 다운로드하여 리사이즈 후 재업로드 */
   const reuploadResizedImage = useCallback(async (imgElement, newWidth, newHeight) => {
@@ -211,20 +207,33 @@ function BoardForm({ type }) {
       const file = new File ([resizedBlob], resizeFilename, { type: outMime });
 
       // 서버에 업로드 (또는 Mock)
+      // 리사이즈 이미지 서버에 업로드
       const newUrl = await uploadFile(file);
 
+      
       // 원본 URL 저장 (처음 한 번만)
       if (!imgElement.getAttribute('data-original-src')) {
         imgElement.setAttribute('data-original-src', originalSrc);
       }
-
+      
       // 새 URL로 교체
       imgElement.src = newUrl;
       console.log('✅ 리사이즈 후 재업로드 완료');
-
+      
+        // 중복 이름 제거(원본, 리사이즈 중 리사이즈만 남기기)
+        setImgFile((prev) => {
+          const newArr = Array.from(
+            new Map([...prev, { file: file, index: prev.length }].reverse()
+              .map(item => [item.file.name, item])
+            ).values()
+          ).reverse();
+        return newArr;
+      });      
     } catch (err) {
       console.error('이미지 재업로드 실패:', err);
-      alert('이미지 리사이즈 저장에 실패했습니다.');
+      CustomAlert({
+        text: '이미지 리사이즈 저장에 실패했습니다.'
+      })
     }
   }, [uploadFile, outMime, quality]);
 
@@ -233,17 +242,23 @@ function BoardForm({ type }) {
     async (file) => {      
       const editor = quillInstanceRef.current;
       if (!editor) {
-        alert('에디터가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+        CustomAlert({
+          text: '에디터가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.'
+        })
         return;
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+        CustomAlert({
+          text: '이미지 크기는 5MB를 초과할 수 없습니다.'
+        })
         return;
       }
 
       if (!file.type.startsWith('image/')) {
-        alert('이미지 파일만 업로드할 수 있습니다.');
+        CustomAlert({
+          text: '이미지 파일만 업로드할 수 있습니다.'
+        })
         return;
       }
 
@@ -251,21 +266,72 @@ function BoardForm({ type }) {
         // 이미지 리사이즈 후 업로드
         const resized = await resizeImage(file);
         const url = await uploadFile(resized);
+
         // 에디터에 이미지 삽입
         const range = editor.getSelection(true);
-        editor.insertEmbed(range.index, 'image', url);
-        editor.setSelection(range.index + 1);
-        // 이미지 리사이즈 시 이미지 덮어쓰기 위한 이미지 이름 저장
-        const img = editor.root.querySelector(`img[src="${url}"]`);
-        if (img) img.setAttribute('data-file-name', file.name);
-        console.log('✅ 이미지 삽입 완료');
+        console.log(range)
+        if (range) {
+          editor.insertEmbed(range.index, 'image', url);
+          editor.setSelection(range.index + 1);
+        } else {
+          const lastIndex = editor.getLength();
+          editor.insertEmbed(lastIndex, "image", url);
+          editor.setSelection(lastIndex + 1);
+        }
+        
+        const img = editor.root.querySelector(`img[src="${url}"]`); // 미리보기 이미지
+        // 미리보기 이미지를 덮어쓰기 위한 이미지 이름 저장
+        const uniqueId = Date.now() + Math.random();
+        if (img) {
+          img.dataset.fileName = file.name;
+          img.dataset.id = uniqueId;
+        }
+        console.log('이미지 삽입 완료');
+
+        // 이미지 업로드
+        const uploadedData = await uploadCloudinary(file);
+        const uploadedUrl = uploadedData.uploadedUrl;
+
+        // 미리보기 이미지 찾기 → src 교체
+        const sameImg = editor.root.querySelector(`img[data-id="${uniqueId}"]`);
+        if (sameImg) {
+          sameImg.src = uploadedUrl;
+          sameImg.dataset.fileName = uploadedData.cloudinaryId;
+        }
+
+        console.log('✅ 이미지 업로드 완료, src 교체 완료');
+        
       } catch (e) {
         console.error('❌ 업로드 오류:', e);
-        alert(`이미지 업로드에 실패했습니다: ${e.message}`);
+        CustomAlert({
+          text: `이미지 업로드에 실패했습니다: ${e.message}`
+        })
       }
     },
     [resizeImage, uploadFile]
   );
+
+
+  // quill.on("text-change", (delta, oldDelta, source) => {
+  //   const deletedImages = [];
+  //   delta.ops.forEach(op => {
+  //     if (op.delete) {
+  //       // oldDelta에서 삭제된 부분 가져오기
+  //       const startIndex = /* index 계산 */;
+  //       const deletedOps = oldDelta.ops.slice(startIndex, startIndex + op.delete);
+  //       deletedOps.forEach(dOp => {
+  //         if (dOp.insert && dOp.insert.image) {
+  //           deletedImages.push(dOp.insert.image);
+  //         }
+  //       });
+  //     }
+  //   });
+  //   if (deletedImages.length) {
+  //     console.log("삭제된 이미지 목록:", deletedImages);
+  //   }
+  // });
+
+
 
   /** 툴바의 이미지 버튼 핸들러 */
   const imageHandler = useCallback(() => {
@@ -337,7 +403,10 @@ function BoardForm({ type }) {
         await uploadAndInsert(file);
       } catch (err) {
         console.error('이미지 업로드 실패:', err);
-        alert('이미지 업로드에 실패했습니다.');
+        CustomAlert({
+          text: '이미지 업로드에 실패했습니다.'
+        })
+        
       } finally {
         isUploading = false;
       }
@@ -558,23 +627,7 @@ function BoardForm({ type }) {
   }, [isReady, reuploadResizedImage]);
 
 
-  useEffect(() => {
-    if(imgFile?.length > 0) {
-      const uploadCloudinary = async() => {
-        const formData = new FormData();
-        imgFile.forEach(({ file, index }) => {
-          formData.append("files", file);   // 개별 파일
-          formData.append("indexs", index); // 개별 index
-        });
-        console.log([...formData.entries()]);
-        const urlList = await uploadImgMutate.mutateAsync(formData);
-        //setImgFile([]);
-      }
-
-      uploadCloudinary();
-    }
-  }, [imgFile])
-
+  
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -612,6 +665,24 @@ function BoardForm({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(isLoading) {
+      CustomAlert({
+        text: "이미지 업로드중입니다. 잠시후에 다시 시도해주세요."
+      })
+      return false;
+    };
+    if(!(title.trim())){
+      CustomAlert({
+        text: "제목 입력 후 등록해주세요."
+      })
+      return false;
+    }
+    if(!(content.trim())){
+      CustomAlert({
+        text: "내용 입력 후 등록해주세요."
+      })
+      return false;
+    }
     console.log('제목:', title);
     console.log('내용:', content);
 
@@ -621,9 +692,48 @@ function BoardForm({ type }) {
 
     console.log(imgFile)
 
-    await adminCreateMutate.mutateAsync(formData);
-    // navigate('/board');
+    await updateMutate.mutateAsync({
+      brdId: params.boardId,
+      formData: formData
+    });
+    
+    navigate(adminPage?`/admin/board/${params.boardId}`:`/board/${params.boardId}`);
   };
+
+  const cancleWrite = async () => {
+    await deleteMutate.mutateAsync(params.boardId);
+  }
+
+  const goBoard = () => {
+    if (type === "update") {
+      if (adminPage) navigate(`/admin/board/${params.boardId}`);
+      else navigate(`/board/${params.boardId}`);
+    } else {
+      if(adminPage) navigate("/admin/board");
+      else navigate("/board");
+    }
+  }
+
+  // 게시물 내용 가져오기
+  useEffect(() => {
+    const fetchBoard = async () => {
+      const result = await getMutate.mutateAsync(params.boardId);
+      setBoardDetail(result.board);
+      setTitle(result.board.title);
+      setContent(result.board.contents);
+      console.log(result.board);
+    }
+    fetchBoard();
+  }, [])
+
+  // 게시물 등록 단계일 때, 다른 페이지 이동 시 게시물 삭제
+
+  useEffect(() => {
+    if (prevLocation.current !== location.pathname) {
+      cancleWrite();                // 이동 직전에 실행할 함수
+      prevLocation.current = location.pathname;
+    }
+  }, [location.pathname, cancleWrite]);
 
   return (
     <>
@@ -635,7 +745,7 @@ function BoardForm({ type }) {
           borderRadius: '4px',
           border: '1px solid #ffc107'
         }}>
-          🎭 Mock 모드 | 이미지 클릭 후 핸들을 드래그하여 크기 조정
+          이미지 삽입 시 클릭 후 핸들을 드래그하여 크기 조정이 가능합니다 🙂
         </div>
       )}
       <form onSubmit={handleSubmit}>
@@ -665,7 +775,7 @@ function BoardForm({ type }) {
             <button type='submit' className='min_btn_b'>
               {type === "update" ? "수정" : "등록"}
             </button>
-            <a href={type==="update"?"/board/detail":"/board"} className='min_btn_w'>취소</a>
+            <button type="button" className='min_btn_w' onClick={goBoard}>취소</button>
           </div>
         </section>
       </form>

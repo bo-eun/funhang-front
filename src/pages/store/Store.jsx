@@ -82,9 +82,11 @@ function Store(props) {
                         <ul className='search_list'>
                             {list?.length > 0 && list.map((item, index) => {
                                  console.log(item);
+                                 const cateNameArr = item.category_name.split(' > ');
+                                 const chainName = cateNameArr[cateNameArr.length - 1];
                                 return <li key={`${chainName}${item.id}${index}`} onClick={() => listClick(item)} className={activeId === item.id ? "active" : ""}>
                                     <StoreIcon
-                                        product={item.category_name}
+                                        product={chainName}
                                     />
                                     <div>
                                         <p className="title">
