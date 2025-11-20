@@ -66,13 +66,6 @@ function Main(props) {
         }
     }, [popularLoading, onePlusOneLoading, twoPlusOneLoading]);
 
-    // useEffect(()=>{
-    //     if(onePlusOne?.items && twoPlusOne?.items &&popular?.items){
-    //         setPromoOne(onePlusOne.items)
-    //         setPromoTwo(twoPlusOne.items)
-    //         setPromoPop(popular.items)
-    //     }
-    // },[onePlusOne,twoPlusOne,popular]);
     const promoPop = popular?.items ?? [];
     const promoOne = onePlusOne?.items ?? [];
     const promoTwo = twoPlusOne?.items ?? [];

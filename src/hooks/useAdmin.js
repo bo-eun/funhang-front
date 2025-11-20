@@ -20,9 +20,7 @@ export const useAdmin = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
+    onSettled: () => {
       setLoading(false);
     }
   });
@@ -35,6 +33,9 @@ export const useAdmin = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
+    },
+    onError: (error)=>{
+
     },
     onSettled: (data, error) => {
       console.log(data);
@@ -49,20 +50,29 @@ export const useAdmin = () => {
 
   const deleteBannerMutation = useMutation({
     mutationFn: async (bannerId) => {
+      setLoading(true);
       const response = await adminApi.delete(bannerId);
       return response;
     },
     onSuccess: () => {
-      alert("배너가 삭제되었습니다!");
+      CustomAlert({
+        text: "배너가 삭제되었습니다!"
+      });
     },
     onError: (error) => {
       console.error("배너 삭제 실패:", error);
-      alert(error.response?.data);
-    },    
+      CustomAlert({
+        text: error.response?.data
+      });
+    },
+    onSettled:()=>{
+      setLoading(false);
+    }    
   });
 
   const getCouponListMutation = useMutation({
     mutationFn: async () => {
+      setLoading(true);
       const response = await couponAdminApi.list();
       return response;
     },
@@ -70,19 +80,19 @@ export const useAdmin = () => {
     onSuccess: () => {
       console.log('쿠폰 리스트 불러오기 완료')
     },
-    onSettled: (data, error) => {
-      console.log(data);
-      console.log(error);
-      setLoading(false);
-      const msg = data && !error ? data.resultMessage : error.response;
+    onError:(error)=>{
       CustomAlert({
-        text: msg
+        text: error.response
       });
+    },
+    onSettled: () => {
+      setLoading(false);
     }     
   });
 
   const createCouponMutation = useMutation({
     mutationFn: async (formData) => {
+      setLoading(true);
       const response = await couponAdminApi.create(formData);
       return response;
     },
@@ -97,6 +107,7 @@ export const useAdmin = () => {
 
   const updateCouponMutation = useMutation({
     mutationFn: async (formData) => {
+      setLoading(true);
       console.log(formData)
       const response = await couponAdminApi.update(formData.couponId, formData);
       console.log(response);
@@ -113,6 +124,7 @@ export const useAdmin = () => {
 
   const deleteCouponMutation = useMutation({
     mutationFn: async(couponIds) => {
+      setLoading(true);
       const response = await couponAdminApi.delete(couponIds);
       console.log(response);
       return response;

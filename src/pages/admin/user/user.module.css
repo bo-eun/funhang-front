@@ -1,4 +1,7 @@
-
+.admin_total{
+    width: 100%;
+    text-align: left;
+}
 .user_info{
     display: flex;
     flex-direction: column;

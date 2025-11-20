@@ -19,19 +19,18 @@ export const usePoint = () => {
         onSuccess : ()=>{
             queryClient.invalidateQueries({queryKey:['user']});
             queryClient.invalidateQueries({queryKey:['point']});
-        },
-        onError:(error)=>{
-
-        },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
-            setLoading(false);
-            const msg = data? "포인트 지급 완료":"포인트 지급 중 오류가 발생했습니다.";
             CustomAlert({
-                text: msg
+                text: "포인트 지급 완료"
             });
-        }
+        },
+        onError:()=>{
+            CustomAlert({
+                text: "포인트 지급 중 오류가 발생했습니다."
+            });
+        },
+        onSettled: () => {
+            setLoading(false);
+        },
     });
 
     const changePoint = useMutation({
@@ -53,9 +52,7 @@ export const usePoint = () => {
                 text: "쿠폰 교환에 실패하였습니다."
             });
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })

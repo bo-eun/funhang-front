@@ -10,6 +10,7 @@ function ListBtnLayout({children,topBtn, bottomBtn,}) {
         <ButtonOrLink
             isLink={topBtn.type === 'link'}
             to={topBtn.to}
+            state={topBtn.state}
             onClick={topBtn.onClick}
             className="min_btn_b"
             style={topBtn.style}
@@ -21,6 +22,7 @@ function ListBtnLayout({children,topBtn, bottomBtn,}) {
         <ButtonOrLink
             isLink={bottomBtn.type === 'link'}
             to={bottomBtn.to}
+            state={bottomBtn.state}
             onClick={bottomBtn.onClick}
             className="min_btn_w"
             style={bottomBtn.style}

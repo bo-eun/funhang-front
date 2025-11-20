@@ -30,9 +30,7 @@ export const useProduct =(productId)=>{
             text:"수정 중 오류가 발생하였습니다."
         })
       },
-      onSettled: (data, error)=>{
-        console.log(data);
-        console.log(error);
+      onSettled: ()=>{
         setLoading(false);
       }
     });
@@ -55,9 +53,7 @@ export const useProduct =(productId)=>{
             text:"삭제 중 오류가 발생했습니다."
         });
       },
-      onSettled: (data, error) => {
-          console.log(data);
-          console.log(error);
+      onSettled: () => {
           setLoading(false);
       }
     })

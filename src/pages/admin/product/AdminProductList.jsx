@@ -13,26 +13,33 @@ import { useProduct } from '../../../hooks/useProduct';
 import CustomAlert from '../../../components/alert/CustomAlert';
 import { loadingStore } from '../../../store/loadingStore';
 import Loading from '../../../components/Loading';
+import ImgFallback from '../../../components/imgFall/imgFallback';
 
 function AdminProductList(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const { prdDeleteMutation } = useProduct();
     const queryParams = new URLSearchParams(location.search);
-    
-    //페이징
-    const [totalRows, setTotalRows] = useState(0);
-    const [currentPage, setCurrentPage] = useState(parseInt(queryParams.get('page') ?? '0', 10));
+    const { sourceChain, promoType, productType } = useParams();
     //sort필터사용시 활성
     const [currentSort, setCurrentSort] = useState(queryParams.get('sort') ?? 'price,asc');
-    //검색
-    const searchQuery = queryParams.get('q') ?? '';
+    //페이징
+    const [totalRows, setTotalRows] = useState(0);
+
+    // 이전 페이지에서 돌아왔을 경우 이전 param으로 그렇지않으면 초기화
+    const getParam = (key, defaultValue) => {
+        if (location.state?.from) {
+            const params = new URLSearchParams(location.state.from.search);
+            return params.get(key) ?? defaultValue;
+        }
+        return queryParams.get(key) ?? defaultValue;
+    };
     
-    //편의점명, 행사, 카테고리
-    const { sourceChain, promoType, productType } = useParams();
-    const [chainId, setChainId] = useState(sourceChain?.toUpperCase() || 'ALL');
-    const [promoId, setPromoId] = useState(promoType?.toUpperCase() || 'ALL');
-    const [categoryId, setCategoryId] = useState(productType?.toUpperCase() || 'ALL');
+    const [currentPage, setCurrentPage] = useState(() => parseInt(getParam('page', '0'), 10));
+    const [chainId, setChainId] = useState(() => getParam('sourceChain', sourceChain?.toUpperCase() || 'ALL').toUpperCase());
+    const [promoId, setPromoId] = useState(() => getParam('promoType', promoType?.toUpperCase() || 'ALL').toUpperCase());
+    const [categoryId, setCategoryId] = useState(() => getParam('productType', productType?.toUpperCase() || 'ALL').toUpperCase());
+    const [searchQuery, setSearchQuery] = useState(() => getParam('q', ''));
     
     
 
@@ -67,6 +74,7 @@ function AdminProductList(props) {
         }
     };
 
+
     // 페이지 이동 처리
     const movePage = (newPage) => {
         setCurrentPage(newPage);
@@ -74,9 +82,7 @@ function AdminProductList(props) {
     };
     // 검색
     const handleSearch=(newQuery)=>{
-        queryParams.set('q', newQuery);
-        queryParams.set('page', 0);
-        navigate(`${location.pathname}?${queryParams.toString()}`);
+        updateUrl({ q: newQuery, page: 0 });
     }
     // 삭제
     const handleDelete=async(productId)=>{
@@ -118,6 +124,11 @@ function AdminProductList(props) {
             setTotalRows(data.totalElements || 0);
         }
     },[data]);
+    //  월 추출 함수 (간단한 방법)
+    const getMonth = (dateString) => {
+        if (!dateString) return '';
+        return dateString.split('-')[1];
+    };
 
     return (
         <>
@@ -145,7 +156,7 @@ function AdminProductList(props) {
                 <SearchInput onChange={handleSearch} value={searchQuery}/>
             </div>
 
-            <div className='brd_list_info'>
+            <div className={`${styles.admin_total}`}>
                 <div className='total'>
                     총 <strong>{totalRows}</strong> 개
                 </div>
@@ -156,6 +167,7 @@ function AdminProductList(props) {
                     topBtn={{ 
                         type: 'link',
                         to:`/admin/product/update/${product.crawlId}`,
+                        state:{ from: location },
                         name: '수정',
                     }}
                     bottomBtn={{ 
@@ -165,15 +177,23 @@ function AdminProductList(props) {
                     }}
                 >
                     <div className={styles.item_box}>
-                        <img src={product.imageUrl} alt={product.productName} />
+                        <ImgFallback
+                            src={product.imageUrl}
+                            alt={product.productName}
+                        />
+                        <StoreIcon 
+                            product={product.sourceChain}
+                            cssPosition="absolute"
+                            top='10px'
+                            right='10px'    
+                        />
                     </div>
-                    <div className={styles.info_box}>
+                    <div className={styles.left_info_box}>
                         <div className={styles.icon_wrap}>
-                            <StoreIcon product={product.sourceChain}/>
                             <EventIcon product={product} />
                         </div>
                         <p className={styles.title}>{product.productName}</p>
-                        <p className={styles.evtMonth}>9월행사상품</p>
+                        <p className={styles.evtMonth}>{getMonth(product.crawledAt)}월행사상품</p>
                     </div>
                     <span className={styles.price}>{product.price.toLocaleString()}원</span>
                 </ListBtnLayout>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import styles from '@/pages/board/boardList.module.css';
 import SearchInput from "../../components/SearchInput";
 import Pagination from "@/components/pagination/Pagination";
@@ -13,10 +13,19 @@ const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
 
 
 function BoardList(props) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+
+    //총데이터수 넣어주기
+    const [totalRows, setTotalRows] = useState(0);
+    //이동 된 페이지
+    const [currentPage,setCurrentPage]= useState(parseInt(queryParams.get("page")??"0", 10)); 
+    
+
     const { userRole } = authStore();
     const isAdmin = userRole === "ROLE_ADMIN";
 
-    const navigate = useNavigate();
 
     const [chkOn,setChkOn] = useState([]);
     const [columns, setColumns] = useState([]);
@@ -86,6 +95,11 @@ function BoardList(props) {
 
     console.log(columns)
 
+    const movePage =(newPage)=>{
+        setCurrentPage(newPage);
+        navigate(`${location.pathname}?${queryParams.toString()}`);
+    }
+
     return (
         <>
             <div className='base_search_bg'>
@@ -131,12 +145,7 @@ function BoardList(props) {
             </div>
 
             <section className="">
-                <Pagination
-                    page="0"
-                    // totalRows={}
-                    pagePerRows = "10"
-                    // movePage={}
-                />
+                <Pagination page={currentPage} totalRows={totalRows} pagePerRows={10} movePage={movePage} />
             </section>
              
         </>

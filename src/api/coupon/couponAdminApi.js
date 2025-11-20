@@ -29,8 +29,18 @@ export const couponAdminApi = {
         return response;
     },
 
-    requestList: async()=>{
-        const response = await api.get(`/api/v1/admin/user/coupon`);
+    requestList: async({
+        size=10, 
+        page = 0, 
+        sort = 'acquiredAt,desc'
+    })=>{
+        const params = new URLSearchParams();
+
+        params.set('size', size);
+        params.set('page', page);
+        params.set('sort', sort);
+        const response = await api.get(`/api/v1/admin/user/coupon?${params.toString()}`);
+
         return response.data.response;
     },
 };

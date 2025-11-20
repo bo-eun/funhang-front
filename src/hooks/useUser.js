@@ -26,9 +26,7 @@ export const useUser = () => {
                 text:"비활성화 처리에 실패하였습니다."
             })
         },
-        onSettled: (data, error) => {
-            console.log(data);
-            console.log(error);
+        onSettled: () => {
             setLoading(false);
         }
     })
