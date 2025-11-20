@@ -3,6 +3,7 @@ import { boardApi } from "../api/board/boardApi";
 import { boardAdminApi } from "../api/board/boardAdminApi";
 import { useNavigate } from "react-router";
 import { loadingStore } from "../store/loadingStore";
+import CustomAlert from "../components/alert/CustomAlert";
 
 
 export const useBoard = () => {
@@ -17,7 +18,9 @@ export const useBoard = () => {
         },
         onError: (error) => {
             console.error("게시글 상세 가져오기 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }        
     });
 
@@ -29,7 +32,9 @@ export const useBoard = () => {
 
         onError: (error) => {
             console.error("게시판 리스트 가져오기 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });
 
@@ -41,7 +46,9 @@ export const useBoard = () => {
         },
         
         onError: (error) => {
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });
 
@@ -87,7 +94,9 @@ export const useBoard = () => {
         
         onError: (error) => {
             console.error("게시글 작성 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });
 
@@ -101,7 +110,9 @@ export const useBoard = () => {
         },
         onError: (error) => {
             console.error("게시글 작성 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });    
      
@@ -115,7 +126,9 @@ export const useBoard = () => {
         // },
         onError: (error) => {
             console.error("추천 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });      
 
@@ -130,7 +143,9 @@ export const useBoard = () => {
         
         onError: (error) => {
             console.error("댓글 불러오기 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     })
 
@@ -146,7 +161,9 @@ export const useBoard = () => {
         
         onError: (error) => {
             console.error("댓글 작성 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });
 
@@ -161,7 +178,9 @@ export const useBoard = () => {
         
         onError: (error) => {
             console.error("댓글 수정 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });
 
@@ -176,7 +195,9 @@ export const useBoard = () => {
         
         onError: (error) => {
             console.error("댓글삭제 실패", error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         }
     });    
 

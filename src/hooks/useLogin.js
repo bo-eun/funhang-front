@@ -25,7 +25,9 @@ export const useLogin = () => {
         },
         onError : (error) =>{
             console.error('회원가입 실패', error);
-            alert(error.response.data.response);
+            CustomAlert({
+                text: error.response.data.response 
+            })
         },
         onSettled: () => {
             setLoading(false);

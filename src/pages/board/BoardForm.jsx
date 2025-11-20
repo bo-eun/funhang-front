@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { loadingStore } from '../../store/loadingStore';
+import CustomAlert from '../../components/alert/CustomAlert';
 
 // Quill Size 설정
 const Size = Quill.import('attributors/style/size');
@@ -228,7 +229,9 @@ function BoardForm({ type }) {
       });      
     } catch (err) {
       console.error('이미지 재업로드 실패:', err);
-      alert('이미지 리사이즈 저장에 실패했습니다.');
+      CustomAlert({
+        text: '이미지 리사이즈 저장에 실패했습니다.'
+      })
     }
   }, [uploadFile, outMime, quality]);
 
@@ -237,17 +240,23 @@ function BoardForm({ type }) {
     async (file) => {      
       const editor = quillInstanceRef.current;
       if (!editor) {
-        alert('에디터가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+        CustomAlert({
+          text: '에디터가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.'
+        })
         return;
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert('이미지 크기는 5MB를 초과할 수 없습니다.');
+        CustomAlert({
+          text: '이미지 크기는 5MB를 초과할 수 없습니다.'
+        })
         return;
       }
 
       if (!file.type.startsWith('image/')) {
-        alert('이미지 파일만 업로드할 수 있습니다.');
+        CustomAlert({
+          text: '이미지 파일만 업로드할 수 있습니다.'
+        })
         return;
       }
 
@@ -286,7 +295,9 @@ function BoardForm({ type }) {
         
       } catch (e) {
         console.error('❌ 업로드 오류:', e);
-        alert(`이미지 업로드에 실패했습니다: ${e.message}`);
+        CustomAlert({
+          text: `이미지 업로드에 실패했습니다: ${e.message}`
+        })
       }
     },
     [resizeImage, uploadFile]
@@ -384,7 +395,10 @@ function BoardForm({ type }) {
         await uploadAndInsert(file);
       } catch (err) {
         console.error('이미지 업로드 실패:', err);
-        alert('이미지 업로드에 실패했습니다.');
+        CustomAlert({
+          text: '이미지 업로드에 실패했습니다.'
+        })
+        
       } finally {
         isUploading = false;
       }
@@ -644,7 +658,9 @@ function BoardForm({ type }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(isLoading) {
-      alert("이미지 업로드중입니다. 잠시후에 다시 시도해주세요.") ;
+      CustomAlert({
+        text: "이미지 업로드중입니다. 잠시후에 다시 시도해주세요."
+      })
       return false;
     };
     console.log('제목:', title);
@@ -702,7 +718,7 @@ function BoardForm({ type }) {
           borderRadius: '4px',
           border: '1px solid #ffc107'
         }}>
-          🎭 Mock 모드 | 이미지 클릭 후 핸들을 드래그하여 크기 조정
+          이미지 삽입 시 클릭 후 핸들을 드래그하여 크기 조정이 가능합니다 🙂
         </div>
       )}
       <form onSubmit={handleSubmit}>

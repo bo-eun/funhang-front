@@ -7,6 +7,7 @@ import { authStore } from "../../store/authStore";
 import Table from "../../components/table/Table";
 import { useBoard } from "../../hooks/useBoard";
 import { useAdmin } from "../../hooks/useAdmin";
+import CustomAlert from "../../components/alert/CustomAlert";
 
 const colWidth = ['50px', '', '160px', '80px', '130px'];
 const headers = ['NO', '제목', '글쓴이', '추천 수', '작성 일'];
@@ -44,7 +45,9 @@ function BoardList(props) {
 
     const isChecked = () => {
         if(chkOn.length <= 0) {
-            alert('채택할 게시물을 선택해주세요');
+            CustomAlert({
+                text: '채택할 게시물을 선택해주세요'
+            })
             return false;
         }   
         return true;
@@ -119,7 +122,7 @@ function BoardList(props) {
                         <option value="best">추천순</option>
                     </select>
                 </div>
-                {isAdmin &&(
+                {location.pathname === '/admin/board' &&(
                     <>
                         <button className="min_btn_w" onClick={noticeBrd}>공지</button>
                         <button className="min_btn_w" onClick={selectBrd}>채택</button>
