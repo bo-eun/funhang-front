@@ -56,53 +56,6 @@ function BoardForm({ type }) {
     }
   }, []);
 
-  /** 이미지 리사이즈 함수 (pica 사용) */
-  const resizeImage = useCallback(async (file) => {
-    const img = await new Promise((res, rej) => {
-      const url = URL.createObjectURL(file);
-      const image = new Image();
-      image.onload = () => { URL.revokeObjectURL(url); res(image); };
-      image.onerror = rej;
-      image.src = url;
-    });
-
-    const ratio = Math.min(1, maxWidth / img.width, maxHeight / img.height);
-    if (ratio === 1) {
-      // 리사이즈 원본 파일 저장
-      return file;
-    }
-
-    const targetW = Math.round(img.width * ratio);
-    const targetH = Math.round(img.height * ratio);
-
-    const from = document.createElement('canvas');
-    const to   = document.createElement('canvas');
-    from.width = img.width;   from.height = img.height;
-    to.width   = targetW;     to.height   = targetH;
-    from.getContext('2d').drawImage(img, 0, 0);
-
-    try {
-      const pica = (await import('pica')).default();
-      await pica.resize(from, to, { quality: 3 });
-      const blob = await pica.toBlob(to, outMime, quality);
-
-      const resizedFile = new File([blob],
-                      file.name.replace(/\.\w+$/, outMime === 'image/png' ? '.png' : '.jpg'),
-                      { type: outMime });
-
-      return resizedFile;
-    } catch (e) {
-      console.warn('pica 리사이즈 실패, 기본 canvas 사용', e);
-      const blob = await new Promise((r) => to.toBlob(r, outMime, quality));
-      if (!blob) throw new Error('canvas toBlob 실패');
-
-      const resizedFile = new File([blob],
-                      file.name.replace(/\.\w+$/, outMime === 'image/png' ? '.png' : '.jpg'),
-                      { type: outMime });                     
-      return resizedFile;
-    }
-  }, [maxWidth, maxHeight, outMime, quality]);
-
   /** Mock 이미지 업로드 (Base64) */
   const mockUploadImage = useCallback((file) => {
     return new Promise((resolve, reject) => {
@@ -147,11 +100,10 @@ function BoardForm({ type }) {
       console.log('✅ Mock 업로드 성공');
     
     return url;
-  }, [USE_MOCK, mockUploadImage, authToken, uploadUrl, imgFile]);
+  }, [USE_MOCK, mockUploadImage, authToken, uploadUrl]);
 
-  /** URL에서 이미지를 다운로드하여 리사이즈 후 재업로드 */
 
-  /** URL에서 이미지를 다운로드하여 리사이즈 후 재업로드 */
+  /** 이미지 리사이즈 시 변경된 url을 감지해 cloudinary가 자동으로 리사이즈 요청을 받음 */
   const reuploadResizedImage = useCallback(async (imgElement, newWidth, newHeight) => {
 
       if(isLoading) {
@@ -197,23 +149,23 @@ function BoardForm({ type }) {
         return;
       }
 
-      try {
+
         // 이미지 업로드
-        const url = await uploadFile(file);
+        const MockUrl = await uploadFile(file);
 
         // 에디터에 이미지 삽입
         const range = editor.getSelection(true);
         console.log(range)
         if (range) {
-          editor.insertEmbed(range.index, 'image', url);
+          editor.insertEmbed(range.index, 'image', MockUrl);
           editor.setSelection(range.index + 1);
         } else {
           const lastIndex = editor.getLength();
-          editor.insertEmbed(lastIndex, "image", url);
+          editor.insertEmbed(lastIndex, "image", MockUrl);
           editor.setSelection(lastIndex + 1);
         }
         
-        const img = editor.root.querySelector(`img[src="${url}"]`); // 미리보기 이미지
+        const img = editor.root.querySelector(`img[src="${MockUrl}"]`); // 미리보기 이미지
         // 미리보기 이미지를 덮어쓰기 위한 이미지 이름 저장
         const uniqueId = Date.now() + Math.random();
         if (img) {
@@ -234,37 +186,9 @@ function BoardForm({ type }) {
         }
 
         console.log('✅ 이미지 업로드 완료, src 교체 완료');
-        
-      } catch (e) {
-        console.error('❌ 업로드 오류:', e);
-        CustomAlert({
-          text: `이미지 업로드에 실패했습니다: ${e.message}`
-        })
-      }
     },
     [uploadFile]
   );
-
-
-  // quill.on("text-change", (delta, oldDelta, source) => {
-  //   const deletedImages = [];
-  //   delta.ops.forEach(op => {
-  //     if (op.delete) {
-  //       // oldDelta에서 삭제된 부분 가져오기
-  //       const startIndex = /* index 계산 */;
-  //       const deletedOps = oldDelta.ops.slice(startIndex, startIndex + op.delete);
-  //       deletedOps.forEach(dOp => {
-  //         if (dOp.insert && dOp.insert.image) {
-  //           deletedImages.push(dOp.insert.image);
-  //         }
-  //       });
-  //     }
-  //   });
-  //   if (deletedImages.length) {
-  //     console.log("삭제된 이미지 목록:", deletedImages);
-  //   }
-  // });
-
 
 
   /** 툴바의 이미지 버튼 핸들러 */
@@ -624,8 +548,6 @@ function BoardForm({ type }) {
     formData.append('title', title);
     formData.append('contents', content);
 
-    console.log(imgFile)
-
     await updateMutate.mutateAsync({
       brdId: params.boardId,
       formData: formData
@@ -649,6 +571,29 @@ function BoardForm({ type }) {
       else navigate("/board");
     }
   }
+
+  // // 내용 입력 시 업로드한 이미지를 배열에 저장
+  // useEffect(() => {
+  //   if(isLoading) return;
+
+  //   console.log('내용 변경!')
+  //   const currentImgList = content.match(/<img [^>]*>/g);
+  //   if(!currentImgList || currentImgList?.length == 0) return;
+    
+  //   setImgFile(prev => {
+  //     const deletedImgTag = prev.find((imgTag) => !currentImgList.includes(imgTag));
+  //     if(deletedImgTag) {
+  //         const deletedImgName = deletedImgTag.match(/data-file-name="([^"]+)"/);
+  //         console.log(deletedImgTag)
+  //       }
+      
+  //       return [...currentImgList]
+  //     });
+  // }, [content, setContent])
+
+  // useEffect(() => {
+
+  // }, [imgFile])
 
   // 게시물 내용 가져오기
   useEffect(() => {

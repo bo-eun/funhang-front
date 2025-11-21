@@ -29,9 +29,9 @@ export const useBoard = () => {
     });
 
     const listMutate = useMutation({
-        mutationFn: async () => {
+        mutationFn: async ({ sort, searchType }) => {
             setLoading(true);
-            const response = await boardApi.list();
+            const response = await boardApi.list({ sort, searchType });
             return response.data.response;
         }, 
         onError: (error) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { boardStore } from "../../store/boardStore";
 import { Link, useLocation, useNavigate } from "react-router";
 import styles from '@/pages/board/boardList.module.css';
@@ -27,14 +27,15 @@ function BoardList(props) {
     const [totalRows, setTotalRows] = useState(0);
     //이동 된 페이지
     const [currentPage,setCurrentPage]= useState(parseInt(queryParams.get("page")??"0", 10)); 
-    
 
     const { userRole, isAuthenticated } = authStore();
-    const isAdmin = userRole === "ROLE_ADMIN";
-
 
     const [chkOn,setChkOn] = useState([]);
     const [columns, setColumns] = useState([]);
+
+    const [sortType, setSortType] = useState('create'); // 기본 정렬: 등록순
+    const [searchType, setSearchType] = useState('title'); // 기본 검색 타입    
+    const [searchQuery, setSearchQuery] = useState('');
     
     const { createMutate, listMutate } = useBoard();
     const { deleteBoardMutate, bestBoardMutate, noticeBoardMutate } = useAdmin();
@@ -43,9 +44,43 @@ function BoardList(props) {
 
     // 게시글 리스트 가져오기
     const fetchList = async() => {
-        const result = await listMutate.mutateAsync();
+        const result = await listMutate.mutateAsync({ 
+            sort: sortType, 
+            searchType,
+            keyword: searchQuery,
+            page: currentPage,
+            size: 10 // pagePerRows와 동일하게
+        });
         setBoardList(result.items);
-        // board테이블에 adminPick 들어가야함...
+        setTotalRows(result.totalElements);
+    };
+
+    // URL 업데이트
+    const updateUrl = (params) => {
+        Object.entries(params).forEach(([key, value]) => {
+            // 빈 문자열도 제거
+            if (value != null && value !== '') {
+                queryParams.set(key, value);
+            } else {
+                queryParams.delete(key);
+            }
+        });
+        navigate(`${location.pathname}?${queryParams.toString()}`);
+    };
+
+    // 필터 변경
+    const handleFilterChange = (type, value) => {
+        if (type === "sort") setSortType(value);
+        if (type === "searchType") setSearchType(value);
+        updateUrl({ sort: type === "sort" ? value : sortType, searchType: type === "searchType" ? value : searchType });
+        setCurrentPage(0);
+    };
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+        setCurrentPage(0);
+        // query가 빈 문자열이면 q 파라미터가 자동으로 제거됨
+        updateUrl({ page: 0, sort: sortType, searchType, q: query });
     };
 
     const isChecked = () => {
@@ -104,30 +139,41 @@ function BoardList(props) {
 
     useEffect(() => {
         fetchList();
-    }, [refresh]) 
+    }, [refresh, sortType, searchType, searchQuery, currentPage]) // searchQuery, currentPage 추가
+    
+    
+    useEffect(() => {
+        const sort = queryParams.get("sort") || "create";
+        const search = queryParams.get("searchType") || "title";
+        const keyword = queryParams.get("q") || "";
+        
+        setSortType(sort);
+        setSearchType(search);
+        setSearchQuery(keyword);
+    }, [location.search]);
 
-    const movePage =(newPage)=>{
+    const movePage = (newPage) => {
         setCurrentPage(newPage);
-        navigate(`${location.pathname}?${queryParams.toString()}`);
-    }
+        updateUrl({ page: newPage, sort: sortType, searchType, q: searchQuery });
+    };
 
     return (
         <>
             <div className='base_search_bg'>
-                <select name="" id="" className="form-select">
-                    <option value="">제목</option>
-                    <option value="">제목+내용</option>
+                <select name="" id="" className="form-select" value={searchType} onChange={(e) => handleFilterChange('searchType', e.target.value)} >
+                    <option value="title">제목</option>
+                    <option value="titlecontents">제목+내용</option>
                 </select>
-                <SearchInput />
+                <SearchInput value={searchQuery} onChange={handleSearch} />
             </div>
             <div className={styles.brd_info_wrap}>
                 <div className={styles.brd_list_info}>
                     <div className="total">
-                        총 <strong>{boardList.length > 0 ? boardList.length : 0}</strong> 개
+                        총 <strong>{totalRows}</strong> 개
                     </div>
-                    <select name="" id="" className="form-select">
-                        <option value="price">등록순</option>
-                        <option value="best">추천순</option>
+                    <select name="" id="" className="form-select" value={sortType} onChange={(e) => handleFilterChange('sort', e.target.value)}>
+                        <option value="create">등록순</option>
+                        <option value="like">추천순</option>
                     </select>
                 </div>
                 {adminPage &&(

@@ -34,16 +34,13 @@ export const useAdmin = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["bannerList"]); // 캐시 갱신
     },
-    onError: (error)=>{
-
-    },
     onSettled: (data, error) => {
       console.log(data);
       console.log(error);
       setLoading(false);
-      const msg = data && !error ? data.resultMessage : error.response;
+      const msg = data && !error ? data.resultMessage : error.response.data.response;
       CustomAlert({
-        text: error?.message || msg
+        text: msg ||  error?.message
       });
     }
   });
@@ -60,7 +57,7 @@ export const useAdmin = () => {
       });
     },
     onError: (error) => {
-      console.error("배너 삭제 실패:", error.response?.data);
+      console.error("배너 삭제 실패:", error.response.data.response?.data);
       CustomAlert({
         text: "배너 삭제 실패"
       });
@@ -81,7 +78,7 @@ export const useAdmin = () => {
       console.log('쿠폰 리스트 불러오기 완료')
     },
     onError:(error)=>{
-      console.log(error.response);
+      console.log(error.response.data.response);
       CustomAlert({
         text: "쿠폰 리스트 불러오기에 실패하였습니다."
       });
@@ -104,7 +101,7 @@ export const useAdmin = () => {
       })
     },
     onError:(error)=>{
-      console.error(error.response);
+      console.error(error.response.data.response);
       CustomAlert({
         text: "쿠폰 등록에 실패하였습니다."
       })
@@ -129,7 +126,7 @@ export const useAdmin = () => {
       })
     },
     onError:(error)=>{
-      console.error(error.response);
+      console.error(error.response.data.response);
       CustomAlert({
         text: "쿠폰 수정에 실패하였습니다."
       })
@@ -153,7 +150,7 @@ export const useAdmin = () => {
       })
     },
     onError:(error)=>{
-      console.error(error.response);
+      console.error(error.response.data.response);
       CustomAlert({
         text: "쿠폰 삭제에 실패하였습니다"
       })
@@ -224,7 +221,7 @@ export const useAdmin = () => {
         console.error("게시글 공지 등록 실패", error);
         console.log(error)
         CustomAlert({
-          text: error.response.data.response
+          text: error.response.data.response.data.response
         })
       },
       onSettled: () => {

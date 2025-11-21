@@ -3,8 +3,17 @@ import api from '../axiosApi';
 
 
 export const boardApi = {
-    list: async() => {
-        const response = await api.get(`/api/v1/board`)
+
+    list: async(params = {}) => {
+        const response = await api.get(`/api/v1/board`, {
+            params: {
+                sort: params.sort || 'create',
+                searchType: params.searchType || 'title',
+                keyword: params.keyword || '',
+                page: params.page || 0,
+                size: params.size || 10
+            }
+        })
         return response; 
     },
 
