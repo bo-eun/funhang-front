@@ -28,6 +28,13 @@ export const boardApi = {
         return response; 
     },
 
+    imageDelete: async(brdId, cloudinaryId) => {
+        const response = await api.delete(`/api/v1/board/${brdId}/image/${cloudinaryId}`, {
+            withCredentials: true // 세션 쿠키 보내기
+        })
+        return response; 
+    },
+
     update: async(brdId, formData) => {
         const response = await api.put(`/api/v1/board/${brdId}/submit`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
@@ -37,7 +44,7 @@ export const boardApi = {
     },
 
     delete: async(brdId) => {
-        const response = await api.delete(`/api/v1/board/${brdId}`, {
+        const response = await api.delete(`/api/v1/board/${brdId}/cancel`, {
             withCredentials: true // 세션 쿠키 보내기
         })
         return response; 

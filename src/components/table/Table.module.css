@@ -18,7 +18,7 @@
 .table :global(.notice) td{
     background: #f7f7f7;
 }
-.table :global(.title.notice) {
+.table :global(.notice .title) {
     font-weight: bold;
 }
 .table :global(.title.pick):after{

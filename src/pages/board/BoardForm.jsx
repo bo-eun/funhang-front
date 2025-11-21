@@ -4,7 +4,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import styles from '@/pages/board/boardList.module.css';
 import axios from 'axios';
 import { useBoard } from '../../hooks/useBoard';
-import { useBlocker, useLocation, useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { loadingStore } from '../../store/loadingStore';
 import CustomAlert from '../../components/alert/CustomAlert';
 import { boardStore } from '../../store/boardStore';
@@ -27,13 +27,6 @@ function BoardForm({ type }) {
   const [content, setContent] = useState('');
   const [imgFile, setImgFile] = useState([]);
   const [boardDetail, setBoardDetail] = useState({});
-
-
-
-  // 다른 페이지로 이동 할 경우 차단됨
- const blocker = useBlocker(({ currentLocation, nextLocation, historyAction }) => {
-    return currentLocation.pathname !== nextLocation.pathname;
- });
 
 
   const { getMutate, updateMutate, uploadImgMutate, deleteMutate } = useBoard();
@@ -157,91 +150,27 @@ function BoardForm({ type }) {
   }, [USE_MOCK, mockUploadImage, authToken, uploadUrl, imgFile]);
 
   /** URL에서 이미지를 다운로드하여 리사이즈 후 재업로드 */
+
+  /** URL에서 이미지를 다운로드하여 리사이즈 후 재업로드 */
   const reuploadResizedImage = useCallback(async (imgElement, newWidth, newHeight) => {
-    try {
-      const originalSrc = imgElement.getAttribute('data-original-src') || imgElement.src;
-      console.log('리사이즈 후 재업로드:', originalSrc);
 
-      // Base64 이미지 처리
-      let blob;
-      if (originalSrc.startsWith('data:')) {
-        // Base64를 blob으로 변환
-        const response = await fetch(originalSrc);
-        blob = await response.blob();
-      } else {
-        // 절대 URL을 상대 경로로 변환
-        let imagePath = originalSrc;
-        try {
-          const url = new URL(originalSrc);
-          imagePath = url.pathname;
-        } catch (e) {
-          // 이미 상대 경로인 경우 그대로 사용
-        }
-
-        // 이미지를 fetch로 가져오기
-        const response = await axios.get(imagePath, { responseType: 'blob' });
-        blob = response.data;
+      if(isLoading) {
+        CustomAlert({
+          text: "이미지 업로드중입니다. 잠시후에 다시 시도해주세요."
+        })        
+        return false;
       }
+      const originalSrc = imgElement.src; 
 
-      // Canvas로 리사이즈
-      const img = await new Promise((res, rej) => {
-        const image = new Image();
-        image.crossOrigin = 'anonymous';
-        image.onload = () => res(image);
-        image.onerror = rej;
-        image.src = URL.createObjectURL(blob);
-      });
+      // 리사이즈 이미지 cloudinary에 리사이징 요청
+      const newUrl = originalSrc.replace(/w_\d+/, `w_${newWidth}`).replace(/h_\d+/, `h_${newHeight}`);
 
-      const canvas = document.createElement('canvas');
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-      // Canvas를 blob으로 변환
-      const resizedBlob = await new Promise((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            reject(new Error('canvas.toBlob 실패'));
-          } else {
-            resolve(blob);
-          }
-        }, outMime, quality);
-      });
-
-      const resizeFilename = imgElement.getAttribute('data-file-name') || 'resized-image.png';
-      const file = new File ([resizedBlob], resizeFilename, { type: outMime });
-
-      // 서버에 업로드 (또는 Mock)
-      // 리사이즈 이미지 서버에 업로드
-      const newUrl = await uploadFile(file);
-
-      
-      // 원본 URL 저장 (처음 한 번만)
-      if (!imgElement.getAttribute('data-original-src')) {
-        imgElement.setAttribute('data-original-src', originalSrc);
-      }
-      
       // 새 URL로 교체
       imgElement.src = newUrl;
       console.log('✅ 리사이즈 후 재업로드 완료');
-      
-        // 중복 이름 제거(원본, 리사이즈 중 리사이즈만 남기기)
-        setImgFile((prev) => {
-          const newArr = Array.from(
-            new Map([...prev, { file: file, index: prev.length }].reverse()
-              .map(item => [item.file.name, item])
-            ).values()
-          ).reverse();
-        return newArr;
-      });      
-    } catch (err) {
-      console.error('이미지 재업로드 실패:', err);
-      CustomAlert({
-        text: '이미지 리사이즈 저장에 실패했습니다.'
-      })
-    }
+
   }, [uploadFile, outMime, quality]);
+
 
   /** 이미지 업로드 → URL 삽입 */
   const uploadAndInsert = useCallback(
@@ -269,9 +198,8 @@ function BoardForm({ type }) {
       }
 
       try {
-        // 이미지 리사이즈 후 업로드
-        const resized = await resizeImage(file);
-        const url = await uploadFile(resized);
+        // 이미지 업로드
+        const url = await uploadFile(file);
 
         // 에디터에 이미지 삽입
         const range = editor.getSelection(true);
@@ -314,7 +242,7 @@ function BoardForm({ type }) {
         })
       }
     },
-    [resizeImage, uploadFile]
+    [uploadFile]
   );
 
 
@@ -613,7 +541,7 @@ function BoardForm({ type }) {
 
       // 리사이즈 후 재업로드
       if (finalWidth !== selectedImage.naturalWidth) {
-        await reuploadResizedImage(selectedImage, finalWidth, finalHeight);
+        reuploadResizedImage(selectedImage, finalWidth, finalHeight);
       }
 
       document.removeEventListener('mousemove', handleMouseMove);
@@ -733,17 +661,6 @@ function BoardForm({ type }) {
     }
     fetchBoard();
   }, [])
-
-  // 게시물 등록 단계일 때, 다른 페이지 이동 시 게시물 삭제
-  useEffect(() => {
-    if(blocker.state === 'blocked') {
-      // 작성중이 아닐 경우 
-      if(title.trim() == '' && content.trim() == '') {
-        cancleWrite();
-      }
-      blocker.proceed();
-    }
-  }, [blocker])
 
   return (
     <>

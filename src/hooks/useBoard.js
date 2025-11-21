@@ -168,6 +168,27 @@ export const useBoard = () => {
         } 
     });      
 
+    const deleteImgMutate = useMutation({
+        mutationFn: async (brdId, cloudinaryId) => {
+            setLoading(true);
+            const response = await boardApi.imageDelete(brdId, cloudinaryId);
+            return response.data.response;
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        
+        onError: (error) => {
+            console.error("댓글 불러오기 실패", error);
+            CustomAlert({
+                text: "댓글 불러오기 실패"
+            })
+        },
+        onSettled: () => {
+            setLoading(false);
+        } 
+    })
+
     const listCommentMutate = useMutation({
         mutationFn: async (brdId) => {
             setLoading(true);
@@ -269,6 +290,7 @@ export const useBoard = () => {
         uploadImgMutate, 
         updateMutate, 
         deleteMutate, 
+        deleteImgMutate,
         bestMutate,
         resizeImgMutation,
         listCommentMutate,
