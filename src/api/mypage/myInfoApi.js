@@ -21,7 +21,7 @@ export const myInfoApi = {
     },
 
     delete: async () => {
-        const response = api.delete(`/api/v1/user/delete`);
+        const response = await api.delete(`/api/v1/user/delete`);
         return response.data.response;
     }
 }

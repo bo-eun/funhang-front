@@ -88,15 +88,17 @@ export const useMypage = () => {
             return response;
         },
         onSuccess: (data) => {
+            console.log(data)
             CustomAlert({
-                text: data.data.response
+                text: data
             })
             clearAuth();
             navigate('/');
         },
         onError:(error)=>{
+            console.log(error)
             CustomAlert({
-                text: error.response.data.response
+                text: error
             })
         },
         onSettled: () => {
@@ -111,9 +113,11 @@ export const useMypage = () => {
             return response;
         },
         onSuccess: (data) => {
-
+        console.log(data)
         },
         onError:(error)=>{
+            
+            console.log(error)
             CustomAlert({
                 text: error.response.data.response
             }) 

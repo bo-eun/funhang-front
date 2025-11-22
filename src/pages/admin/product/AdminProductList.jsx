@@ -82,6 +82,7 @@ function AdminProductList(props) {
     };
     // 검색
     const handleSearch=(newQuery)=>{
+        setSearchQuery(newQuery);
         updateUrl({ q: newQuery, page: 0 });
     }
     // 삭제
