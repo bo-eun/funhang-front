@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { boardApi } from "../api/board/boardApi";
 import { boardAdminApi } from "../api/board/boardAdminApi";
 import { useNavigate } from "react-router";
@@ -28,22 +28,21 @@ export const useBoard = () => {
         }         
     });
 
-    const listMutate = useMutation({
-        mutationFn: async ({ sort, searchType }) => {
-            setLoading(true);
-            const response = await boardApi.list({ sort, searchType });
-            return response.data.response;
-        }, 
-        onError: (error) => {
-            console.error("게시판 리스트 가져오기 실패", error.response.data.response);
-            CustomAlert({
-                text: "게시판 리스트 가져오기 실패"
-            })
-        },
-        onSettled: () => {
-            setLoading(false);
-        } 
-    });
+    const getBoardList = ({ sortType, searchType, keyword, page, size }) => {
+        return useQuery({
+            queryKey: ['boardList', sortType, searchType, keyword, page, size],
+            queryFn: async () => {
+                const response = await boardApi.list({ sortType, searchType, keyword, page, size });
+                return response.data.response;
+            },
+            onError: (error) => {
+                console.error("게시판 리스트 가져오기 실패", error.response?.data?.response);
+                CustomAlert({
+                    text: "게시판 리스트 가져오기 실패"
+                });
+            }
+        });
+    };
 
     const createMutate = useMutation({
         mutationFn: async () => {
@@ -285,7 +284,7 @@ export const useBoard = () => {
 
     return { 
         getMutate,
-        listMutate, 
+        getBoardList, 
         createMutate, 
         uploadImgMutate, 
         updateMutate, 

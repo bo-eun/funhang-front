@@ -7,7 +7,7 @@ export const boardApi = {
     list: async(params = {}) => {
         const response = await api.get(`/api/v1/board`, {
             params: {
-                sort: params.sort || 'create',
+                sortType: params.sortType || 'create',
                 searchType: params.searchType || 'title',
                 keyword: params.keyword || '',
                 page: params.page || 0,

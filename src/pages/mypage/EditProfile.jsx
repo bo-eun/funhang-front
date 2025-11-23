@@ -101,6 +101,7 @@ function EditProfile(props) {
                                 label="이름"
                                 type="text"
                                 placeholder="이름을 입력해주세요"
+                                readOnly={true}
                                 name="username"
                                 register={myInfoFrm.register}
                                 error={myInfoFrm.formState.errors.username}
