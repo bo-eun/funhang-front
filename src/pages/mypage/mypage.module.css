@@ -52,6 +52,12 @@
     font-size: 20px;
     border-radius: 0 30px 30px 0;
 }
+.sub_category_list li button {
+    display: block;
+    padding: 14px 0px 14px 40px;
+    font-size: 20px;
+    border-radius: 0 30px 30px 0;
+}
 .my_cont .sub_category_list li a.active {
     background: var(--secondary-color);
     font-weight: bold;

@@ -97,7 +97,7 @@ export const useAdmin = () => {
     mutationKey: ['coupon', 'create'], // 중복 요청 막음
     onSuccess:(data)=>{
       CustomAlert({
-        text: data.resultMessage
+        text: data.data.response.resultMessage
       })
     },
     onError:(error)=>{
@@ -122,7 +122,7 @@ export const useAdmin = () => {
     mutationKey: ['coupon', 'update'], // 중복 요청 막음
     onSuccess:(data)=>{
       CustomAlert({
-        text: data.resultMessage
+        text: data.data.response.resultMessage
       })
     },
     onError:(error)=>{
@@ -146,7 +146,7 @@ export const useAdmin = () => {
     mutationKey: ['coupon', 'delete'], // 중복 요청 막음
     onSuccess:(data)=>{
       CustomAlert({
-        text: data.resultMessage
+        text: data.data.response.resultMessage
       })
     },
     onError:(error)=>{

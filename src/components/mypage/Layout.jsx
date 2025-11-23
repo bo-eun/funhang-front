@@ -134,7 +134,7 @@ function Layout() {
                             <NavLink to="/mypage/profile" className={({isActive}) => isActive? styles.active:""}>내 정보 수정</NavLink>
                         </li>
                         <li>
-                            <NavLink to="" onClick={deleteUser}>회원탈퇴</NavLink>
+                            <button onClick={deleteUser}>회원탈퇴</button>
                         </li>
                     </ul>
                 </Col>

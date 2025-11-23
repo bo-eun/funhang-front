@@ -54,7 +54,7 @@ function CommentItem({comment,isEditing,onStartEdit,onCancelEdit,onSubmitEdit,on
                     </textarea>
                 ):(
                     <p className={styles.text}>
-                        {comment.contents}
+                        {comment.content}
                     </p>
                 )
             }
