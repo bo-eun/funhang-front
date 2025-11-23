@@ -84,7 +84,7 @@ function Point(props) {
                         <tr key={item.id}>
                             <td>{formatDate(item.createDate)}</td>
                             <td>{item.reason}</td>
-                            <td className={styles.plus}>{item.amount}</td>
+                            <td className={item.amount > 0 ? styles.plus : styles.minus}>{item.amount}</td>
                         </tr>
                     ))}
                 </tbody>
