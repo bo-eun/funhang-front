@@ -7,7 +7,6 @@ import { authStore } from '../../store/authStore';
 function Table({ headers, data, colWidth, columns=data, checkedList, setCheckedList, clickColumnBtn=null,path }) {
 
     const navigate = useNavigate();
-    
     const { userRole } = authStore();
     const isAdmin = userRole === "ROLE_ADMIN";
 
@@ -39,9 +38,9 @@ function Table({ headers, data, colWidth, columns=data, checkedList, setCheckedL
                             <td>
                                 <input 
                                     type="checkbox" 
-                                    id={obj.brdId}
-                                    checked={checkedList?.includes(obj.brdId)}
-                                    onChange={() => handleCheck(obj.brdId)}
+                                    id={obj.brdId ? obj.brdId : obj.id}
+                                    checked={checkedList?.includes(obj.brdId ? obj.brdId : obj.id)}
+                                    onChange={() => handleCheck(obj.brdId ? obj.brdId : obj.id)}
                                 />
                             </td> 
                         }

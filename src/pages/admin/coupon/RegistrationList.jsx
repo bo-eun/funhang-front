@@ -118,6 +118,7 @@ function List(props) {
     }, [])
 
 
+    console.log(checkedList)
 
     // 현재 쿠폰 정보 가져오기
     useEffect(() => {
