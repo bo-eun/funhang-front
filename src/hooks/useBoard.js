@@ -28,7 +28,7 @@ export const useBoard = () => {
         }         
     });
 
-    const getBoardList = ({ sortType, searchType, keyword, page, size }) => {
+    const useBoardList = ({ sortType, searchType, keyword, page, size }) => {
         return useQuery({
             queryKey: ['boardList', sortType, searchType, keyword, page, size],
             queryFn: async () => {
@@ -284,7 +284,7 @@ export const useBoard = () => {
 
     return { 
         getMutate,
-        getBoardList, 
+        useBoardList, 
         createMutate, 
         uploadImgMutate, 
         updateMutate, 

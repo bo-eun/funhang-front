@@ -33,11 +33,11 @@ function BoardList() {
     const [searchQuery, setSearchQuery] = useState(() => queryParams.get("q") || "");
     const [chkOn, setChkOn] = useState([]);
     
-    const { createMutate, getBoardList } = useBoard();
+    const { createMutate, useBoardList } = useBoard();
     const { deleteBoardMutate, bestBoardMutate, noticeBoardMutate } = useAdmin();
 
     // 게시글 리스트 가져오기
-    const { data, isLoading, isError, refetch } = getBoardList({
+    const { data, isLoading, isError, refetch } = useBoardList({
         sortType,
         searchType,
         keyword: searchQuery,
