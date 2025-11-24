@@ -181,7 +181,7 @@ useEffect(() => {
         // 거리순 정렬
         filtered.sort((a, b) => a.distance - b.distance);
 
-        setList(filtered);
+        setList && setList(filtered);
 
         // 지도 중심 이동
         mapInstance.current.setCenter(
