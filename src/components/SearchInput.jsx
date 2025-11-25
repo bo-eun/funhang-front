@@ -1,34 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import searchbtn from "../assets/img/search_btn.svg";
-import { IoSearch } from "react-icons/io5";
+import React from 'react';
+import searchbtn from "../assets/img/search_btn.svg"
 
-function SearchInput({value, onChange}) {
-    const [input, setInput] = useState(value);
-
-    // 부모 값이 바뀌면 input도 업데이트
-    useEffect(() => {
-        setInput(value);
-    }, [value]);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onChange(input); // 부모로 이벤트 전달
-    };
+function SearchInput(props) {
     return (
-        <form className='search_box' onSubmit={handleSubmit}>
-            
-            <input 
-                type="text" 
-                name="search" 
-                id="search" 
-                className='search_input' 
-                value={input}
-                onChange={(e)=>setInput(e.target.value)}
-            />
+        <div className='search_box'>
+            <input type="text" name="search" id="search" className='search_input' />
             <button type="submit">
-                <IoSearch className='search_icon'/>
+                <img src={searchbtn} alt="검색" />
             </button>
-        </form>
+        </div>
     );
 }
 

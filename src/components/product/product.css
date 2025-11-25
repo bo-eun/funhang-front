@@ -1,0 +1,193 @@
+/* Layout */
+.product_cont h2 {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    padding: 100px 0 70px;
+}
+
+.category_list {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    background: var(--main-color);
+    border-radius: 30px;
+}
+.category_list li {
+    width: 100%;
+}
+.category_list li a {
+    display: block;
+    width: 100%;
+    line-height: 50px;
+    color: #fff;
+    border-radius: 30px;
+    background: var(--main-color);
+    text-align: center;
+    font-size: 20px;
+}
+
+.category_list li.active {
+    margin-left: -2px;
+}
+.category_list li.active a {
+    color: #222;
+    background: var(--secondary-color);
+}
+
+.sub_category_list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 86px;
+}
+.sub_category_list li a {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 20px;
+    padding-left: 40px;
+}
+.sub_category_list li.active a  {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.product_cont .contents {
+    padding: 45px 0 100px;
+}
+
+
+
+
+/* list */
+.product_cont .list_section .list_info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0;
+}
+.product_cont .list_section .list_info .total {
+    font-size: 20px;
+}
+.product_cont .list_section .list_info select {
+    font-size: 18px;
+    max-width: 170px;
+}
+.product_cont .list_section .prd_list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 200px;
+}
+
+
+
+/* detail */
+.product_cont .detail_section .prd_info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 0 70px;
+}
+.product_cont .detail_section .prd_info .img_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #C9C9C9;
+    border-radius: 15px;
+    aspect-ratio: 1/1;
+}
+.product_cont .detail_section .prd_info .info_box {
+    position: relative;
+    margin-top: 40px;
+}
+.product_cont .detail_section .prd_info .info_box .share_btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.product_cont .detail_section .prd_info .info_box .event_text {
+    font-size: 16px;
+    color: #999;
+    padding-bottom: 15px;
+}
+.product_cont .detail_section .prd_info .info_box .title {
+    display: flex;
+    font-size: 26px;
+    gap: 12px;
+    align-items: center;
+}
+.product_cont .detail_section .prd_info .info_box .event {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    padding: 2px 15px;
+    border-radius: 20px;
+}
+.product_cont .detail_section .prd_info .info_box .event.one {
+    background: #EA0000;
+}
+.product_cont .detail_section .prd_info .info_box .price {
+    font-size: 30px;
+}
+
+.detail_section > section h3 {
+    padding: 100px 0 40px;
+    font-size: 26px;
+    font-weight: bold;
+}
+.detail_section section.comment ul {
+    padding-bottom: 20px;
+}
+.detail_section section.comment ul li {
+    padding: 0 0 30px;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #D9D9D9;
+
+}
+.detail_section section.comment ul li .comment_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.detail_section section.comment ul li .info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+    color: #7E7E7E;
+}
+.detail_section section.comment ul li .info button {
+    color: #7E7E7E;
+}
+.detail_section section.comment ul li .name {
+    font-size: 21px;
+    font-weight: 500;
+    padding-bottom: 15px;
+}
+.detail_section section.comment ul li .text {
+    font-size: 16px;
+}
+.detail_section section.comment .comment_box {
+    display: flex;
+    border: 1px solid #C9C9C9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.detail_section section.comment .comment_box textarea {
+    width: calc(100% - 100px);
+    border: 0;
+    min-height: 140px;
+    padding: 15px;
+    font-size: 16px;
+}
+.detail_section section.comment .comment_box textarea:focus {
+    outline: none;
+}
+.detail_section section.comment .comment_box button {
+    font-size: 16px;
+    color: #666;
+    width: 100px;
+    border-left: 1px solid #C9C9C9;
+}

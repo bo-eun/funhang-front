@@ -1,0 +1,22 @@
+.footer-bg{
+    height: 150px;
+    width: 100%;
+    background-color: #2C3E50;
+}
+.footer-body{
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 900px;
+    height: 100%;
+}
+.foot-text-body{
+    color: white;
+}
+.foot-logo{
+    height: 30px;
+}
+.foot-logo img{
+    height: 100%;
+}

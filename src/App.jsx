@@ -2,9 +2,6 @@ import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider } from 'react-router'
 import { router } from './router/router';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import './assets/css/toast.css';
 
 
 //react -query 설정
@@ -19,16 +16,13 @@ const queryClient = new QueryClient({
     }
 });
 
+
+
+
 function App() {
   return (
     <>
-    
      <QueryClientProvider client={queryClient}>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}       // 3초 후 자동 닫힘
-          icon={false}
-        />
        <RouterProvider router={router}/>
      </QueryClientProvider>
     </>
