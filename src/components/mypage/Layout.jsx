@@ -80,7 +80,9 @@ function Layout() {
     const couponCount = couponRes.data?.count ?? 0;
 
     const deleteUser = async () => {
-        await deleteUserMutation.mutateAsync();
+        if(confirm('회원을 탈퇴하시겠습니까?')) {
+            await deleteUserMutation.mutateAsync();
+        }
     };
     
     return (

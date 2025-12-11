@@ -108,6 +108,10 @@ export const useLogin = () => {
             const response = await loginApi.confirmEmailCode(formData);
             return response.data.response;
         },
+        onError: (error)=>{
+            console.error("비밀번호 변경 실패", error);
+            alert(error.response.data.response);
+        },
         onSettled: () => {
             setLoading(false);
         }
