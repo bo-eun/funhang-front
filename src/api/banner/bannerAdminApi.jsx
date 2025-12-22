@@ -10,7 +10,7 @@ export const adminApi = {
   },
 
   useList: async () => {
-    const response = await api.get(`/api/v1/admin/useBanner`);
+    const response = await api.get(`/api/v1/useBanner`);
     return response.data.response;
   },
 

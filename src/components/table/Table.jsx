@@ -20,21 +20,21 @@ function Table({ headers, data, colWidth, columns=data, checkedList, setCheckedL
         <table className={`table w-100 ${styles.table}`}>
             {colWidth && 
                 <colgroup>
-                    { isAdmin && <col width="40px" /> }
+                    { (isAdmin && checkedList) && <col width="40px" /> }
                     { colWidth.map((col, index) => <col key={index} width={col} />) }
                     { clickColumnBtn && <col width="80px" /> }
                 </colgroup>
             }
             <thead className='text-center'>
                 <tr>
-                    { isAdmin && <th></th> }
+                    { (isAdmin && checkedList) && <th></th> }
                     { headers.map((header, index) => <th key={`th${index}`}>{header}</th>) }
                 </tr>
             </thead>
             <tbody>
                 {columns?.map((obj, index) => 
                     <tr key={index} className={`${data[index]?.noticeYn == "Y" ? 'notice' : ''}`}>
-                        { isAdmin && 
+                        { (isAdmin && checkedList) && 
                             <td>
                                 <input 
                                     type="checkbox" 

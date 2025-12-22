@@ -28,14 +28,14 @@ function Point(props) {
     //관리자가 등록한 쿠폰 리스트
     const {data:couponData, isLoading:adminCouponLoading} = useQuery({
         queryKey:['adminCouponList'],
-        queryFn:async()=>couponAdminApi.list(),
+        queryFn:async()=>couponAdminApi.userCouponList(),
     });
     //로딩 동기화
     useEffect(()=>{
         setLoading(adminCouponLoading);
     },[adminCouponLoading,setLoading]);
 
-    const admincouponList = couponData?.data.response.content ?? [];
+    const admincouponList = couponData?.content ?? [];
 
     const handleChange=(e)=>{
         setCouponId(Number(e.target.id));

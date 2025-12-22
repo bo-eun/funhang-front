@@ -196,7 +196,7 @@ function AdminProductList(props) {
                         <p className={styles.title}>{product.productName}</p>
                         <p className={styles.evtMonth}>{getMonth(product.crawledAt)}월행사상품</p>
                     </div>
-                    <span className={styles.price}>{product.price.toLocaleString()}원</span>
+                    <span className={styles.price}>{product?.price?.toLocaleString()}원</span>
                 </ListBtnLayout>
             ))}
             <Pagination page={currentPage} totalRows={totalRows} pagePerRows={20} movePage={movePage} />

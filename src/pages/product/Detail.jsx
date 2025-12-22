@@ -73,6 +73,8 @@ function Detail() {
             const mappedName = CHAIN_MAP[prd.sourceChain] || prd.sourceChain;
             setMapName(mappedName);
         }
+
+        console.log(prd);
     }, [prd]);
 
     //클립보드
@@ -126,7 +128,7 @@ function Detail() {
                             product={prd}
                         />
                     </p>
-                    <p className={styles.price}><strong>{prd.price}</strong> 원</p>
+                    <p className={styles.price}><strong>{prd?.price?.toLocaleString()}</strong> 원</p>
                 </div>
             </div>
 

@@ -73,7 +73,7 @@ function Item({ product }) {
         <div className={styles.info_box}>
           {/* <StoreIcon product={product.sourceChain} /> */}
           <p className={styles.title}>{product.productName}</p>
-          <p className={styles.price}>{product.price.toLocaleString()}원</p>
+          <p className={styles.price}>{product?.price?.toLocaleString()}원</p>
         </div>
       </div>
     </Link>

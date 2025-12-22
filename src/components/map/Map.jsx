@@ -49,8 +49,9 @@ function Map({ chainName, searchText = "", setList, selectedItem, height, showAl
     }
 
     const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_KEY}&autoload=false&libraries=services,clusterer`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_KEY}&autoload=false&libraries=services,clusterer`;
     script.async = true;
+
     document.head.appendChild(script);
 
     script.onload = () => {

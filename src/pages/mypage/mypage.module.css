@@ -133,6 +133,8 @@
 }
 :global(.modal .modal-body) {
     padding: 40px;
+    max-height: 80vh;
+    overflow: auto;
 }
 :global(.modal) .notice_box {
     color: #C80000;

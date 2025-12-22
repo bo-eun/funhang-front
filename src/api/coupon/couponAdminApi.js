@@ -7,6 +7,19 @@ export const couponAdminApi = {
         return response;
     },
 
+    userCouponList: async({
+        size = 10,
+        page = 0
+    } = {})=>{
+        const params = new URLSearchParams();
+
+        params.set('size', size);
+        params.set('page', page);
+        const response = await api.get(`/api/v1/user/coupon?${params.toString()}`);
+
+        return response.data.response;
+    },
+
     create: async(formData) => {
         const response = await api.post(`/api/v1/admin/coupon`, formData, {
             headers: {"Content-Type" : "multipart/form-data"},
@@ -30,17 +43,17 @@ export const couponAdminApi = {
     },
 
     requestList: async({
-        size=10, 
-        page = 0, 
-        sort = 'acquiredAt,desc'
-    })=>{
+        size = 10,
+        page = 0
+    } = {})=>{
         const params = new URLSearchParams();
 
         params.set('size', size);
         params.set('page', page);
-        params.set('sort', sort);
         const response = await api.get(`/api/v1/admin/user/coupon?${params.toString()}`);
 
+        console.log(response);
+
         return response.data.response;
-    },
+    },  
 };

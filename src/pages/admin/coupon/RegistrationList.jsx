@@ -191,8 +191,8 @@ function List(props) {
                         alignItems:'center',
                         justifyContent: 'center',
                         background:'#f7f7f7', 
-                        height: '100px',
-                        cursor: 'pointer'
+                        minHeight: '200px',
+                        cursor: 'pointer',
                         }}>
                         {currentCoupon?.imgUrl ? <img src={currentCoupon.imgUrl} /> : '+'}
                     </label>
